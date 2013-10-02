@@ -1,0 +1,2 @@
+/usr/bin/ar cr ../../dist/Mac/10.7/lib/libtinyxml.a  CMakeFiles/tinyxml.dir/src/tinystr.cpp.o CMakeFiles/tinyxml.dir/src/tinyxml.cpp.o CMakeFiles/tinyxml.dir/src/tinyxmlerror.cpp.o CMakeFiles/tinyxml.dir/src/tinyxmlparser.cpp.o
+/usr/bin/ranlib ../../dist/Mac/10.7/lib/libtinyxml.a

@@ -1,0 +1,2 @@
+/usr/bin/ar cr ../../dist/Mac/10.7/lib/libindigo-inchi-static.a  CMakeFiles/indigo-inchi.dir/src/indigo_inchi_api.cpp.o CMakeFiles/indigo-inchi.dir/src/indigo_inchi_core.cpp.o
+/usr/bin/ranlib ../../dist/Mac/10.7/lib/libindigo-inchi-static.a

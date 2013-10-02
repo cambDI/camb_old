@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/daniel/Dropbox/projects/camb/camb/src/api/tests/c/dlopen-test.c
+stdio.h
+-
+string.h
+-
+Windows.h
+-
+dlfcn.h
+-
+

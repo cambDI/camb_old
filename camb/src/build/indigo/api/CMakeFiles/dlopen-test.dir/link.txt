@@ -1,0 +1,1 @@
+/usr/bin/cc  -O3 -DNDEBUG -arch i386 -arch x86_64 -isysroot /Developer/SDKs/MacOSX10.7.sdk -mmacosx-version-min=10.7 -Wl,-search_paths_first -Wl,-headerpad_max_install_names   -rdynamic -ldl -pthread CMakeFiles/dlopen-test.dir/tests/c/dlopen-test.c.o  -o ../../dist/Mac/10.7/shared/dlopen-test  -rdynamic -ldl -pthread 

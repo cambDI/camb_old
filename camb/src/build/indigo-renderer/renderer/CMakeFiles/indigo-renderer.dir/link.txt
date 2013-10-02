@@ -1,0 +1,2 @@
+/usr/bin/ar cr ../../dist/Mac/10.7/lib/libindigo-renderer-static.a  CMakeFiles/indigo-renderer.dir/src/indigo_render2d.cpp.o
+/usr/bin/ranlib ../../dist/Mac/10.7/lib/libindigo-renderer-static.a
