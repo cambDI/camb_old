@@ -1,0 +1,8 @@
+ss <- readRDS("ss.rda")
+library(caret)
+library(doMC)
+library(gbm)
+registerDoMC(cores=15)
+tune.grid <- expand.grid(.n.trees=500, .interaction.depth=c(25), .shrinkage = c(0.04, 0.08, 0.16))
+model <- train(ss$x.train, ss$y.train, "gbm", tuneGrid=tune.grid, trControl=ss$trControl)
+saveRDS(model, file="gbm.rda")
