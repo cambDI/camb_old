@@ -1,0 +1,12 @@
+Package: diR
+Type: Package
+Title: Collection of functions shared by Daniel and Isidro
+Version: 0.1
+Date: 19/03/2012
+Author: Daniel Murrell <dsmurrell@gmail.com>, Isidro Cortes <isidrolauscher@gmail.com>
+Maintainer: Daniel Murrell <dsmurrell@gmail.com>, Isidro Cortes <isidrolauscher@gmail.com>
+Depends: R (>= 2.12.0), caret,
+Description: Contains useful functions
+License: GPL
+LazyLoad: yes
+
