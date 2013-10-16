@@ -5,9 +5,13 @@ ViewTargets <- function(y, bw) {
 
 # TBD write function to view a feature by name in the same way as the targets above
 
-ImputeFeatures <- function(x) {
+ReplaceInfinitesWithNA <- function(d) {
+  do.call(data.frame,lapply(d, function(x) replace(x, is.infinite(x),NA)))
+}
+
+ImputeFeatures <- function(d) {
   library(impute)
-  as.data.frame(impute.knn(as.matrix(x), k = 10)$data)
+  as.data.frame(impute.knn(as.matrix(d), k = 10)$data)
 }
 
 SplitSet <- function(x, y, percentage = 20, seed = 1) {
