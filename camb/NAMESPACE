@@ -10,6 +10,9 @@ export(RemoveNearZeroVarianceFeatures)
 export(RemoveHighlyCorrelatedFeatures)
 export(PreProcess)
 export(GetCVTrainControl)
+export(Fingerprints)
+export(GeneratePadelDescriptors)
+export(StandardiseMolecules)
 
 # Import all packages listed as Imports or Depends
 import(

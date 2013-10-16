@@ -1,20 +1,19 @@
-GeneratePadelDescriptors <- function(structures.file, threads = -1, limit = -1) {
-  standardised.file <- tempfile("standardised", fileext=".sdf")
-  name.file <- tempfile("name", fileext=".txt")
+RemoveStandardisedPrefix <- function(descriptors) {
+  descriptors$Name <- sapply(descriptors$Name, function(x) {strsplit(as.character(x), "Standardised_")[[1]][2]})
+  descriptors
+}
+
+GeneratePadelDescriptors <- function(standardised.file, threads = -1, limit = -1) {
   descriptors.file <- tempfile("descriptors", fileext=".csv")
-  StandardiseMolecules(structures.file, standardised.file, name.file = name.file, limit = limit)
-  GenerateDescriptors.internal(standardised.file, descriptors.file, name.file, threads)
+  GeneratePadelDescriptors.internal(standardised.file, descriptors.file, threads)
   read.csv(descriptors.file)
 }
 
-GeneratePadelDescriptorsFile <- function(structures.file, descriptors.file, threads = -1, limit = -1) {
-  standardised.file <- tempfile("standardised", fileext=".sdf")
-  name.file <- tempfile("name", fileext=".txt")
-  StandardiseMolecules(structures.file, standardised.file, name.file = name.file, limit = limit)
-  GenerateDescriptors.internal(standardised.file, descriptors.file, name.file, threads)
+GeneratePadelDescriptorsFile <- function(standardised.file, descriptors.file, threads = -1, limit = -1) {
+  GeneratePadelDescriptors.internal(standardised.file, descriptors.file, threads)
 }
 
-GeneratePadelDescriptors.internal <- function(structures.file, descriptors.file, name.file, threads = -1) {
+GeneratePadelDescriptors.internal <- function(structures.file, descriptors.file, threads = -1) {
   print("Generating Descriptors")
   .jinit()
   .jcall("java/lang/System","S","setProperty","java.awt.headless","true")
@@ -41,23 +40,9 @@ GeneratePadelDescriptors.internal <- function(structures.file, descriptors.file,
       lines <- c(lines, line)
     }
   }
-  #print(lines)
   writeLines(lines, writeCon)
   close(readCon)
   close(writeCon)
       
   .jcall("padeldescriptor.PaDELDescriptorApp", , "main", c("-config", writefile))
-  
-  # reads the name.file and puts the molecules back in their original order using the names in the SMILES/SDF    
-  descs <- read.csv(descriptors.file)
-  df <- data.frame(number = 1:nrow(descs))
-  readCon2  <- file(name.file, open = "r")
-  names <- c()
-  while (length(line <- readLines(readCon2, n = 1, warn = FALSE)) > 0) {
-    names <- c(names,line)
-  }
-  close(readCon2)
-  df$Name <- names
-  m <- merge(df, descs, by.x="number", by.y="Name")
-  write.csv(m[, 2:ncol(m)], descriptors.file, row.names=FALSE)    
 }
