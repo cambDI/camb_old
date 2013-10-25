@@ -14,7 +14,7 @@ ImputeFeatures <- function(d) {
   as.data.frame(impute.knn(as.matrix(d), k = 10)$data)
 }
 
-SplitSet <- function(x, y, percentage = 20, seed = 1) {
+SplitSet <- function(ids, x, y, percentage = 20, seed = 1) {
   holdout.size <- round(nrow(x) * (percentage/100))
   set.seed(seed)
   holdout.indexes <- sample(1:nrow(x), holdout.size, replace=FALSE)
@@ -24,6 +24,7 @@ SplitSet <- function(x, y, percentage = 20, seed = 1) {
   y.train <- y[train.indexes]
   y.holdout <- y[holdout.indexes]
   l <- list()
+  l$ids <- ids
   l$holdout.indexes <- holdout.indexes
   l$train.indexes <- train.indexes
   l$x.train <- x.train

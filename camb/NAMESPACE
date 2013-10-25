@@ -13,6 +13,9 @@ export(GetCVTrainControl)
 export(Fingerprints)
 export(GeneratePadelDescriptors)
 export(StandardiseMolecules)
+export(ReplaceInfinitesWithNA)
+export(RemoveStandardisedPrefix)
+
 
 # Import all packages listed as Imports or Depends
 import(
