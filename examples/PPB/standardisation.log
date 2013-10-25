@@ -1,0 +1,67 @@
+Reading SMILES (C)
+571356 (#1) warning: molecular mass greater than 900 daltons, may not give good prediction
+4470656 (#2) warning: molecular mass greater than 900 daltons, may not give good prediction
+10481973 (#3) warning: molecular mass greater than 900 daltons, may not give good prediction
+10482082 (#4) warning: molecular mass greater than 900 daltons, may not give good prediction
+17216149 (#6) warning: molecular mass greater than 900 daltons, may not give good prediction
+10482098 (#7) warning: molecular mass greater than 900 daltons, may not give good prediction
+4447449 (#8) warning: molecular mass greater than 900 daltons, may not give good prediction
+10482301 (#9) warning: molecular mass greater than 900 daltons, may not give good prediction
+388434 (#10) warning: molecular mass greater than 900 daltons, may not give good prediction
+16743716 (#11) warning: molecular mass greater than 900 daltons, may not give good prediction
+343402 (#31) skipped over: NOT_ORGANIC
+21160115 (#42) skipped over: NOT_ORGANIC
+3113 (#63) warning: molecule contains more than 3 flourines, may not give good prediction
+9532 (#100) skipped over: NOT_ORGANIC
+4514492 (#102) warning: molecular mass greater than 900 daltons, may not give good prediction
+3906 (#147) warning: molecule contains more than 3 flourines, may not give good prediction
+145752 (#149) warning: molecular mass greater than 900 daltons, may not give good prediction
+22666 (#184) warning: molecular mass greater than 900 daltons, may not give good prediction
+10481896 (#193) warning: molecule contains more than 3 chlorines, may not give good prediction
+5614 (#208) warning: molecule contains more than 3 iodines, may not give good prediction
+389935 (#249) warning: molecular mass greater than 900 daltons, may not give good prediction
+411774 (#252) warning: molecular mass greater than 900 daltons, may not give good prediction
+8062727 (#254) skipped over: NOT_ORGANIC
+552174 (#279) skipped over: NOT_ORGANIC
+24605910 (#301) warning: molecular mass greater than 900 daltons, may not give good prediction
+4066 (#329) warning: molecule contains more than 3 chlorines, may not give good prediction
+23226 (#333) skipped over: NOT_ORGANIC
+10605761 (#339) warning: molecular mass greater than 900 daltons, may not give good prediction
+5293568 (#343) warning: molecule contains more than 3 flourines, may not give good prediction
+14245 (#348) warning: molecular mass greater than 900 daltons, may not give good prediction
+51545 (#367) warning: molecular mass greater than 900 daltons, may not give good prediction
+3472 (#396) warning: molecule contains more than 3 chlorines, may not give good prediction
+10482078 (#468) warning: molecular mass greater than 900 daltons, may not give good prediction
+4447684 (#515) warning: molecule contains more than 3 flourines, may not give good prediction
+10482167 (#533) warning: molecular mass greater than 900 daltons, may not give good prediction
+26618 (#606) warning: molecular mass greater than 900 daltons, may not give good prediction
+5293502 (#631) warning: molecule contains more than 3 flourines, may not give good prediction
+50614 (#632) warning: molecule contains more than 3 flourines, may not give good prediction
+54249 (#638) warning: molecular mass greater than 900 daltons, may not give good prediction
+2339421 (#643) warning: molecular mass greater than 900 daltons, may not give good prediction
+452539 (#660) skipped over: NOT_ORGANIC
+3239 (#677) warning: molecule contains more than 3 flourines, may not give good prediction
+751 (#698) warning: molecular mass greater than 900 daltons, may not give good prediction
+3593 (#712) warning: molecular mass greater than 900 daltons, may not give good prediction
+3593 (#712) warning: molecule contains more than 3 iodines, may not give good prediction
+3571948 (#718) warning: molecule contains more than 3 flourines, may not give good prediction
+24747358 (#764) warning: molecular mass greater than 900 daltons, may not give good prediction
+65067 (#777) warning: molecular mass greater than 900 daltons, may not give good prediction
+5168 (#782) warning: molecular mass greater than 900 daltons, may not give good prediction
+21117764 (#808) warning: molecular mass greater than 900 daltons, may not give good prediction
+21468899 (#823) warning: molecular mass greater than 900 daltons, may not give good prediction
+2338980 (#826) warning: molecular mass greater than 900 daltons, may not give good prediction
+24571200 (#834) warning: molecular mass greater than 900 daltons, may not give good prediction
+8117062 (#835) warning: molecular mass greater than 900 daltons, may not give good prediction
+17292756 (#841) warning: molecular mass greater than 900 daltons, may not give good prediction
+28536137 (#845) skipped over: NOT_ORGANIC
+139381 (#846) skipped over: NOT_ORGANIC
+189912 (#850) warning: molecule contains more than 3 flourines, may not give good prediction
+8028764 (#868) warning: molecule contains more than 3 flourines, may not give good prediction
+396459 (#882) skipped over: NOT_ORGANIC
+9342697 (#885) warning: molecule contains more than 3 flourines, may not give good prediction
+13093347 (#886) warning: molecule contains more than 3 flourines, may not give good prediction
+element: fromString(): element T not supported, Readcount: 898
+element: fromString(): element T not supported, Readcount: 900
+element: fromString(): element T not supported, Readcount: 902
+element: fromString(): element T not supported, Readcount: 904
