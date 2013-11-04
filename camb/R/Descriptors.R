@@ -1,0 +1,253 @@
+#################################################################################
+## Standardization and Descriptor Calculation of Molecules and Peptides / Sequences
+#################################################################################
+
+##############
+## Standardize Compounds
+StandardiseMolecules <- function(structures.file, standardised.file, is.training = FALSE, limit = -1) {
+  # handle non-existant file
+  if (!file.exists(structures.file)) {
+    print("File does not exist")
+  }
+  
+  # deal with sdf or smi difference
+  split <- strsplit(structures.file, "\\.")[[1]]
+  filetype <- split[length(split)]
+  if(tolower(filetype) == "sdf") {
+    print("Standardising Structures: Reading SDF (R)")
+    sink(file="standardisation.log", append=FALSE, split=FALSE)
+    .C("R_standardiseMolecules", structures.file, standardised.file, as.integer(1), as.integer(is.training), as.integer(limit)) 
+    sink()
+  }
+  else if(tolower(filetype) == "smi") {
+    print("Standardising Structures: Reading SMILES (R)")
+    sink(file="standardisation.log", append=FALSE, split=FALSE)
+    .C("R_standardiseMolecules", structures.file, standardised.file, as.integer(0), as.integer(is.training), as.integer(limit))
+    sink()
+  }
+  else {
+    print("Unrecognised file type")
+  }
+}
+
+##############
+## Compound Descriptors
+RemoveStandardisedPrefix <- function(descriptors) {
+  descriptors$Name <- sapply(descriptors$Name, function(x) {strsplit(as.character(x), "Standardised_")[[1]][2]})
+  descriptors
+}
+
+GeneratePadelDescriptors <- function(standardised.file, threads = -1, limit = -1) {
+  descriptors.file <- tempfile("descriptors", fileext=".csv")
+  GeneratePadelDescriptors.internal(standardised.file, descriptors.file, threads)
+  read.csv(descriptors.file)
+}
+
+GeneratePadelDescriptorsFile <- function(standardised.file, descriptors.file, threads = -1, limit = -1) {
+  GeneratePadelDescriptors.internal(standardised.file, descriptors.file, threads)
+}
+
+GeneratePadelDescriptors.internal <- function(structures.file, descriptors.file, threads = -1) {
+  print("Generating Descriptors")
+  .jinit()
+  .jcall("java/lang/System","S","setProperty","java.awt.headless","true")
+  # add all JARs
+  .jaddClassPath(Sys.glob("lib/*.jar"))
+  # call the main() method on the main class
+  padel_config_file <- system.file("extdata", "config.txt", package="camb")
+  readCon  <- file(padel_config_file, open = "r")
+  writefile <- tempfile("config", fileext=".txt")
+  writeCon <- file(writefile)
+  lines <- c()
+  while (length(line <- readLines(readCon, n = 1, warn = FALSE)) > 0) {
+    vec <- unlist(strsplit(line, "="))
+    if(vec[1]=="MaxThreads") {
+      lines <- c(lines, paste("MaxThreads=", threads, sep=""))
+    }
+    else if(vec[1]=="DescriptorFile") {
+      lines <- c(lines, paste("DescriptorFile=", descriptors.file, sep=""))
+    } 
+    else if(vec[1]=="Directory") {
+      lines <- c(lines, paste("Directory=", structures.file, sep=""))
+    }
+    else {
+      lines <- c(lines, line)
+    }
+  }
+  writeLines(lines, writeCon)
+  close(readCon)
+  close(writeCon)
+  
+  .jcall("padeldescriptor.PaDELDescriptorApp", , "main", c("-config", writefile))
+}
+
+##############
+# Check if an AA is natural
+checkAA <- function(x) {
+  AADict = c("A", "R", "N", "D", "C", "E", "Q", "G", "H", "I", 
+             "L", "K", "M", "F", "P", "S", "T", "W", "Y", "V",
+             "ALA","CYS","ASP","GLU","PHE","GLY","HIS","ILE","LYS",
+             "LEU","MET","ASN","PRO","GLN","ARG","SER","THR","VAL",
+             "TRP","TYR")
+  return(x %in% AADict)
+}
+
+##############
+## Three letter to one letter AA code
+convert31 <- function(AA) {  
+  threeL <- c("ALA", "ARG", "ASN", "ASP", "CYS", "GLU", "GLN",
+              "GLY", "HIS", "ILE", "LEU", "LYS", "MET", "PHE",
+              "PRO", "SER", "THR", "TRP", "TYR", "VAL")  
+  names(threeL) <- c("A", "R", "N", "D", "C", "E", "Q", "G", "H", "I",
+                     "L", "K", "M", "F", "P", "S", "T", "W", "Y", "V")  
+  res <- names(threeL[which(threeL==toupper(AA))])
+  return(res)
+}
+
+##############
+# Calculate AA descriptors
+AA_descs <- function(Data, type="Z5",..){
+  if (!is.vector(Data) && !is.character(Data) && !is.data.frame(Data) && !is.matrix(Data)){
+    stop("Input must be a character, vector, data frame or matrix")
+  } else {    
+    match_AA1 <- function(AA,sel=sel){
+      if (checkAA(toupper(AA))){
+        AA <- toupper(AA)
+        if (nchar(AA) == 1){
+          d <- descs[descs$AA1==AA,sel+2]
+        } else {
+          AA <- convert31(AA)
+          d <- descs[descs$AA1==AA,sel+2]
+        }
+        return(d)
+      } else {
+        stop("Non natural Amino acid provided")
+      }
+    }
+    
+    match_AA1_vec <-function(v,sel=sel){
+      if (is.vector(v)){
+        des <- sapply(v,match_AA1,sel=sel)
+        namesDes <- row.names(des)
+        des <- unlist(des)
+        namesDes <- c(t(sapply(namesDes,paste0,"_",v)))
+        names(des) <- namesDes
+        return(des)
+      } else {
+        stop("Input is not a vector or character")
+      }
+    }
+    
+    match_AA1_df <- function(df,colNames,sel){
+      if (is.data.frame(df) || is.matrix(df)){
+        des <- t(apply(df,1,match_AA1_vec))
+        row.names(des) <- seq(1,nrow(df))
+        colnames(des) <- c(t(sapply(colNames,paste0,seq(1,ncol(df)))))
+        return(des)
+      } else {
+        stop("Input is neither a data.frame nor a matrix")
+      }
+    }
+    
+    if  (is.vector(Data)){
+      descs <- read.table('./prot_desc.csv',header=TRUE,sep=",")
+      types <- c("ProtFP8","TScales","Tscales","VHSE","STScales","BLOSUM","FASGAI","MSWHIM","Z5","Z3")
+      type <- match.arg(type,types,several.ok=TRUE)
+      root <- strsplit(names(descs)[3:ncol(descs)],"_")
+      root <- unlist(root)[seq(1,length(unlist(root)),2)]
+      sel <- which(root %in% type)
+      return(match_AA1_vec(Data,sel))
+    } else {
+      descs <- read.table('./prot_desc.csv',header=TRUE,sep=",")
+      types <- c("ProtFP8","TScales","Tscales","VHSE","STScales","BLOSUM","FASGAI","MSWHIM","Z5","Z3")
+      type <- match.arg(type,types,several.ok=TRUE)
+      root <- strsplit(names(descs)[3:ncol(descs)],"_")
+      root <- unlist(root)[seq(1,length(unlist(root)),2)]
+      typeExt <- root[which(root %in% type)]
+      sel <- which(root %in% type)
+      return(match_AA1_df(Data,colNames=typeExt))
+    }
+  }
+}
+
+##############
+# Calculate Protein Descriptors
+SeqDescs <- function(Data,UniProtID=TRUE,type="AAC",..){
+  if (UniProtID){
+    if (!is.vector(Data)) stop("The input UNIPROT identifiers must be in a vector")
+    d <- data.frame(unlist(lapply(Data,getUniProt)))
+    types <- c("AAC","DC","TC","MoreauBroto","Moran","Geary",
+               "CTDC","CTDT","CTDD","CTriad","SOCN","QSO",
+               "PACC","APAAC")
+    type <- match.arg(type,types,several.ok=TRUE)
+    type <- paste0("extract",type,"(x)")
+    type <- paste("c(",paste(type,collapse=","),")",sep="")
+    t <- paste("t(apply(d,1,FUN=function(x)",type,"))",sep="") 
+    des=eval(parse(text=t))
+    row.names(des) <- Data
+    return(des) 
+  } else {
+    if (!is.data.frame(Data) && !is.matrix(Data)) stop("The input sequences must be a dataframe or a matrix")
+    types <- c("AAC","DC","TC","MoreauBroto","Moran","Geary",
+               "CTDC","CTDT","CTDD","CTriad","SOCN","QSO",
+               "PACC","APAAC")
+    type <- match.arg(type,types,several.ok=TRUE)
+    type <- paste0("extract",type,"(x)")
+    type <- paste("c(",paste(type,collapse=","),")",sep="")
+    t <- paste("t(apply(Data,1,FUN=function(x)",type,"))",sep="") 
+    des=eval(parse(text=t))
+    row.names(des) <- rownames(Data)
+    return(des) 
+  }
+}
+
+
+##############
+## Circular Morgan Fingerprints as specified in RDkit
+############## 
+MorganFPs <- function (bits=512,radius=2,type="smi",mols,output,keep="hashed_binary",images=FALSE,unhashed=FALSE,
+                       verbose=FALSE,RDkitPath="/usr/local/lib/python2.7/site-packages/",
+                       extFileExtension=FALSE,extMols=FALSE,unhashedExt=FALSE,logFile=FALSE) {
+  types <- c("smi","smiles","sdf")
+  type <- match.arg(type,types,several.ok=FALSE)
+  if (is.na(type)){
+    stop("Input formats currently supported are .smi, .smiles and .sdf")
+  }  
+  t <- paste("./FingerprintCalculator.py --bits",bits,"--rad",radius,"--f",type,
+             "--mols",mols,"--output",output,"--RDkitPath",RDkitPath,sep=" ")
+  if (images) t <- paste(t,"--image",sep=" ")
+  if (verbose) t <- paste(t,"--v",sep=" ")
+  if (unhashed) t <- paste(t,"--unhased",sep=" ")
+  if (extFileExtension && extMols) t <- paste(t,"--extF", extFileExtension, "--molsEXT",extMols,sep=" ")
+  if (unhashedExt) t <- paste(t, "--unhashedEXT",unhashedExt,sep=" ")
+  if (logFile) t <- paste(t, " > ",output,".log",sep="")
+  system(t) 
+  types_keep <- c("hashed_binary","hashed_counts","unhashed_binary","unhashed_counts",
+                  "hashed_binaryEXT","hashed_countsEXT","unhashed_binaryEXT","unhashed_countsEXT")
+  keep <- match.arg(keep,types_keep,several.ok=FALSE)
+  if (is.na(keep)){
+    stop("Cannot load the fingerprints file. Possible types are:
+         hashed_binary, hashed_counts, unhashed_binary, unhashed_counts, hashed_binaryEXT, hashed_countsEXT, unhashed_binaryEXT and unhashed_countsEXT")
+  }  
+  loadFile=paste(output,"_",keep,".csv",sep="")
+  p=read.table(loadFile,sep=",")
+  return(p)
+}
+
+
+
+
+
+##############
+loadMorganFPs <- function (type="hashed_binary",output){
+  types_keep <- c("hashed_binary","hashed_counts","unhashed_binary","unhashed_counts",
+                  "hashed_binaryEXT","hashed_countsEXT","unhashed_binaryEXT","unhashed_countsEXT")
+  type <- match.arg(type,types_keep,several.ok=FALSE)
+  if (is.na(type)){
+    stop("Cannot load the fingerprints file. Possible types are:
+         hashed_binary, hashed_counts, unhashed_binary, unhashed_counts, hashed_binaryEXT, hashed_countsEXT, unhashed_binaryEXT and unhashed_countsEXT")
+  }  
+  loadFile=paste(output,type,".csv",sep="_")
+  p=read.table(loadFile,sep=",")
+  return(p)
+}
