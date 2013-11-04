@@ -5,7 +5,7 @@ Version: 1.0
 Date: 2013-02-06
 Author: Daniel Murrell <dsmurrell@gmail.com>, Isidro Cortes <isidrolauscher@gmail.com>
 Maintainer: Daniel Murrell <dsmurrell@gmail.com>, Isidro Cortes <isidrolauscher@gmail.com>
-Depends: R (>= 2.12.0), rJava, caret, kernlab, impute, gbm 
+Depends: R (>= 2.12.0), rJava, caret, kernlab, impute, gbm, grid, gridExtra, vegan, protr, maptools, directlabels
 Description: A group of utilities to rapidly train and analyse models built to predict physicochemical properties and bioactivities of small molecules. The package also permits the training of models for bioactivity modeling: Quantitative-Structure Activity Relationships (QSAR), Proteochemometrics (PCM) and Chemogenomics. 
 NeedsCompile: Yes
 License: GPL
