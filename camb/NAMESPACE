@@ -29,8 +29,6 @@ import(
   gridExtra,
   protr,
   vegan,
-  maptools,
-  directlabels
 )
 
 useDynLib(camb)
