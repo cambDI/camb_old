@@ -17,7 +17,7 @@ DensityResponse <- function(Data,xlab="",ylab="",main="",alpha=0.2,
     theme(text = element_text(size=TextSize),axis.text.x = element_text(size=XAxisSize,angle = AngleLab, hjust = 1),
           axis.title.x=element_text(size=TitleAxesSize),axis.title.y=element_text(size=TitleAxesSize),axis.text.y=element_text(size=YAxisSize),
           legend.position=LegendPosition,plot.title=element_text(size=TitleSize),
-          legend.key=element_blank(), plot.margin=unit(c(tmar,rmar,bmar,lmar), "cm")))
+          legend.key=element_blank(), plot.margin=unit(c(tmar,rmar,bmar,lmar), "cm"))
 return(p)
 }
 
@@ -35,9 +35,9 @@ PCAProt <- function(Data,SeqsName=NULL){
     PC1 <- as.vector(ana$rotation[,1])   
     PC2 <- as.vector(ana$rotation[,2])
     if (is.null(SeqsName)){
-      Data <- Data.frame(PC1,PC2)
+      Data <- data.frame(PC1,PC2)
     } else {
-      Data <- Data.frame(PC1,PC2,SeqsName)
+      Data <- data.frame(PC1,PC2,SeqsName)
     }
     return(Data)
   }else{

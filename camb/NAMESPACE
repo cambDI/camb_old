@@ -28,7 +28,7 @@ import(
   grid,
   gridExtra,
   protr,
-  vegan,
+  vegan
 )
 
 useDynLib(camb)
