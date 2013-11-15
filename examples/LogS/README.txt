@@ -1,20 +1,21 @@
-Water solublity (logS) database 
+Water solublity (logS) databases
 
-In logS database, the aqueous solubility was expressed as logS, where S is the solubility at a temperature of 20-25°C in mol/L. These are two databases for our modeling. In reference [1], the data afforded by Tetko was used. This database includes 1290 organic compounds. The data set was converted from the SMILES flat file representation to the MACCS/sdf structured data file. In reference [2], some new molecules collected from literature were added. This database includes 1708 molecules.
+In these logS databases, the aqueous solubility was expressed as logS, where S is the solubility at a temperature of 20-25°C in mol/L. These are two databases for our modeling. In reference [1], the data afforded by Tetko was used. This database includes 1290 organic compounds. The data set was converted from the SMILES flat file representation to the MACCS/sdf structured data file. In reference [2], some new molecules collected from literature were added. This database includes 1708 molecules.
 
-Download the databases:
+Downloaded databases:
 
 1. The database with 1290 molecules used in reference [1] 
       • database.sdf (the SDF file includes 1290 molecules)
       • database.dat (the SMILES file includes 1290 molecules)
       • test_set1.sdf (the SDF file includes 21 molecules for external test)
+      • test_set2.sdf (the SDF file includes a second external test)
 	     TableA.doc (the experimental and predicted LogS values according to ref1)
 
 
 2. The database with 1708 molecules used in reference [2]
       • solubility_2007_sdf.sdf (the SDF file includes 1708 molecules)
 
-Reference
+References:
 
 [1]. Tingjun Hou, Ke Xia, Wei Zhang, Xiaojie Xu, ADME evaluation in drug discovery. 4. Prediction of aqueous solubility based on atom contribution approach, Journal of Chemical Information and Computer Sciences, 2004, 44, 266-275.
 
