@@ -15,6 +15,7 @@ export(GeneratePadelDescriptors)
 export(StandardiseMolecules)
 export(ReplaceInfinitesWithNA)
 export(RemoveStandardisedPrefix)
+export("prot_descs.rda")
 exportPattern("^[[:alpha:]]+")
 
 # Import all packages listed as Imports or Depends

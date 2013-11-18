@@ -158,7 +158,7 @@ AA_descs <- function(Data, type="Z5",..){
       sel <- which(root %in% type)
       return(match_AA1_vec(Data,sel))
     } else {
-      descs <- read.table('./prot_desc.csv',header=TRUE,sep=",")
+      descs <- load("prot_descs.rda") # read.table('./prot_desc.csv',header=TRUE,sep=",")
       types <- c("ProtFP8","TScales","Tscales","VHSE","STScales","BLOSUM","FASGAI","MSWHIM","Z5","Z3")
       type <- match.arg(type,types,several.ok=TRUE)
       root <- strsplit(names(descs)[3:ncol(descs)],"_")
