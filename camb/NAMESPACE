@@ -1,4 +1,4 @@
-# Export all names
+#Export all names
 # exportPattern(".")
 
 # Export specific functions
@@ -10,12 +10,12 @@ export(RemoveNearZeroVarianceFeatures)
 export(RemoveHighlyCorrelatedFeatures)
 export(PreProcess)
 export(GetCVTrainControl)
-export(Fingerprints)
 export(GeneratePadelDescriptors)
 export(StandardiseMolecules)
 export(ReplaceInfinitesWithNA)
 export(RemoveStandardisedPrefix)
 
+exportPattern("^[[:alpha:]]+")
 
 # Import all packages listed as Imports or Depends
 import(
