@@ -234,10 +234,6 @@ MorganFPs <- function (bits=512,radius=2,type="smi",mols,output,keep="hashed_bin
   return(p)
 }
 
-
-
-
-
 ##############
 loadMorganFPs <- function (type="hashed_binary",output){
   types_keep <- c("hashed_binary","hashed_counts","unhashed_binary","unhashed_counts",
