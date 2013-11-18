@@ -1,0 +1,430 @@
+Reading SMILES (C)
+ (#34) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#35) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#61) warning: molecule contains more than 3 flourines, may not give good prediction
+SMILES loader: cycle 1 not closed, Readcount: 69
+SMILES loader: cycle 1 not closed, Readcount: 70
+SMILES loader: cycle 1 not closed, Readcount: 72
+SMILES loader: cycle 1 not closed, Readcount: 73
+SMILES loader: cycle 1 not closed, Readcount: 74
+SMILES loader: cycle 1 not closed, Readcount: 76
+SMILES loader: cycle 1 not closed, Readcount: 78
+SMILES loader: cycle 1 not closed, Readcount: 79
+SMILES loader: cycle 1 not closed, Readcount: 80
+ (#82) warning: molecule contains more than 3 flourines, may not give good prediction
+SMILES loader: cycle 1 not closed, Readcount: 92
+SMILES loader: cycle 1 not closed, Readcount: 127
+ (#180) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#217) warning: molecule contains more than 3 flourines, may not give good prediction
+SMILES loader: cycle 1 not closed, Readcount: 252
+ (#309) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#310) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#311) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#312) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#316) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#324) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#327) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#339) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#340) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#341) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#346) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#347) warning: molecule contains more than 3 flourines, may not give good prediction
+SMILES loader: cycle 1 not closed, Readcount: 366
+SMILES loader: cycle 1 not closed, Readcount: 372
+SMILES loader: cycle 1 not closed, Readcount: 375
+SMILES loader: cycle 1 not closed, Readcount: 382
+ (#487) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#501) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#509) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#517) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#520) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#528) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#533) warning: molecule contains more than 3 flourines, may not give good prediction
+SMILES loader: cycle 1 not closed, Readcount: 534
+ (#658) warning: molecular mass less than 20 daltons, may not give good prediction
+ (#757) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#765) warning: molecular mass less than 20 daltons, may not give good prediction
+ (#769) warning: molecular mass less than 20 daltons, may not give good prediction
+ (#778) warning: molecular mass less than 20 daltons, may not give good prediction
+ (#779) warning: molecular mass less than 20 daltons, may not give good prediction
+SMILES loader: cycle 1 not closed, Readcount: 848
+SMILES loader: cycle 1 not closed, Readcount: 854
+ (#899) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#921) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#922) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#924) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#925) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#1016) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#1030) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#1034) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#1035) warning: molecule contains more than 3 flourines, may not give good prediction
+SMILES loader: cycle 1 not closed, Readcount: 1045
+ (#1055) warning: molecule contains more than 3 flourines, may not give good prediction
+SMILES loader: cycle 1 not closed, Readcount: 1056
+ (#1058) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#1060) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#1063) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#1066) warning: molecule contains more than 3 flourines, may not give good prediction
+SMILES loader: cycle 1 not closed, Readcount: 1117
+SMILES loader: cycle 1 not closed, Readcount: 1177
+ (#1373) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#1475) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#1534) warning: molecular mass greater than 900 daltons, may not give good prediction
+ (#1535) warning: molecular mass greater than 900 daltons, may not give good prediction
+ (#1536) warning: molecular mass greater than 900 daltons, may not give good prediction
+ (#1537) warning: molecular mass greater than 900 daltons, may not give good prediction
+ (#1538) warning: molecular mass greater than 900 daltons, may not give good prediction
+ (#1539) warning: molecular mass greater than 900 daltons, may not give good prediction
+ (#1540) warning: molecular mass greater than 900 daltons, may not give good prediction
+ (#1541) warning: molecular mass greater than 900 daltons, may not give good prediction
+ (#1542) warning: molecular mass greater than 900 daltons, may not give good prediction
+ (#1543) warning: molecular mass greater than 900 daltons, may not give good prediction
+ (#1544) warning: molecular mass greater than 900 daltons, may not give good prediction
+SMILES loader: cycle 1 not closed, Readcount: 1562
+ (#1566) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#1568) warning: molecular mass less than 20 daltons, may not give good prediction
+ (#1570) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#1575) warning: molecular mass less than 20 daltons, may not give good prediction
+ (#1577) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#1578) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#1579) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#1580) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#1589) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#1590) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#1591) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#1592) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#1593) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#1594) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#1633) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#1640) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#1675) warning: molecule contains more than 3 chlorines, may not give good prediction
+ (#1775) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#1785) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#1890) warning: molecular mass less than 20 daltons, may not give good prediction
+ (#1937) warning: molecule contains more than 3 flourines, may not give good prediction
+SMILES loader: cycle 1 not closed, Readcount: 1978
+SMILES loader: cycle 1 not closed, Readcount: 1979
+SMILES loader: cycle 1 not closed, Readcount: 1980
+SMILES loader: cycle 1 not closed, Readcount: 1981
+SMILES loader: cycle 1 not closed, Readcount: 1982
+SMILES loader: cycle 1 not closed, Readcount: 1983
+SMILES loader: cycle 1 not closed, Readcount: 1984
+SMILES loader: cycle 1 not closed, Readcount: 1985
+SMILES loader: cycle 1 not closed, Readcount: 1986
+SMILES loader: cycle 1 not closed, Readcount: 1988
+SMILES loader: cycle 1 not closed, Readcount: 1990
+SMILES loader: cycle 1 not closed, Readcount: 1991
+SMILES loader: cycle 1 not closed, Readcount: 1992
+SMILES loader: cycle 1 not closed, Readcount: 1993
+SMILES loader: cycle 1 not closed, Readcount: 1994
+SMILES loader: cycle 1 not closed, Readcount: 1995
+SMILES loader: cycle 1 not closed, Readcount: 1996
+SMILES loader: cycle 1 not closed, Readcount: 1997
+SMILES loader: cycle 1 not closed, Readcount: 1998
+SMILES loader: cycle 1 not closed, Readcount: 1999
+SMILES loader: cycle 1 not closed, Readcount: 2000
+SMILES loader: cycle 1 not closed, Readcount: 2001
+SMILES loader: cycle 1 not closed, Readcount: 2002
+SMILES loader: cycle 1 not closed, Readcount: 2003
+SMILES loader: cycle 1 not closed, Readcount: 2004
+SMILES loader: cycle 1 not closed, Readcount: 2005
+SMILES loader: cycle 1 not closed, Readcount: 2076
+SMILES loader: cycle 1 not closed, Readcount: 2078
+SMILES loader: cycle 1 not closed, Readcount: 2079
+SMILES loader: cycle 1 not closed, Readcount: 2080
+SMILES loader: cycle 1 not closed, Readcount: 2122
+SMILES loader: cycle 1 not closed, Readcount: 2227
+SMILES loader: cycle 1 not closed, Readcount: 2229
+SMILES loader: cycle 1 not closed, Readcount: 2231
+SMILES loader: cycle 1 not closed, Readcount: 2233
+SMILES loader: cycle 1 not closed, Readcount: 2235
+SMILES loader: cycle 1 not closed, Readcount: 2237
+SMILES loader: cycle 1 not closed, Readcount: 2239
+SMILES loader: cycle 1 not closed, Readcount: 2241
+SMILES loader: cycle 1 not closed, Readcount: 2243
+ (#2248) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#2262) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#2291) warning: molecular mass greater than 900 daltons, may not give good prediction
+ (#2345) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#2352) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#2411) warning: molecule contains more than 3 flourines, may not give good prediction
+SMILES loader: cycle 1 not closed, Readcount: 2431
+SMILES loader: cycle 1 not closed, Readcount: 2515
+SMILES loader: cycle 1 not closed, Readcount: 2540
+SMILES loader: cycle 1 not closed, Readcount: 2562
+ (#2566) warning: molecule contains more than 3 flourines, may not give good prediction
+SMILES loader: cycle 1 not closed, Readcount: 2586
+SMILES loader: cycle 1 not closed, Readcount: 2592
+SMILES loader: cycle 1 not closed, Readcount: 2595
+ (#2600) warning: molecule contains more than 3 flourines, may not give good prediction
+SMILES loader: cycle 1 not closed, Readcount: 2647
+ (#2656) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#2658) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#2666) warning: molecule contains more than 3 flourines, may not give good prediction
+SMILES loader: cycle 1 not closed, Readcount: 2676
+SMILES loader: cycle 1 not closed, Readcount: 2696
+ (#2818) warning: molecular mass less than 20 daltons, may not give good prediction
+ (#2819) warning: molecular mass less than 20 daltons, may not give good prediction
+SMILES loader: cycle 1 not closed, Readcount: 2874
+ (#2879) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#2880) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#2889) warning: molecule contains more than 3 flourines, may not give good prediction
+SMILES loader: cycle 1 not closed, Readcount: 2894
+SMILES loader: cycle 1 not closed, Readcount: 2898
+ (#2902) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#2912) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#2926) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#2927) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#2942) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#2954) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#2957) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#2958) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#2961) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#2969) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#2985) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#2992) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#2996) warning: molecule contains more than 3 flourines, may not give good prediction
+SMILES loader: cycle 1 not closed, Readcount: 3000
+ (#3010) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3013) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3034) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3057) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3066) warning: molecule contains more than 3 flourines, may not give good prediction
+SMILES loader: cycle 1 not closed, Readcount: 3096
+ (#3101) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3105) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3111) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3115) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3124) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3147) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3149) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3159) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3160) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3163) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3208) warning: molecule contains more than 3 flourines, may not give good prediction
+SMILES loader: cycle 1 not closed, Readcount: 3209
+ (#3211) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3212) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3214) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3217) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3220) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3221) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3235) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3280) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3294) warning: molecule contains more than 3 flourines, may not give good prediction
+SMILES loader: cycle 1 not closed, Readcount: 3332
+ (#3354) warning: molecular mass less than 20 daltons, may not give good prediction
+ (#3371) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3384) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3397) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3492) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3493) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3495) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3496) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3501) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3513) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3516) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3517) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3531) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3533) warning: molecule contains more than 3 flourines, may not give good prediction
+SMILES loader: cycle 1 not closed, Readcount: 3537
+ (#3541) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3547) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3549) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3550) warning: molecule contains more than 3 flourines, may not give good prediction
+SMILES loader: cycle 1 not closed, Readcount: 3551
+ (#3552) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3556) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3560) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3565) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3567) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3569) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3571) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3595) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3597) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3598) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3616) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3620) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3622) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3626) warning: molecule contains more than 3 flourines, may not give good prediction
+SMILES loader: cycle 1 not closed, Readcount: 3722
+ (#3806) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3883) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3884) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3885) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3886) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3888) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3889) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3890) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3916) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3918) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3931) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3946) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3947) warning: molecule contains more than 3 flourines, may not give good prediction
+SMILES loader: cycle 1 not closed, Readcount: 3953
+SMILES loader: cycle 1 not closed, Readcount: 3956
+ (#3961) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3971) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3974) warning: molecule contains more than 3 flourines, may not give good prediction
+SMILES loader: cycle 1 not closed, Readcount: 3977
+SMILES loader: cycle 1 not closed, Readcount: 3979
+ (#3987) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#3994) warning: molecule contains more than 3 flourines, may not give good prediction
+SMILES loader: cycle 1 not closed, Readcount: 3995
+ (#4009) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#4111) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#4209) warning: molecular mass less than 20 daltons, may not give good prediction
+ (#4287) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#4290) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#4294) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#4331) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#4338) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#4397) warning: molecule contains more than 3 flourines, may not give good prediction
+SMILES loader: cycle 1 not closed, Readcount: 4405
+SMILES loader: cycle 1 not closed, Readcount: 4412
+ (#4418) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#4422) warning: molecule contains more than 3 flourines, may not give good prediction
+SMILES loader: cycle 1 not closed, Readcount: 4423
+ (#4424) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#4438) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#4446) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#4452) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#4491) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#4495) warning: molecule contains more than 3 flourines, may not give good prediction
+SMILES loader: cycle 1 not closed, Readcount: 4498
+SMILES loader: cycle 1 not closed, Readcount: 4507
+SMILES loader: cycle 1 not closed, Readcount: 4509
+ (#4533) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#4543) warning: molecular mass less than 20 daltons, may not give good prediction
+ (#4547) warning: molecular mass less than 20 daltons, may not give good prediction
+SMILES loader: cycle 1 not closed, Readcount: 4632
+SMILES loader: cycle 1 not closed, Readcount: 4679
+SMILES loader: cycle 1 not closed, Readcount: 4741
+SMILES loader: cycle 1 not closed, Readcount: 4798
+ (#4804) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#4973) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#4974) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#5008) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#5009) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#5012) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#5024) warning: molecule contains more than 3 flourines, may not give good prediction
+SMILES loader: cycle 1 not closed, Readcount: 5169
+SMILES loader: cycle 1 not closed, Readcount: 5170
+ (#5225) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#5226) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#5286) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#5288) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#5312) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#5434) warning: molecular mass greater than 900 daltons, may not give good prediction
+ (#5435) warning: molecular mass greater than 900 daltons, may not give good prediction
+ (#5436) warning: molecular mass greater than 900 daltons, may not give good prediction
+ (#5437) warning: molecular mass greater than 900 daltons, may not give good prediction
+ (#5438) warning: molecular mass greater than 900 daltons, may not give good prediction
+ (#5439) warning: molecular mass greater than 900 daltons, may not give good prediction
+ (#5440) warning: molecular mass greater than 900 daltons, may not give good prediction
+ (#5441) warning: molecular mass greater than 900 daltons, may not give good prediction
+ (#5442) warning: molecular mass greater than 900 daltons, may not give good prediction
+ (#5443) warning: molecular mass greater than 900 daltons, may not give good prediction
+ (#5444) warning: molecular mass greater than 900 daltons, may not give good prediction
+ (#5485) warning: molecular mass less than 20 daltons, may not give good prediction
+SMILES loader: cycle 1 not closed, Readcount: 5487
+ (#5494) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#5496) warning: molecular mass less than 20 daltons, may not give good prediction
+SMILES loader: cycle 1 not closed, Readcount: 5498
+ (#5499) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#5504) warning: molecular mass less than 20 daltons, may not give good prediction
+ (#5506) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#5507) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#5508) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#5509) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#5518) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#5519) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#5520) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#5521) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#5522) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#5523) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#5589) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#5669) warning: molecule contains more than 3 chlorines, may not give good prediction
+ (#5670) warning: molecule contains more than 3 chlorines, may not give good prediction
+SMILES loader: cycle 1 not closed, Readcount: 5676
+ (#5685) warning: molecule contains more than 3 chlorines, may not give good prediction
+ (#5872) warning: molecule contains more than 3 flourines, may not give good prediction
+SMILES loader: cycle 1 not closed, Readcount: 5898
+SMILES loader: cycle 1 not closed, Readcount: 5932
+ (#5936) warning: molecule contains more than 3 flourines, may not give good prediction
+SMILES loader: cycle 1 not closed, Readcount: 5956
+SMILES loader: cycle 1 not closed, Readcount: 5963
+SMILES loader: cycle 1 not closed, Readcount: 5967
+ (#5971) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#6032) warning: molecule contains more than 3 flourines, may not give good prediction
+SMILES loader: cycle 1 not closed, Readcount: 6034
+SMILES loader: cycle 1 not closed, Readcount: 6041
+ (#6051) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#6056) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#6057) warning: molecule contains more than 3 flourines, may not give good prediction
+SMILES loader: cycle 1 not closed, Readcount: 6065
+SMILES loader: cycle 1 not closed, Readcount: 6076
+ (#6103) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#6170) warning: molecular mass greater than 900 daltons, may not give good prediction
+ (#6171) warning: molecular mass greater than 900 daltons, may not give good prediction
+ (#6233) warning: molecular mass greater than 900 daltons, may not give good prediction
+ (#6235) warning: molecular mass greater than 900 daltons, may not give good prediction
+ (#6236) warning: molecular mass greater than 900 daltons, may not give good prediction
+SMILES loader: cycle 1 not closed, Readcount: 6402
+SMILES loader: cycle 1 not closed, Readcount: 6403
+SMILES loader: cycle 1 not closed, Readcount: 6404
+SMILES loader: cycle 1 not closed, Readcount: 6405
+SMILES loader: cycle 1 not closed, Readcount: 6406
+SMILES loader: cycle 1 not closed, Readcount: 6407
+SMILES loader: cycle 1 not closed, Readcount: 6408
+SMILES loader: cycle 1 not closed, Readcount: 6409
+SMILES loader: cycle 1 not closed, Readcount: 6410
+SMILES loader: cycle 1 not closed, Readcount: 6411
+SMILES loader: cycle 1 not closed, Readcount: 6413
+SMILES loader: cycle 1 not closed, Readcount: 6417
+SMILES loader: cycle 1 not closed, Readcount: 6418
+SMILES loader: cycle 1 not closed, Readcount: 6419
+SMILES loader: cycle 1 not closed, Readcount: 6420
+SMILES loader: cycle 1 not closed, Readcount: 6421
+SMILES loader: cycle 1 not closed, Readcount: 6422
+SMILES loader: cycle 1 not closed, Readcount: 6423
+SMILES loader: cycle 1 not closed, Readcount: 6424
+SMILES loader: cycle 1 not closed, Readcount: 6425
+SMILES loader: cycle 1 not closed, Readcount: 6426
+SMILES loader: cycle 1 not closed, Readcount: 6427
+SMILES loader: cycle 1 not closed, Readcount: 6428
+SMILES loader: cycle 1 not closed, Readcount: 6429
+SMILES loader: cycle 1 not closed, Readcount: 6430
+SMILES loader: cycle 1 not closed, Readcount: 6431
+SMILES loader: cycle 1 not closed, Readcount: 6432
+SMILES loader: cycle 1 not closed, Readcount: 6433
+SMILES loader: cycle 1 not closed, Readcount: 6434
+SMILES loader: cycle 1 not closed, Readcount: 6435
+SMILES loader: cycle 1 not closed, Readcount: 6491
+SMILES loader: cycle 1 not closed, Readcount: 6492
+SMILES loader: cycle 1 not closed, Readcount: 6493
+SMILES loader: cycle 1 not closed, Readcount: 6495
+SMILES loader: cycle 1 not closed, Readcount: 6496
+SMILES loader: cycle 1 not closed, Readcount: 6497
+ (#6511) warning: molecule contains more than 3 flourines, may not give good prediction
+SMILES loader: cycle 1 not closed, Readcount: 6522
+SMILES loader: cycle 1 not closed, Readcount: 6597
+SMILES loader: cycle 1 not closed, Readcount: 6599
+SMILES loader: cycle 1 not closed, Readcount: 6601
+SMILES loader: cycle 1 not closed, Readcount: 6603
+SMILES loader: cycle 1 not closed, Readcount: 6605
+SMILES loader: cycle 1 not closed, Readcount: 6607
+SMILES loader: cycle 1 not closed, Readcount: 6609
+SMILES loader: cycle 1 not closed, Readcount: 6611
+SMILES loader: cycle 1 not closed, Readcount: 6613
+ (#6616) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#6655) warning: molecular mass greater than 900 daltons, may not give good prediction
+ (#6680) warning: molecule contains more than 3 chlorines, may not give good prediction
+ (#6681) warning: molecule contains more than 3 chlorines, may not give good prediction
+ (#6682) warning: molecule contains more than 3 chlorines, may not give good prediction
+ (#6683) warning: molecule contains more than 3 bromines, may not give good prediction
+ (#6694) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#6700) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#6721) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#6725) warning: molecule contains more than 3 flourines, may not give good prediction
+ (#6747) warning: molecule contains more than 3 flourines, may not give good prediction
