@@ -4,7 +4,7 @@
 bio_repetitions <- readRDS("bioactivity_repetitions.rds")
 
 # Read the information of the dataset
-df1= read.table(file="COX_dataset_info.csv",sep=',',header=T)
+df1 <- readRDS("COX_dataset_info.rds") #read.table(file="COX_dataset_info.csv",sep=',',header=T)
 
 ##################################################################
 #### Preprocessing of the fingerprints 

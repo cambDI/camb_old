@@ -90,6 +90,15 @@ GetCVTrainControl <- function(ss, seed = 1, folds = 5, repeats = 1) {
 }
 
 ##############
+expGrid <- function(ini,end,stride,base){
+  grid <- c()
+  for (i in seq(ini,end,stride)){
+    grid <- append(grid,base^i)
+  }
+  return(grid)
+}
+
+##############
 ## Maximum Model Performance
 vplayout <- function(x, y) viewport(layout.pos.row = x, layout.pos.col = y)
 
