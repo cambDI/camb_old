@@ -219,14 +219,18 @@ SeqDescs <- function(Data,UniProtID=TRUE,type="AAC",..){
 ## Circular Morgan Fingerprints as specified in RDkit
 ############## 
 MorganFPs <- function (bits=512,radius=2,type="smi",mols,output,keep="hashed_binary",images=FALSE,unhashed=FALSE,
-                       verbose=FALSE,RDkitPath="/usr/local/lib/python2.7/site-packages/",
+                       verbose=FALSE,RDkitPath="/usr/local/share/RDKit",PythonPath="/usr/local/lib/python2.7/site-packages",
                        extFileExtension=FALSE,extMols=FALSE,unhashedExt=FALSE,logFile=FALSE) {
   types <- c("smi","smiles","sdf")
   type <- match.arg(type,types,several.ok=FALSE)
   if (is.na(type)){
     stop("Input formats currently supported are .smi, .smiles and .sdf")
-  }  
-  t <- paste("./FingerprintCalculator.py --bits",bits,"--rad",radius,"--f",type,
+  }
+  if (is.null(RDkitPath)) RDkitPath <- "/usr/local/share/RDKit"
+  if (is.null(PythonPath)) RDkitPath <- "/usr/local/lib/python2.7/site-packages"
+  
+  pyfpath <- system.file("extdata", "FingerprintCalculator.py", package="camb")
+  t <- paste(pyfpath," --bits",bits,"--rad",radius,"--f",type,
              "--mols",mols,"--output",output,"--RDkitPath",RDkitPath,sep=" ")
   if (images) t <- paste(t,"--image",sep=" ")
   if (verbose) t <- paste(t,"--v",sep=" ")

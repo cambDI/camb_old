@@ -11,7 +11,7 @@ DensityResponse <- function(Data,xlab="",ylab="",main="",alpha=0.2,
                             TitleAxesSize=15,tmar=1,bmar=1,rmar=1,lmar=1){
   if (!is.vector(Data)) stop("Input data must be a numeric matrix or data.frame")
   Data <- data.frame(Values=Data)
-  if (is.null(binwidth)) binwidth <- abs(range(Data)[1] - range(Data)[2]) / 10
+  if (is.null(binwidth)) binwidth <- abs(range(Data)[1] - range(Data)[2]) / 20
   p <- ggplot(Data, aes(x=Values)) + theme_bw() + 
     geom_histogram(aes(y=..density..),binwidth=binwidth,colour=histCol, fill=histFill) + 
     geom_density(alpha=alpha, fill=densityFill)+ ylab(ylab) + xlab(xlab) + ggtitle(main) +
@@ -50,7 +50,7 @@ PCAProt <- function(Data,SeqsName=NULL){
 # Plot the towo first PC of the sequence descriptors
 PCAProtPlot <- function (Data,main="",ylab="PC2",xlab="PC1",Seqs=NULL,PointSize=4,
                          LegendPosition="right",LegendName="Sequences",ColLegend=1,RowLegend=NULL,
-                         TitleSize=15,TextSize=15,XAxisSize=15,YAxisSize=15,
+                         TitleSize=15,TextSize=15,XAxisSize=15,YAxisSize=15,AngleLab=30,
                          TitleAxesSize=15,tmar=1,bmar=1,rmar=1,lmar=1) 
 {
   if (length(names(Data)) < 2 || length(names(Data)) > 3){
