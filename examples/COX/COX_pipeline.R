@@ -1,7 +1,7 @@
-#### Cambridge Workshop ####
-#### November 2013 ####
-
-# PCM Example with 'camb' #
+''' Cambridge Workshop '''
+''' November 2013 '''
+''' Isidro Cortes and Daniel Murrell '''
+''' PCM Example with camb '''
 
 library(camb)
 setwd('/Users/icortes/Desktop/camb_final/camb/examples/COX')
@@ -13,12 +13,9 @@ smiles <- read.table("smiles_COX.smi", header=FALSE)
 #StandardiseMolecules(structures.file="smiles_COX.smi", standardised.file="smiles_COX_processed.sdf", is.training=TRUE)
 descriptors_COX <- GeneratePadelDescriptors(standardised.file = "smiles_COX.smi", threads = 1)
 
-# imputation etc..
-
 descriptors <- RemoveStandardisedPrefix(descriptors)
 saveRDS(descriptors, file="descriptors.rds")
 descriptors <- readRDS("descriptors.rds")
-
 
 #########################################
 # Calculate Circular Morgan Fingerprints
@@ -27,7 +24,7 @@ Sys.setenv(RDBASE="/usr/local/share/RDKit")
 Sys.setenv(PYTHONPATH="/usr/local/lib/python2.7/site-packages")
 #fps_COX_512 <- MorganFPs(bits=512,radius=2,type='smi',mols='smiles_COX.smi',output='COX',keep='hashed_counts')
 #saveRDS(fps_COX_512,file="fps_COX_512.rds")
-readRDS(fps_COX_512,file="fps_COX_512.rds")
+fps_COX_512 <- readRDS("fps_COX_512.rds")
 
 #########################################
 # Read and calculate target descriptors
@@ -43,12 +40,16 @@ saveRDS(amino_accompound_IDs_zscales,file="Z3_COX.rds")
 #########################################
 
 setwd('/Users/icortes/Desktop/camb_final/camb/examples/COX')
-dataset <- read.table("COX_dataset_info.csv",sep=",",header=TRUE)
+dataset <- readRDS("COX_dataset_info.rds")
 bioactivity <- dataset$standard_value
 
 # The bioactivity is in nM, we convert it to pIC50
 bioactivity <- bioactivity * 10^-9
 bioactivity <- - log(bioactivity,base=10)
+
+#########################################
+# Dataset Visualization
+#########################################
 
 # Having a look at the response variable
 DensityResponse(bioactivity)
@@ -57,6 +58,14 @@ DensityResponse(bioactivity)
 target_PCA <- PCAProt(amino_accompound_IDs_zscales,SeqsName=dataset$accession)
 PCAProtPlot(target_PCA,main="PCA COX dataset",PointSize=8,TitleSize=25)
 
+# Pairwise Compound Similarity
+pw_dist_comp_fps <- PairwiseDist(fps_COX_512,method="jaccard")
+#saveRDS(pw_dist_comp_fps,file="pairiwse_dist_COX.rds")
+readRDS("pairiwse_dist_COX.rds")
+PairwiseDistPlot(pw_dist_comp_fps)
+
+# Which is the maximum achievable performance?
+MaxPerf(meanNoise=0,sdNoise=0.68,meanResp=mean(bioactivity),sdResp=sd(bioactivity),lenPred=800)
 
 #########################################
 # Removing repeated bioactivity datapoints (more than one annotation for the same compound-target combination)
@@ -130,6 +139,8 @@ CVRMSE <- signif(min(as.vector(na.omit(modelCoxSVMrad$results$RMSE))), digits=3)
 holdout.predictions <- as.vector(predict(modelCoxSVMrad, newdata = dataset$x.holdout))
 
 
+# Correlation between observed and predicted
+ObsPred()
 
 
 
