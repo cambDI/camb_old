@@ -24,16 +24,10 @@ descriptors <- readRDS("descriptors.rds")
 # Read and preprocess target descriptors
 #########################################
 
-setwd('/Users/icortes/Desktop/camb_final/camb/examples/COX')
 amino_acids <- read.table("AAs_COX.csv",sep=",",header=TRUE,colClasses=c("character"),row.names=1)
 amino_acids <- amino_acids[,2:ncol(amino_acids)]
 amino_acids_zscales <- AA_descs(Data=amino_acids,type="Z5")
 
 
-# Merge the target values together with the descriptors
-targets <- data.frame(Name = origin$ChemSpiderID, target = origin$Value)
-all <- merge(x=targets, y=descriptors, by="Name")
-ids <- all$Name
-x <- all[3:ncol(all)]
-y <- all$target
+
 

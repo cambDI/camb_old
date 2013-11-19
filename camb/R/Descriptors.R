@@ -130,7 +130,7 @@ AA_descs <- function(Data, type="Z5",..){
         des <- sapply(v,match_AA1,sel.=sel)
         namesDes <- row.names(des)
         des <- unlist(des)
-        namesDes <- c(t(sapply(namesDes,paste0,"_",v)))
+        namesDes <- c(t(sapply(namesDes,paste0,"_",v,seq(1,length(v)))))
         names(des) <- namesDes
         return(des)
       } else {
@@ -142,12 +142,19 @@ AA_descs <- function(Data, type="Z5",..){
       if (is.data.frame(df) || is.matrix(df)){
         des <- t(apply(df,1,match_AA1_vec))
         row.names(des) <- seq(1,nrow(df))
-        colnames(des) <- c(t(sapply(colNames,paste0,seq(1,ncol(df)))))
+        tableDescs <- table(colNames)
+        colNamesPos=c()
+        for(i in 1:length(tableDescs)){
+          now <- which(colNames %in% names(tableDescs)[i])
+          colNamesPos <- append(colNamesPos,paste0(colNames[now],"_",seq(1,length(now))))
+        }
+        colnames(des) <- c(t(sapply(colNamesPos,paste0,"_Aa",seq(1,ncol(df)))))
         return(des)
       } else {
         stop("Input is neither a data.frame nor a matrix")
       }
     }
+    
     
     if  (is.vector(Data)){
 	  descs_path <- system.file("extdata", "aa_descs.rds", package="camb")
@@ -172,13 +179,6 @@ AA_descs <- function(Data, type="Z5",..){
   }
 }
 
-toto <- function(){
-
-	  descs_path <- system.file("extdata", "aa_descs.rds", package="camb")
-	  #descs <- read.table(descs_path,header=TRUE,sep=",")
-	  descs <- readRDS(descs_path)
-	  return(descs)
-}
 
 
 
@@ -260,3 +260,9 @@ loadMorganFPs <- function (type="hashed_binary",output){
   p=read.table(loadFile,sep=",")
   return(p)
 }
+
+##############
+mergeData <- function(a1,a2,a3,..){
+  return(cbind(a1,a2,a3,..))
+}
+
