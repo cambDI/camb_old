@@ -9,7 +9,7 @@ df1= read.table(file="COX_dataset_info.csv",sep=',',header=T)
 ##################################################################
 #### Preprocessing of the fingerprints 
 ##################################################################
-df2 = read.table(file="fps_COX_counts_512.csv",sep=",",header=FALSE)
+df2 <- readRDS("fps_COX_512.rds") #read.table(file="fps_COX_counts_512.csv",sep=",",header=FALSE)
 nzv.columns <- nearZeroVar(df2, freqCut = 30/1)
 nb_descs = ncol(df2) - length(nzv.columns)
 nzv.names <- names(df2)[nzv.columns]

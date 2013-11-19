@@ -25,6 +25,8 @@ descriptors <- readRDS("descriptors.rds")
 #########################################
 Sys.setenv(RDBASE="/usr/local/share/RDKit")
 Sys.setenv(PYTHONPATH="/usr/local/lib/python2.7/site-packages")
+fps_COX_512 <- MorganFPs(bits=512,radius=2,type='smi',mols='smiles_COX.smi',output='COX',keep='hashed_counts')
+saveRDS(fps_COX_512,file="fps_COX_512.rds")
 
 #########################################
 # Read and calculate target descriptors
