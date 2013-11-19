@@ -110,14 +110,14 @@ AA_descs <- function(Data, type="Z5",..){
   if (!is.vector(Data) && !is.character(Data) && !is.data.frame(Data) && !is.matrix(Data)){
     stop("Input must be a character, vector, data frame or matrix")
   } else {    
-    match_AA1 <- function(AA,sel=sel){
+    match_AA1 <- function(AA,sel.=sel){
       if (checkAA(toupper(AA))){
         AA <- toupper(AA)
         if (nchar(AA) == 1){
-          d <- descs[descs$AA1==AA,sel+2]
+          d <- descs[descs$AA1 == AA,sel.+2]
         } else {
           AA <- convert31(AA)
-          d <- descs[descs$AA1==AA,sel+2]
+          d <- descs[descs$AA1 == AA,sel.+2]
         }
         return(d)
       } else {
@@ -125,9 +125,9 @@ AA_descs <- function(Data, type="Z5",..){
       }
     }
     
-    match_AA1_vec <-function(v,sel=sel){
+    match_AA1_vec <-function(v,sel.=sel){
       if (is.vector(v)){
-        des <- sapply(v,match_AA1,sel=sel)
+        des <- sapply(v,match_AA1,sel.=sel)
         namesDes <- row.names(des)
         des <- unlist(des)
         namesDes <- c(t(sapply(namesDes,paste0,"_",v)))
@@ -138,7 +138,7 @@ AA_descs <- function(Data, type="Z5",..){
       }
     }
     
-    match_AA1_df <- function(df,colNames,sel){
+    match_AA1_df <- function(df,colNames,sel.){
       if (is.data.frame(df) || is.matrix(df)){
         des <- t(apply(df,1,match_AA1_vec))
         row.names(des) <- seq(1,nrow(df))
@@ -150,7 +150,8 @@ AA_descs <- function(Data, type="Z5",..){
     }
     
     if  (is.vector(Data)){
-      descs <- load("prot_descs.rda") # read.table('./prot_desc.csv',header=TRUE,sep=",")
+	  descs_path <- system.file("extdata", "aa_descs.rds", package="camb")
+	  descs <- readRDS(descs_path)
       types <- c("ProtFP8","TScales","Tscales","VHSE","STScales","BLOSUM","FASGAI","MSWHIM","Z5","Z3")
       type <- match.arg(type,types,several.ok=TRUE)
       root <- strsplit(names(descs)[3:ncol(descs)],"_")
@@ -158,17 +159,29 @@ AA_descs <- function(Data, type="Z5",..){
       sel <- which(root %in% type)
       return(match_AA1_vec(Data,sel))
     } else {
-      descs <- load("prot_descs.rda") # read.table('./prot_desc.csv',header=TRUE,sep=",")
-      types <- c("ProtFP8","TScales","Tscales","VHSE","STScales","BLOSUM","FASGAI","MSWHIM","Z5","Z3")
+	  descs_path <- system.file("extdata", "aa_descs.rds", package="camb")
+	  descs <- readRDS(descs_path)
+	  types <- c("ProtFP8","TScales","Tscales","VHSE","STScales","BLOSUM","FASGAI","MSWHIM","Z5","Z3")
       type <- match.arg(type,types,several.ok=TRUE)
       root <- strsplit(names(descs)[3:ncol(descs)],"_")
       root <- unlist(root)[seq(1,length(unlist(root)),2)]
       typeExt <- root[which(root %in% type)]
       sel <- which(root %in% type)
-      return(match_AA1_df(Data,colNames=typeExt))
+      return(match_AA1_df(Data,colNames=typeExt,sel=sel))
     }
   }
 }
+
+toto <- function(){
+
+	  descs_path <- system.file("extdata", "aa_descs.rds", package="camb")
+	  #descs <- read.table(descs_path,header=TRUE,sep=",")
+	  descs <- readRDS(descs_path)
+	  return(descs)
+}
+
+
+
 
 ##############
 # Calculate Protein Descriptors

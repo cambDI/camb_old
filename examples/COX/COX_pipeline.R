@@ -24,6 +24,7 @@ descriptors <- readRDS("descriptors.rds")
 # Read and preprocess target descriptors
 #########################################
 
+setwd('/Users/icortes/Desktop/camb_final/camb/examples/COX')
 amino_acids <- read.table("AAs_COX.csv",sep=",",header=TRUE,colClasses=c("character"),row.names=1)
 amino_acids <- amino_acids[,2:ncol(amino_acids)]
 amino_acids_zscales <- AA_descs(Data=amino_acids,type="Z5")
