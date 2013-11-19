@@ -10,4 +10,4 @@ Description: A group of utilities to rapidly train and analyse models built to p
 NeedsCompile: Yes
 License: GPL
 LazyLoad: yes
-LazyData: yes
+LazyData: no
