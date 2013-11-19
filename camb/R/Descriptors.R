@@ -262,7 +262,7 @@ loadMorganFPs <- function (type="hashed_binary",output){
 }
 
 ##############
-mergeData <- function(a1,a2,a3,..){
-  return(cbind(a1,a2,a3,..))
+mergeData <- function(a1,a2,a3,a4=NULL,a5=NULL,a6=NULL){
+  return(cbind(a1,a2,a3,a4,a5,a6,deparse.level=0))
 }
 
