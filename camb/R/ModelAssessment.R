@@ -3,14 +3,17 @@
 #################################################################################
 
 ##############
-ErrorBarplot <- function(Data,X,Y,std,colour=NULL,shape=NULL,fill=NULL,main="",ylab="",xlab="",
+ErrorBarplot <- function(Data,X,Y,err,colour=NULL,shape=NULL,fill=NULL,main="",ylab="",xlab="",
                          minn=NULL,maxx=NULL,TextSize=15,TitleSize=15,XAxisSize=15,YAxisSize=15,
                          TitleAxesSize=15,AngleLab=35,barcol="red",
                          barWidth=0.3, LegendName="Legend",ColLegend=1,
                          RowLegend=NULL,LegendPosition="right",
                          tmar=1,bmar=1,rmar=1,lmar=1,stat="identity"){
-  low <- Data[,Y] - Data[,std]
-  high <- Data[,Y] + Data[,std]
+  toChar <- function(vec) {
+    paste(deparse(substitute(vec)))
+  }
+  low <- Data[,toChar(Y)] - Data[,toChar(err)]
+  high <- Data[,toChar(Y)] + Data[,toChar(err)]
   err <- data.frame(low,high)
   err_rang <- range()
   if (is.null(minn)) { minn <- min(err) - 0.20*diff((range(err)))}
@@ -73,7 +76,7 @@ Validation <- function(pred,obs){
 ObsPred <- function (pred,obs,margin=NULL,main="",ylab="Observed",xlab="Predicted",
                    PointSize=4,ColMargin="blue",TextSize=15,TitleSize=15,
                    XAxisSize=15,YAxisSize=15,TitleAxesSize=15,tmar=1,bmar=1,
-                   rmar=1,lmar=1) 
+                   rmar=1,lmar=1,AngleLab=30,LegendPosition="right") 
 { 
   if (isnot.vector(obs) || isnot.vector(pred)){
     stop("The input data must be two vectors")
@@ -100,3 +103,78 @@ ObsPred <- function (pred,obs,margin=NULL,main="",ylab="Observed",xlab="Predicte
   }
   return(p) 
 }
+
+# Functions to evaluate models performance
+# Tropsha, A.; Golbraikh, A. Predictive Quantitative Structure–Activity Relationships Modeling: 
+#Development and Validation of QSAR Models. In: Handbook of Chemoinformatics Algorithms 
+#(Faulon, J.-L.; Bender, A., Eds.), Chapter 7, pp. 213-233, Chapman & Hall / CRC, London, UK, 2010.
+
+# calculates the RMSE between two vectors
+RMSE <- function(v1, v2) {
+  i1 <- which(!is.na(v1))
+  i2 <- which(!is.na(v2))
+  is <- intersect(i1, i2)
+  v1 <- v1[is]
+  v2 <- v2[is]
+  residuals <- abs(v1-v2)
+  return(as.numeric(sqrt( (residuals%*%residuals)/length(v1) )))
+}
+
+# calculates the MAE between two vectors
+MAE <- function (v1, v2) {
+  i1 <- which(!is.na(v1))
+  i2 <- which(!is.na(v2))
+  is <- intersect(i1, i2)
+  v1 <- v1[is]
+  v2 <- v2[is]
+  residuals <- abs(v1 - v2)
+  return(sum(residuals)/length(v1))
+}
+
+# Calculates the slope between two vector (k')
+slope <- function(v1,v2){ # v1=z.test v2=y.test
+  return(sum(v2*v1)/sum(v1*v1))
+}
+
+# Calculates the regression coefficient through the origin
+Rsquared0 <- function(v1,v2) { #v1=z.test (y), v2=y.test (x)
+  if (is.vector(v1) && is.vector(v2) && length(v1)==length(v2)){
+    y_obs_mean <- mean(v2)
+    yr0 = v1 * slope(v1,v2)
+    first_term = (v2 - yr0)*(v2 - yr0)
+    second_term= (v2-y_obs_mean)*(v2-y_obs_mean)
+    return(1-(sum(first_term)/sum(second_term)))
+  }
+  else {print("Wrong input: input arguments are not vector or have unequal length")}
+}
+
+
+# Calculates the regression coefficient 
+Rsquared <- function(v1,v2) { # v1=z.test (y), v2=y.test (x)
+  if (is.vector(v1) && is.vector(v2) && length(v1)==length(v2)){
+    y_obs_mean <- mean(v2)
+    y_pred_mean <- mean(v1)
+    first_term <- sum((v2-y_obs_mean) * (v1 - y_pred_mean))
+    second_term <- sqrt(sum((v2-y_obs_mean)*(v2-y_obs_mean)) * sum((v1 - y_pred_mean)*(v1 - y_pred_mean)))
+    division <- first_term / second_term
+    return(division * division)
+  }
+  else {print("Wrong input: input arguments are not vector or have unequal length")}
+  
+}
+
+# Calculates the Q squared 
+#Qsquared (z.test,y.test) (predicted vs observed)
+Qsquared <- function(v1, v2) {
+  if (is.vector(v1) && is.vector(v2) && length(v1)==length(v2)){
+    y_obs_mean <- mean(v2)
+    first_term <- abs(v1-v2)*abs(v1-v2)
+    second_term <- abs(v2-y_obs_mean)*abs(v2-y_obs_mean)
+    return(1-(sum(first_term)/sum(second_term)))
+  }
+  else {print("Wrong input: input arguments are not vector or have unequal length")}
+}
+
+################################
+
+
