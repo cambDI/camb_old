@@ -5,12 +5,13 @@
 ##############
 ## Density of the response variable
 DensityResponse <- function(Data,xlab="",ylab="",main="",alpha=0.2,
-                            binwidth=0.05,histFill="white",histCol="black",
+                            binwidth=NULL,histFill="white",histCol="black",
                             densityFill="#FF6666",TitleSize=15,TextSize=15,
-                            XAxisSize=15,YAxisSize=15,
+                            XAxisSize=15,YAxisSize=15,AngleLab=30,LegendPosition="right",
                             TitleAxesSize=15,tmar=1,bmar=1,rmar=1,lmar=1){
   if (!is.vector(Data)) stop("Input data must be a numeric matrix or data.frame")
   Data <- data.frame(Values=Data)
+  if (is.null(binwidth)) binwidth <- abs(range(Data)[1] - range(Data)[2]) / 10
   p <- ggplot(Data, aes(x=Values)) + theme_bw() + 
     geom_histogram(aes(y=..density..),binwidth=binwidth,colour=histCol, fill=histFill) + 
     geom_density(alpha=alpha, fill=densityFill)+ ylab(ylab) + xlab(xlab) + ggtitle(main) +
@@ -118,7 +119,7 @@ PairwiseDist <- function(Data,method="jaccard",..){
 
 ##############
 PairwiseDistPlot <- function(Data,xlab="",ylab="",main="",TextSize=15,TitleSize=15,XAxisSize=15,YAxisSize=15,
-                             TitleAxesSize=15,tmar=1,bmar=1,rmar=1,lmar=1){
+                             TitleAxesSize=15,tmar=1,bmar=1,rmar=1,lmar=1,LegendPosition="right"){
   if (is.matrix(Data) || is.data.frame(Data)){
     p <- ggplot(Data, aes(x=Distance)) + 
       geom_histogram(aes(y=..density..),binwidth=.05,colour="black", fill="white") + 
