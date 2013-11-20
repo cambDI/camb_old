@@ -9,6 +9,7 @@ setwd('/Users/icortes/Desktop/camb_final/camb/examples/COX')
 #########################################
 # Read, preprocess and calculate descriptors for the compounds
 #########################################
+
 smiles <- read.table("smiles_COX.smi", header=FALSE)
 #StandardiseMolecules(structures.file="smiles_COX.smi", standardised.file="smiles_COX_processed.sdf", is.training=TRUE)
 descriptors_COX <- GeneratePadelDescriptors(standardised.file = "smiles_COX.smi", threads = 1)
@@ -20,6 +21,7 @@ descriptors <- readRDS("descriptors.rds")
 #########################################
 # Calculate Circular Morgan Fingerprints
 #########################################
+
 Sys.setenv(RDBASE="/usr/local/share/RDKit")
 Sys.setenv(PYTHONPATH="/usr/local/lib/python2.7/site-packages")
 #fps_COX_512 <- MorganFPs(bits=512,radius=2,type='smi',mols='smiles_COX.smi',output='COX',keep='hashed_counts')
@@ -35,6 +37,7 @@ amino_accompound_IDs <- amino_accompound_IDs[,2:ncol(amino_accompound_IDs)]
 amino_accompound_IDs_zscales <- AA_descs(Data=amino_accompound_IDs,type="Z3")
 saveRDS(amino_accompound_IDs_zscales,file="Z3_COX.rds")
 amino_accompound_IDs_zscales <-readRDS("Z3_COX.rds")
+
 #########################################
 # Read the file with the information about the dataset: {target names, bioctivities, etc..}
 #########################################
@@ -108,41 +111,51 @@ saveRDS(dataset, file="dataset_COX_preprocessed.rda")
 #########################################
 # Training a SVM
 #########################################
+
 dataset <- readRDS("dataset_COX_preprocessed.rda")
 
 # Set the number of cores for parallelization of the training
 registerDoMC(cores=4)
 
-method <- "rvmRadial"
+method <- "svmRadial"
 # We define an exponential grid to optimize the hyperparameters
 exp_grid <- expGrid(ini=-8,end=-6,stride=2,base=2)
 tune.grid <- expand.grid(.sigma = exp_grid)
 
-modelCoxSVMrad <- train(dataset$x.train, dataset$y.train, method, tuneGrid=tune.grid, trControl=dataset$trControl)
-saveRDS(modelCoxSVMrad, file=paste("COX",method,".rds",sep=""))
+#modelCoxSVMrad <- train(dataset$x.train, dataset$y.train, method, tuneGrid=tune.grid, trControl=dataset$trControl)
+#saveRDS(modelCoxSVMrad, file="svm_model_COX.rds")
+modelCoxSVMrad <- readRDS("COXsvm.rds")
 
 #########################################
-# Training a Random Foresy
+# Training a Random Forest
 #########################################
 
 method <- "rf"
 tune.grid <- expand.grid(.mtry = seq(5,100,5))
 
-modelCoxRF<- train(dataset$x.train, dataset$y.train, method, tuneGrid=tune.grid, trControl=dataset$trControl)
-saveRDS(modelCoxRF, file=paste("COX",method,".rds",sep=""))
-
-dataset <- readRDS("dataset_COX_preprocessed.rda")
+#modelCoxRF<- train(dataset$x.train, dataset$y.train, method, tuneGrid=tune.grid, trControl=dataset$trControl)
+#saveRDS(modelCoxRF, file="rf_model_COX.rds")
+modelCoxRF<- readRDS("COXrf.rds")
 
 
 #########################################
 # Assesing Model Performance
 #########################################
-CVRMSE <- signif(min(as.vector(na.omit(modelCoxSVMrad$results$RMSE))), digits=3)
-holdout.predictions <- as.vector(predict(modelCoxSVMrad, newdata = dataset$x.holdout))
 
+# Cross Validation Metrics.
+# We assume the metric used for the choice of the best combination of hyperparameters is 'RMSE'.
+# This can e chacke by: _my_model_$metric
+RMSE_CV = signif(min(as.vector(na.omit(modelCoxRF$results$RMSE))), digits=3)
+Rsquared_CV = modelCoxRF$results$Rsquared[which( modelCoxRF$results$RMSE %in% min(modelCoxRF$results$RMSE, na.rm=TRUE))]
+
+# Predict the values of the hold-out (external) set
+holdout.predictions <- as.vector(predict(modelCoxRF, newdata = dataset$x.holdout))
+
+# Statistics for Model Validation
+MetricsRf <- Validation(holdout.predictions,dataset$y.holdout)
 
 # Correlation between observed and predicted
-ObsPred()
-
+ObsPred(pred=holdout.predictions,obs=dataset$y.holdout,PointSize=3,ColMargin='green',
+        margin=1,PointColor="black",PointShape=16,MarginWidth=2)
 
 

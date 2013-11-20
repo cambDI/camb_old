@@ -62,7 +62,8 @@ Validation <- function(pred,obs){
 ObsPred <- function (pred,obs,margin=NULL,main="",ylab="Observed",xlab="Predicted",
                    PointSize=4,ColMargin="blue",TextSize=15,TitleSize=15,
                    XAxisSize=15,YAxisSize=15,TitleAxesSize=15,tmar=1,bmar=1,
-                   rmar=1,lmar=1,AngleLab=30,LegendPosition="right") 
+                   rmar=1,lmar=1,AngleLab=30,LegendPosition="right",PointColor="black",
+                   PointShape=16,MarginWidth=1) 
 { 
   if (isnot.vector(obs) || isnot.vector(pred)){
     stop("The input data must be two vectors")
@@ -71,17 +72,20 @@ ObsPred <- function (pred,obs,margin=NULL,main="",ylab="Observed",xlab="Predicte
   } else if(isnot.null(margin)) {
     Data <- data.frame(Observed=obs,Predicted=pred)
     p <- ggplot(Data, aes(x=Observed, y=Predicted)) +
-      geom_point(size=PointSize) +  geom_abline(slope=1,intercept=margin/2,colour=ColMargin) + 
-      geom_abline(slope=1,intercept=-(margin/2),colour=ColMargin) + theme_bw() + 
+      geom_point(size=PointSize,colour=PointColor,shape=PointShape) +  
+      geom_abline(slope=1,intercept=margin/2,colour=ColMargin,size=MarginWidth) + 
+      geom_abline(slope=1,intercept=-(margin/2),colour=ColMargin,size=MarginWidth) + theme_bw() + 
       ggtitle(main) + ylab(ylab) + xlab(xlab)+
+      ylim(c(min(c(obs,pred)), max(c(obs,pred)))) + xlim(c(min(c(obs,pred)), max(c(obs,pred)))) +
       theme(text = element_text(size=TextSize),axis.text.x = element_text(size=XAxisSize,angle = AngleLab, hjust = 1),
             axis.title.x=element_text(size=TitleAxesSize),axis.title.y=element_text(size=TitleAxesSize),
             axis.text.y=element_text(size=YAxisSize),legend.position=LegendPosition,plot.title=element_text(size=TitleSize),
             legend.key=element_blank(), plot.margin=unit(c(tmar,rmar,bmar,lmar),"cm")) 
   } else {
     Data <- data.frame(Observed=obs,Predicted=pred)
-    p <- ggplot(Data, aes(x=Observed, y=Predicted)) + geom_point(size=PointSize) + theme_bw() + 
+    p <- ggplot(Data, aes(x=Observed, y=Predicted)) + geom_point(size=PointSize,colour=PointColor,shape=PointShape) + theme_bw() + 
       ggtitle(main) + ylab(ylab) + xlab(xlab) +
+      ylim(c(min(c(obs,pred)), max(c(obs,pred)))) + xlim(c(min(c(obs,pred)), max(c(obs,pred)))) +
       theme(text = element_text(size=TextSize),axis.text.x = element_text(size=XAxisSize,angle = AngleLab, hjust = 1),
             axis.title.x=element_text(size=TitleAxesSize),axis.title.y=element_text(size=TitleAxesSize),
             axis.text.y=element_text(size=YAxisSize),legend.position=LegendPosition,plot.title=element_text(size=TitleSize),
