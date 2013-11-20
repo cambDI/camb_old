@@ -87,7 +87,7 @@ void R_standardiseMolecules(char **structures_file, char **standardised_file, in
     bool isTraining = (*isTrainingInt!=0);
     int l = *limit;
    
-    bool debug = false;
+    bool debug = true;
    
     int structure, structureIter;
     int sdfWriter = indigoWriteFile(*standardised_file);
@@ -119,14 +119,15 @@ void R_standardiseMolecules(char **structures_file, char **standardised_file, in
             //printf("Structure Index: %d, readCount: %d\n", structureIndex+1, readCount);
             string structureName = indigoName(structure);
             int structureClone = indigoClone(structure);
-                
-            if (debug) printf("folding hydrogens\n");
+            
+            if (debug) Rprintf("%s (#%d)\n", structureName.c_str(), structureIndex+1);    
+            if (debug) Rprintf("folding hydrogens\n");
             indigoFoldHydrogens(structure);
             
             if((structureIndex+1)%50 == 0) printf(".");
             if((structureIndex+1)%5000 == 0) printf("\n");
             
-            if (debug) printf("checking bad valence and ambiguousH\n");
+            if (debug) Rprintf("checking bad valence and ambiguousH\n");
             // skip over if indigo determines bad valence
             if( indigoCheckBadValence(structure)==NULL ) {
                 Rprintf("%s (#%d) skipped over: INDIGO_BAD_VALANCE\n", structureName.c_str(), structureIndex+1);
@@ -144,7 +145,7 @@ void R_standardiseMolecules(char **structures_file, char **standardised_file, in
                 continue;
             }
             
-            if (debug) printf("checking if organic\n");
+            if (debug) Rprintf("checking if organic\n");
             // skip over if not organic
             if(!isOrganic(structure)) {
                 inorganicCount++;
@@ -157,13 +158,13 @@ void R_standardiseMolecules(char **structures_file, char **standardised_file, in
             
             bool wasAromatic = isAromatic(structure);
             // check if the structure can be dearomatized
-            if (debug) printf("dearomitizing\n");
+            if (debug) Rprintf("dearomitizing\n");
             indigoDearomatize(structure);
             
-            if (debug) printf("checking aromatic\n");
+            if (debug) Rprintf("checking aromatic\n");
             // if the structure is now not aromatic (i.e. hasn't failed the dearomitisation) then pass it through the inchi plugin
             if(!isAromatic(structure)) {
-                if (debug) printf("passing through inchi\n");
+                if (debug) Rprintf("passing through inchi\n");
                 const char* inchi = indigoInchiGetInchi(structure);
                 string trimmedInchi = trimInchi(inchi);
                 int temp = indigoInchiLoadMolecule(trimmedInchi.c_str());
@@ -184,11 +185,11 @@ void R_standardiseMolecules(char **structures_file, char **standardised_file, in
             }
             
             // reset the isotopes of all the atoms in the molecule
-            if (debug) printf("resetting isotopes\n");
+            if (debug) Rprintf("resetting isotopes\n");
             resetIsotopes(structure);
             
             // print warnings on molecular mass variations
-            if (debug) printf("various conditions\n");
+            if (debug) Rprintf("various conditions\n");
             float molecularMass = indigoMolecularWeight(structure);
             if(molecularMass<20) {
                 tooLightCount++;
@@ -242,7 +243,7 @@ void R_standardiseMolecules(char **structures_file, char **standardised_file, in
             //}
         
             // use the largest substructure
-            if (debug) printf("selecting the largest substructure\n");
+            if (debug) Rprintf("selecting the largest substructure\n");
             int temp2 = pickLargestSubstructure(structure);
             indigoFree(structure);
             structure = temp2;

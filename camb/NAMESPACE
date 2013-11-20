@@ -13,6 +13,7 @@ export(GetCVTrainControl)
 export(GeneratePadelDescriptors)
 export(StandardiseMolecules)
 export(ReplaceInfinitesWithNA)
+export(RemoveColumnsWithMoreThanHalfNA)
 export(RemoveStandardisedPrefix)
 
 exportPattern("^[[:alpha:]]+")
