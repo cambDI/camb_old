@@ -1,0 +1,34 @@
+# Export all names
+# exportPattern(".")
+
+# Export specific functions
+export(StandardiseMolecules)
+export(ViewTargets)
+export(ImputeFeatures)
+export(SplitSet)
+export(RemoveNearZeroVarianceFeatures)
+export(RemoveHighlyCorrelatedFeatures)
+export(PreProcess)
+export(GetCVTrainControl)
+export(Fingerprints)
+export(GeneratePadelDescriptors)
+export(StandardiseMolecules)
+export(ReplaceInfinitesWithNA)
+export(RemoveStandardisedPrefix)
+exportPattern("^[[:alpha:]]+")
+
+# Import all packages listed as Imports or Depends
+import(
+  kernlab,
+  gbm,
+  rJava,
+  caret,
+  impute,
+  ggplot2,
+  grid,
+  gridExtra,
+  protr,
+  vegan
+)
+
+useDynLib(camb)

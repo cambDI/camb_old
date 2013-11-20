@@ -1,4 +1,4 @@
-# Export all names
+#Export all names
 # exportPattern(".")
 
 # Export specific functions
@@ -10,13 +10,13 @@ export(RemoveNearZeroVarianceFeatures)
 export(RemoveHighlyCorrelatedFeatures)
 export(PreProcess)
 export(GetCVTrainControl)
-export(Fingerprints)
 export(GeneratePadelDescriptors)
 export(StandardiseMolecules)
 export(ReplaceInfinitesWithNA)
 export(RemoveColumnsWithMoreThanHalfNA)
 export(RemoveStandardisedPrefix)
 
+exportPattern("^[[:alpha:]]+")
 
 # Import all packages listed as Imports or Depends
 import(
@@ -24,7 +24,12 @@ import(
   gbm,
   rJava,
   caret,
-  impute
+  impute,
+  ggplot2,
+  grid,
+  gridExtra,
+  protr,
+  vegan
 )
 
 useDynLib(camb)
