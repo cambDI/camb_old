@@ -9,6 +9,11 @@ ReplaceInfinitesWithNA <- function(d) {
   do.call(data.frame,lapply(d, function(x) replace(x, is.infinite(x),NA)))
 }
 
+RemoveColumnsWithMoreThanHalfNA <- function(d) {
+  indexes <- which(apply(d, 2, function(x) {length(which(is.na(x)))>(0.5*length(x))}))
+  d[,-indexes]
+}
+                         
 ImputeFeatures <- function(d) {
   library(impute)
   as.data.frame(impute.knn(as.matrix(d), k = 10)$data)

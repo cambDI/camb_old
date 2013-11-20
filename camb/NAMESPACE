@@ -14,6 +14,7 @@ export(Fingerprints)
 export(GeneratePadelDescriptors)
 export(StandardiseMolecules)
 export(ReplaceInfinitesWithNA)
+export(RemoveColumnsWithMoreThanHalfNA)
 export(RemoveStandardisedPrefix)
 
 
