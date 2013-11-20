@@ -34,12 +34,14 @@ amino_accompound_compound_IDs <- read.table("AAs_COX.csv",sep=",",header=TRUE,co
 amino_accompound_IDs <- amino_accompound_IDs[,2:ncol(amino_accompound_IDs)]
 amino_accompound_IDs_zscales <- AA_descs(Data=amino_accompound_IDs,type="Z3")
 saveRDS(amino_accompound_IDs_zscales,file="Z3_COX.rds")
-
+amino_accompound_IDs_zscales <-readRDS("Z3_COX.rds")
 #########################################
-# Read the file with the info about the dataset: {target names, bioctivities, etc..}
+# Read the file with the information about the dataset: {target names, bioctivities, etc..}
 #########################################
+# Be careful: when reading smiles from a .csv file into an R
+# dataframe, the smils are clipped after a hash ('#') symbol.
+# Good practice: keep the smiles alone in a .smi file
 
-setwd('/Users/icortes/Desktop/camb_final/camb/examples/COX')
 dataset <- readRDS("COX_dataset_info.rds")
 bioactivity <- dataset$standard_value
 

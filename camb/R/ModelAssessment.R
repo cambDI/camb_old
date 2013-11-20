@@ -3,36 +3,23 @@
 #################################################################################
 
 ##############
+aes_string(x=names(data)[xind], y=names(data)[yind])
 ErrorBarplot <- function(Data,X,Y,err,colour=NULL,shape=NULL,fill=NULL,main="",ylab="",xlab="",
                          minn=NULL,maxx=NULL,TextSize=15,TitleSize=15,XAxisSize=15,YAxisSize=15,
-                         TitleAxesSize=15,AngleLab=35,barcol="red",
+                         TitleAxesSize=15,AngleLab=35,barcol="red",barSize=1,
                          barWidth=0.3, LegendName="Legend",ColLegend=1,
                          RowLegend=NULL,LegendPosition="right",
                          tmar=1,bmar=1,rmar=1,lmar=1,stat="identity"){
-  toChar <- function(vec) {
-    paste(deparse(substitute(vec)))
-  }
-  low <- Data[,toChar(Y)] - Data[,toChar(err)]
-  high <- Data[,toChar(Y)] + Data[,toChar(err)]
-  err <- data.frame(low,high)
-  err_rang <- range()
-  if (is.null(minn)) { minn <- min(err) - 0.20*diff((range(err)))}
-  if (is.null(maxx)) { maxx <- max(err) + 0.20*diff((range(err)))}
   
-  p <- ggplot(Data, aes_string(x=X, y=Y,fill=fill,colour=colour,shape=shape)) + theme_bw() + 
-    ggtitle(main)+ ylab(ylab) + xlab(xlab) +   
-    coord_cartesian(ylim=c(minn,maxx))+
-    theme(text = element_text(size=TextSize),axis.text.x = element_text(size=XAxisSize,angle = AngleLab, hjust = 1),
-          axis.title.x=element_text(size=TitleAxesSize),axis.title.y=element_text(size=TitleAxesSize),
-          axis.text.y=element_text(size=YAxisSize),
-          legend.position=LegendPosition,plot.title=element_text(size=TitleSize),
-          legend.key=element_blank(), plot.margin=unit(c(tmar,rmar,bmar,lmar), "cm")) +
-    geom_bar(position="dodge",stat=stat) + 
-    geom_errorbar(data=err, aes(ymin=low, ymax=high),
-                  position=position_dodge(0.9), width=barWidth,color=barcol) +   
-    guides(colour = guide_legend(LegendName,ncol=ColLegend,nrow=RowLegend),
-           shape=guide_legend(LegendName,ncol=ColLegend,nrow=RowLegend),
-           fill=guide_legend(LegendName,ncol=ColLegend,nrow=RowLegend)) 
+  yerr_names <- names(Data)[c(Y,err)]
+  yerrbar <- aes_string(ymin = paste(yerr_names, collapse = '-'), 
+                        ymax = paste(yerr_names,collapse='+'))
+  
+  p <- ggplot(Data, aes_string(x=names(Data)[X], y=names(Data)[Y],fill=fill,colour=colour,shape=shape)) + theme_bw() + 
+    geom_bar(position="dodge",stat=stat)+
+    geom_errorbar(mapping=yerrbar,
+                  position=position_dodge(0.9), width=barWidth,color=barcol,size=barSize) 
+  
   return(p)
 }
 
