@@ -3,7 +3,6 @@
 #################################################################################
 
 ##############
-aes_string(x=names(data)[xind], y=names(data)[yind])
 ErrorBarplot <- function(Data,X,Y,err,colour=NULL,shape=NULL,fill=NULL,main="",ylab="",xlab="",
                          minn=NULL,maxx=NULL,TextSize=15,TitleSize=15,XAxisSize=15,YAxisSize=15,
                          TitleAxesSize=15,AngleLab=35,barcol="red",barSize=1,
