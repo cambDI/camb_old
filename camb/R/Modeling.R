@@ -15,7 +15,15 @@ ReplaceInfinitesWithNA <- function(d) {
   do.call(data.frame,lapply(d, function(x) replace(x, is.infinite(x),NA)))
 }
 
+<<<<<<< HEAD:camb/R/train.R
+RemoveColumnsWithMoreThanHalfNA <- function(d) {
+  indexes <- which(apply(d, 2, function(x) {length(which(is.na(x)))>(0.5*length(x))}))
+  d[,-indexes]
+}
+                         
+=======
 ##############
+>>>>>>> 7448e0f5021baa693cc4a614f79f0b12658b80e6:camb/R/Modeling.R
 ImputeFeatures <- function(d) {
   library(impute)
   as.data.frame(impute.knn(as.matrix(d), k = 10)$data)
