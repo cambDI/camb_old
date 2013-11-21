@@ -79,18 +79,36 @@ void R_drawMoleculeInSDFbyID(char **structures_file, char **structureIDIn, char 
     indigoFree(fileIter);
 }
 
-void R_standardiseMolecules(char **structures_file, char **standardised_file, int *isSDFInt, int *isTrainingInt, int *limit) {
+void R_standardiseMolecules(char **structures_file,
+                            char **standardised_file,
+                            char **removed_file,
+                            int *isSDFInt,
+                            int *removeInorganicInt,
+                            int *fluorineLimitInt,
+                            int *chlorineLimitInt,
+                            int *bromineLimitInt,
+                            int *iodineLimitInt,
+                            int *minMassLimitInt,
+                            int *maxMassLimitInt,
+                            int *numberProcessedInt) {
     indigoSetOption("aromaticity-model", "generic"); // enable the dearomatization to work properly
     indigoSetOption("dearomatize-verification", "false"); // enable the dearomatization to work properly
    
     bool isSDF = (*isSDFInt!=0);
-    bool isTraining = (*isTrainingInt!=0);
-    int l = *limit;
-   
-    bool debug = true;
+    bool removeInorganic = (*removeInorganicInt!=0);
+    int numberProcessed = *numberProcessedInt;
+    int fluorineLimit = *fluorineLimitInt;
+    int chlorineLimit = *chlorineLimitInt;
+    int bromineLimit = *bromineLimitInt;
+    int iodineLimit = *iodineLimitInt;
+    int minMassLimit = *minMassLimitInt;
+    int maxMassLimit = *maxMassLimitInt;
+    
+    bool debug = false;
    
     int structure, structureIter;
     int sdfWriter = indigoWriteFile(*standardised_file);
+    int removedWriter = indigoWriteFile(*removed_file);
     if(isSDF) {
         Rprintf("Reading SDF (C)\n");
         structureIter = indigoIterateSDFile(*structures_file);
@@ -109,10 +127,9 @@ void R_standardiseMolecules(char **structures_file, char **standardised_file, in
     int highChlorineCount = 0;
     int highBromineCount = 0;
     int highIodineCount = 0;
-    bool noEorW = true; // no errors or warnings
     while (structure = indigoNext(structureIter)) {
         readCount++;
-        if(l != -1 && readCount > l) break;
+        if(numberProcessed != -1 && readCount > numberProcessed) break;
         if (indigoCountAtoms(structure) != -1) {
             int structureIndex = indigoIndex(structure);
             
@@ -131,7 +148,6 @@ void R_standardiseMolecules(char **structures_file, char **standardised_file, in
             // skip over if indigo determines bad valence
             if( indigoCheckBadValence(structure)==NULL ) {
                 Rprintf("%s (#%d) skipped over: INDIGO_BAD_VALANCE\n", structureName.c_str(), structureIndex+1);
-                noEorW = false;
                 indigoFree(structureClone);
                 indigoFree(structure);
                 continue;
@@ -139,7 +155,6 @@ void R_standardiseMolecules(char **structures_file, char **standardised_file, in
             // skip over if indigo determines ambiguous H
             if( indigoCheckAmbiguousH(structure)==NULL ) {
                 Rprintf("%s (#%d) skipped over: INDIGO_AMBIGUOUSH\n", structureName.c_str(), structureIndex+1);
-                noEorW = false;
                 indigoFree(structureClone);
                 indigoFree(structure);
                 continue;
@@ -149,11 +164,12 @@ void R_standardiseMolecules(char **structures_file, char **standardised_file, in
             // skip over if not organic
             if(!isOrganic(structure)) {
                 inorganicCount++;
-                Rprintf("%s (#%d) skipped over: NOT_ORGANIC\n", structureName.c_str(), structureIndex+1);
-                noEorW = false;
-                indigoFree(structureClone);
-                indigoFree(structure);
-                continue;
+                if(removeInorganic) {
+                    Rprintf("%s (#%d) skipped over: NOT_ORGANIC\n", structureName.c_str(), structureIndex+1);
+                    indigoFree(structureClone);
+                    indigoFree(structure);
+                    continue;
+                }
             }
             
             bool wasAromatic = isAromatic(structure);
@@ -170,7 +186,6 @@ void R_standardiseMolecules(char **structures_file, char **standardised_file, in
                 int temp = indigoInchiLoadMolecule(trimmedInchi.c_str());
                 if(strcmp(indigoInchiGetWarning(), "") != 0) {
                     Rprintf("%s (#%d) warning: while converting to Inchi: %s\n", structureName.c_str(), structureIndex+1, indigoInchiGetWarning());
-                    noEorW = false;
                 }
                 else {
                     indigoFree(structure);
@@ -180,7 +195,6 @@ void R_standardiseMolecules(char **structures_file, char **standardised_file, in
             else {
                 if(wasAromatic) {
                     Rprintf("%s (#%d) warning: failed dearomatize, didn't go through inchi\n", structureName.c_str(), structureIndex+1);
-                    noEorW = false;
                 }
             }
             
@@ -191,48 +205,41 @@ void R_standardiseMolecules(char **structures_file, char **standardised_file, in
             // print warnings on molecular mass variations
             if (debug) Rprintf("various conditions\n");
             float molecularMass = indigoMolecularWeight(structure);
-            if(molecularMass<20) {
+            if(minMassLimit != -1 && molecularMass < minMassLimit) {
                 tooLightCount++;
-                Rprintf("%s (#%d) warning: molecular mass less than 20 daltons, may not give good prediction\n", structureName.c_str(), structureIndex+1);
-                noEorW = false;
+                Rprintf("%s (#%d) warning: molecular mass less than %d daltons\n", structureName.c_str(), structureIndex+1, minMassLimit);
             }
-            if(molecularMass>900) {
+            if(maxMassLimit != -1 && molecularMass > maxMassLimit) {
                 tooHeavyCount++;
-                Rprintf("%s (#%d) warning: molecular mass greater than 900 daltons, may not give good prediction\n", structureName.c_str(), structureIndex+1);
-                noEorW = false;
+                Rprintf("%s (#%d) warning: molecular mass greater than %d daltons\n", structureName.c_str(), structureIndex+1, maxMassLimit);
             }
-            bool highFlourine = containsMoreThanX(structure, 3, 9);
+            bool highFlourine = fluorineLimit != -1 && containsMoreThanX(structure, fluorineLimit, 9);
             if(highFlourine) {
                 highFlourineCount++;
-                Rprintf("%s (#%d) warning: molecule contains more than 3 flourines, may not give good prediction\n", structureName.c_str(), structureIndex+1);
-                noEorW = false;
+                Rprintf("%s (#%d) warning: molecule contains more than %d flourines\n", structureName.c_str(), structureIndex+1, fluorineLimit);
             }
-            bool highChlorine = containsMoreThanX(structure, 3, 17);
+            bool highChlorine = chlorineLimit != -1 && containsMoreThanX(structure, chlorineLimit, 17);
             if(highChlorine) {
                 highChlorineCount++;
-                Rprintf("%s (#%d) warning: molecule contains more than 3 chlorines, may not give good prediction\n", structureName.c_str(), structureIndex+1);
-                noEorW = false;
+                Rprintf("%s (#%d) warning: molecule contains more than %d chlorines\n", structureName.c_str(), structureIndex+1, chlorineLimit);
             }
-            bool highBromine = containsMoreThanX(structure, 3, 35);
+            bool highBromine = bromineLimit != -1 && containsMoreThanX(structure, bromineLimit, 35);
             if(highBromine) {
                 highBromineCount++;
-                Rprintf("%s (#%d) warning: molecule contains more than 3 bromines, may not give good prediction\n", structureName.c_str(), structureIndex+1);
-                noEorW = false;
+                Rprintf("%s (#%d) warning: molecule contains more than %d bromines\n", structureName.c_str(), structureIndex+1, bromineLimit);
             }
-            bool highIodine = containsMoreThanX(structure, 3, 53);
+            bool highIodine = iodineLimit != -1 && containsMoreThanX(structure, iodineLimit, 53);
             if(highIodine) {
                 highIodine++;
-                Rprintf("%s (#%d) warning: molecule contains more than 3 iodines, may not give good prediction\n", structureName.c_str(), structureIndex+1);
-                noEorW = false;
+                Rprintf("%s (#%d) warning: molecule contains more than %d iodines\n", structureName.c_str(), structureIndex+1, iodineLimit);
             }
             
-            // remove 'bad' molecules from the training set
-            if(isTraining) {
-                if(molecularMass < 20 || molecularMass > 900 || highFlourine || highChlorine || highBromine || highIodine) {
-                    indigoFree(structureClone);
-                    indigoFree(structure);
-                    continue; 
-                }
+            // remove 'bad' molecules (normally used during training)
+            if(molecularMass < minMassLimit || molecularMass > maxMassLimit || highFlourine || highChlorine || highBromine || highIodine) {
+                indigoSdfAppend(removedWriter, structure);
+                indigoFree(structureClone);
+                indigoFree(structure);
+                continue; 
             }
             
             // rendering example left in for reference
@@ -258,29 +265,24 @@ void R_standardiseMolecules(char **structures_file, char **standardised_file, in
         }
         else {
             Rprintf("%s, Readcount: %d\n", indigoGetLastError(), readCount);
-            noEorW = false;
         }
     }  
     printf("\n");
     indigoFree(structureIter);
     indigoClose(sdfWriter);
     indigoFree(sdfWriter);
+    indigoClose(removedWriter);
+    indigoFree(removedWriter);
     
-    if(isTraining) {
-        printf("\ninorganicCount: %d\n", inorganicCount);
-        printf("tooLightCount: %d\n", tooLightCount);
-        printf("tooHeavyCount: %d\n", tooHeavyCount);
-        printf("highFlourineCount: %d\n", highFlourineCount);
-        printf("highChlorineCount: %d\n", highChlorineCount);
-        printf("highBromineCount: %d\n", highBromineCount);
-        printf("highIodineCount: %d\n", highIodineCount);
-        printf("readCount: %d\n", readCount);
-        printf("writeCount: %d\n", writeCount);
-    }
-   
-    if(noEorW) {
-        Rprintf("No errors or warnings encountered."); 
-    }
+    printf("\ninorganicCount: %d\n", inorganicCount);
+    printf("tooLightCount: %d\n", tooLightCount);
+    printf("tooHeavyCount: %d\n", tooHeavyCount);
+    printf("highFlourineCount: %d\n", highFlourineCount);
+    printf("highChlorineCount: %d\n", highChlorineCount);
+    printf("highBromineCount: %d\n", highBromineCount);
+    printf("highIodineCount: %d\n", highIodineCount);
+    printf("readCount: %d\n", readCount);
+    printf("writeCount: %d\n", writeCount);
 }
 
 } // extern "C"
