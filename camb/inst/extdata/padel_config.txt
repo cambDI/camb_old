@@ -1,10 +1,10 @@
 1;2c#Mon Mar 18 15:44:54 GMT 2013
-MaxThreads=15
-DescriptorFile=./descriptors.csv
+MaxThreads=NEEDSINPUT
+DescriptorFile=NEEDSINPUT
 Compute3D=false
 TautomerFile=
-ComputeFingerprints=false
-Directory=../1_original_data/D1_pkkb_logP_only.sdf
+ComputeFingerprints=true
+Directory=NEEDSINPUT
 MaxCpdPerFile=0
 StandardizeTautomers=false
 StandardizeNitro=true
@@ -15,6 +15,6 @@ MaxRunTime=20000
 UseFilenameAsMolName=false
 Log=true
 DetectAromaticity=true
-Compute2D=true
+Compute2D=false
 Retain3D=false
 Convert3D=No
