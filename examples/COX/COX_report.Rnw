@@ -1,0 +1,292 @@
+\documentclass[twoside,a4wide,12pt]{article}
+%\DefineVerbatimEnvironment{Sinput}{Verbatim} {xleftmargin=2em,frame=single}
+%\DefineVerbatimEnvironment{Soutput}{Verbatim} {xleftmargin=2em,frame=single}
+\usepackage[left=2.5cm,top=2cm,right=2.5cm,bottom=2.5cm,bindingoffset=0.5cm]{geometry}
+\usepackage{amsmath} 
+\usepackage[affil-it]{authblk}
+\usepackage{hyperref}
+\usepackage[backend=bibtex, sorting=none]{biblatex}
+\usepackage{setspace}
+\bibliography{biblio}
+
+\title{PCM with 'camb'\\
+{\bf C}hemistry {\bf A}ware {\bf M}odel {\bf B}uilder\\
+Cambridge. November 2013}
+
+\author[1,3]{\rm Isidro Cortes-Ciriano\thanks{isidrolauscher@gmail.com}} 
+\author[2,3]{\rm Daniel Murrell\thanks{dsmurrell@gmail.com}}
+\affil[1]{Unite de Bioinformatique Structurale, Institut Pasteur and CNRS UMR 3825, Structural Biology and Chemistry Department, 25-28, rue Dr. Roux, 75 724 Paris, France.}
+\affil[2]{Unilever Centre for Molecular Science Informatics, Department of Chemistry, University of Cambridge, Cambridge, United Kingdom.}
+\affil[*]{Equal contributors}
+
+\begin{document}
+
+\maketitle
+\onehalfspacing
+
+<<include=FALSE>>=
+opts_chunk$set(concordance=TRUE)
+opts_chunk$set(dev='pdf')
+setwd('/Users/icortes/Desktop/camb_final/camb/examples/COX')
+Sys.setenv(TEXINPUTS=getwd(),
+           BIBINPUTS=getwd(),
+           BSTINPUTS=getwd())
+@
+
+<<echo=FALSE>>=
+options(width=60)
+@
+\maketitle
+
+Firstly, we load the package and set the working directory:
+<<echo=FALSE,results='hide',warning=FALSE,message=FALSE>>=
+library(camb)
+setwd('/Users/icortes/Desktop/camb_final/camb/examples/COX')
+@
+\section{Compounds}
+
+\subsection{Reading and Preprocessing}
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
+smiles <- read.table("smiles_COX.smi", header=FALSE)
+StandardiseMolecules(structures.file="smiles_COX.smi",standardised.file="smiles_COX_processed.sdf",is.training=TRUE)
+@
+
+\subsection{PaDEL Descriptors}
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
+descriptors_COX <- GeneratePadelDescriptors(standardised.file="smiles_COX.smi",threads = 1)
+descriptors <- RemoveStandardisedPrefix(descriptors)
+saveRDS(descriptors, file="descriptors.rds")
+descriptors <- readRDS("descriptors.rds")
+@
+
+\subsection{Circular Morgan Fingerprints}
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),eval=TRUE>>=
+Sys.setenv(RDBASE="/usr/local/share/RDKit")
+Sys.setenv(PYTHONPATH="/usr/local/lib/python2.7/site-packages")
+#fps_COX_512 <- MorganFPs(bits=512,radius=2,type='smi',mols='smiles_COX.smi', output='COX',keep='hashed_counts')
+#saveRDS(fps_COX_512,file="fps_COX_512.rds")
+fps_COX_512 <- readRDS("fps_COX_512.rds")
+@
+
+\section{Targets}
+
+\subsection{Read and Preprocessing}
+We read the read the amino acids from a .csv file:
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),eval=FALSE,tidy=TRUE>>=
+amino_accompound_compound_IDs <- read.table("AAs_COX.csv",sep=",",header=TRUE,colClasses=c("character"),row.names=1)
+amino_accompound_IDs <- amino_accompound_IDs[,2:ncol(amino_accompound_IDs)]
+@
+
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),eval=FALSE,tidy=TRUE>>=
+amino_accompound_IDs_zscales <- AA_descs(Data=amino_accompound_IDs,type="Z3")
+@
+
+Ensuingly, we save the descriptors in a .rds file.
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE>>=
+#saveRDS(amino_accompound_IDs_zscales,file="Z3_COX.rds")
+amino_accompound_IDs_zscales <-readRDS("Z3_COX.rds")
+@
+
+\subsection{Reading the Data-set Information}
+Now, we are going to read the file with the information about the dataset, namely: target names, bioctivities, etc..
+Be careful: when reading smiles from a .csv file into an R dataframe, the smils are clipped after a hash ('\#') symbol.
+Good practice: also keep the smiles alone in a \{.smi,.smiles\} file.
+
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE>>=
+dataset <- readRDS("COX_dataset_info.rds")
+bioactivity <- dataset$standard_value
+@
+The bioactivity is in nM. We convert it to pIC50:
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE>>=
+bioactivity <- bioactivity * 10^-9
+bioactivity <- -log(bioactivity,base=10)
+@
+
+\section{Data-set Visualization}
+We can have a look at the response variable:
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,fig.align='center',fig.cap="Bioactivity Distribution",out.width='12cm'>>=
+DensityResponse(bioactivity,xlab="pIC50",main="",ylab="Densitiy",TitleSize=26,XAxisSize=20,YAxisSize=20,TitleAxesSize=24)
+@
+
+Plotting a PCA analysis of the target descriptors gives:
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,fig.align='center',fig.cap="PCA Analysis on the\nAmino Acid Descriptors">>=
+target_PCA <- PCAProt(amino_accompound_IDs_zscales,SeqsName=dataset$accession)
+PCAProtPlot(target_PCA,PointSize=8,main="",TitleSize=26,XAxisSize=20,YAxisSize=20,TitleAxesSize=24)
+@
+
+Similarly, we can analyze the chemical space by calculating pairwise compound similarities based upon the compound descriptors. In this case, we use the Jaccard metric to calculate the distance between compounds.
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,fig.align='center',fig.cap="Pairwise Compound Jaccard Similarity",out.width='15cm'>>=
+#pw_dist_comp_fps <- PairwiseDist(fps_COX_512,method="jaccard")
+#saveRDS(pw_dist_comp_fps,file="pairwise_dist_COX.rds")
+pw_dist_comp_fps <- readRDS("pairwise_dist_COX.rds")
+PairwiseDistPlot(pw_dist_comp_fps,xlab="Jaccard Similarity",ylab="Density",TitleSize=26,XAxisSize=20,YAxisSize=20,TitleAxesSize=24)
+@
+
+Before any modeling attempt, it is interesting to know which is the maximum performance achievable {\it on the basis} of the available data.\\ 
+By that, we consider the experimental uncertainty and the size of our data-set. 
+In this case, a Gaussian Process (GP) model was trained in Matlab (data not shown) where the experimental uncertainty was optimized as a hyperparameter. The obtained value was 0.60.\\
+This value is in accordance with recently prublished value of 0.68 for public IC50 data.
+With the function 'MaxPerf', we can calculate the manximum achievable performance:
+
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
+MaxPerf(meanNoise=0,sdNoise=0.6,meanResp=mean(bioactivity),sdResp=sd(bioactivity),lenPred=800)
+@
+
+\section{Statistical Pre-processing}
+Bioactivity annotations in ChEMBL are sometimes redundant, meaning that for a given target-compound combination there are more than one annotated values.\\
+To avoid this issue, we will remove redundant pairs and will keep the mean bioactivity value for those compound-target combinations repeated.\\
+%To do that, we run the file \"remove_duplicates.R\":
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
+source("remove_duplicates.R")
+@
+
+Now, we load the dataset without repetitions generated in the previous step. In addition, we remove those columns not containing descriptors (e.g. compound name):
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
+dataset <- readRDS("Whole_dataset_NO_REP.rds")
+killset <- expression(c(tid,pref_name,accession,organism,chembl_id,standard_value,standard_units,
+                        standard_type,chembl_id.1,Name,Name.1,Name.2,rows))
+bioactivity <- dataset$standard_value
+compound_IDs <- dataset$chembl_id.1
+dataset <- subset(dataset,select=-eval(killset))
+@
+
+Subsequently, we split the dataset into a training (70\%) and a hold-out (external; 30\%) set that will be used to assess the predictive ability of the models. Furthermore, we remove the following descriptors: (i) those with a variance close to zero (near-zero variance), and (ii) those highly correlated:
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
+# split the dataset into a training and holdout set
+dataset <- SplitSet(compound_IDs, dataset, bioactivity, percentage=30)
+
+# remove the descriptors that are highly correlated or have low variance
+dataset <- RemoveNearZeroVarianceFeatures(dataset,frequencyCutoff=30/1)
+dataset <- RemoveHighlyCorrelatedFeatures(dataset)
+@
+
+We convert the descriptors to z-scores by centering them to zero mean and scaling their values to unit variance:
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
+dataset <- PreProcess(dataset)
+@
+
+Given that cross-validation (CV) will be used to optimize the hyperparameters of the models, we divide the training setin 5 folds:
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
+dataset <- GetCVTrainControl(dataset)
+saveRDS(dataset, file="dataset_COX_preprocessed.rda")
+@
+
+\section{Model Training}
+
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE>>=
+dataset <- readRDS("dataset_COX_preprocessed.rda")
+# Set the number of cores for parallelization of the training
+library(doMC)
+registerDoMC(cores=4) #from the package 'doMC'
+@
+
+\subsection{Support Vector Machines (SVM)}
+Firstly, a SVM will be trained. We define an exponential grid (base 2) to optimize the hyperparameters:
+
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
+method <- "svmRadial"
+exp_grid <- expGrid(ini=-8,end=-6,stride=2,base=2)
+tune.grid <- expand.grid(.sigma = exp_grid)
+@
+
+Training:
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
+#modelCoxSVMrad <- train(dataset$x.train, dataset$y.train, method, tuneGrid=tune.grid, trControl=dataset$trControl)
+#saveRDS(modelCoxSVMrad, file="svm_model_COX.rds")
+modelCoxSVMrad <- readRDS("COXsvm.rds")
+@
+
+\subsection{Random Forest}
+We proceed similarly in the case of a random forest model.
+
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE>>=
+method <- "rf"
+tune.grid <- expand.grid(.mtry = seq(5,100,5))
+
+#modelCoxRF<- train(dataset$x.train, dataset$y.train, method, tuneGrid=tune.grid, trControl=dataset$trControl)
+#saveRDS(modelCoxRF, file="rf_model_COX.rds")
+modelCoxRF<- readRDS("COXrf.rds")
+@
+
+\section{Model Evaluation}
+
+Once the models are trained, the cross validated metrics can be calculated:
+
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE>>=
+# Cross Validation Metrics.
+# We assume the metric used for the choice of the best combination of hyperparameters is 'RMSE'.
+# This can be checked by: 'my_model'$metric
+RMSE_CV = signif(min(as.vector(na.omit(modelCoxRF$results$RMSE))), digits=3)
+Rsquared_CV = modelCoxRF$results$Rsquared[which(modelCoxRF$results$RMSE %in% min(modelCoxRF$results$RMSE, na.rm=TRUE))]
+print(RMSE_CV)
+print(Rsquared_CV)
+@
+
+On the basis of the soundness of the obtained models, we predict the values for the hod-out set:
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,warning=FALSE,message=FALSE>>=
+holdout.predictions <- as.vector(predict(modelCoxRF, newdata = dataset$x.holdout))
+@
+
+We evaluate the predictive ability of our models by calculation the following statistical metrics:\\
+
+{\bf Internal validation:}
+\\
+\begin{equation}
+q_{{\it int}}^{2} = 1 - \frac {\sum_{i=1}^{N} (y_{i} - \widetilde{y}_{i})^{2}} {\sum_{i=1}^{N} (y_{i} - \bar{y}_{tr})^{2}}
+\end{equation}
+% cross-validated correlation coefficient
+
+\begin{equation}
+RMSE_{int} = \frac {\sqrt {(y_i - \widetilde{y}_i)^{2}}} {N}
+\end{equation}
+
+where $N$, $y_i$, $\widetilde{y}_i$ and $\bar{y}_{tr}$ represent the size of the training set, the observed, the predicted and the averaged values of the response variable for those datapoints included in the training set. The {\it i}th position within the training set is defined by {\it i}.  
+\\
+\\
+{\bf External validation:}
+\\
+
+\begin{equation}
+q_{{\it ext}}^{2} = 1 - \frac {\sum_{j=1}^{N} (y_j-\widetilde{y}_j)^{2}}  {\sum_{j=1}^{N} (y_j - \bar{y}_{ext})^{2}}
+\end{equation}
+
+\begin{equation}
+RMSE_{ext} = \frac {\sqrt {(y_i - \widetilde{y}_i)^{2}}} {N} 
+\end{equation}
+
+\begin{equation}
+R_{ext}^{2} = \frac {{\sum_{i=1}^{N} (y_{i} - \bar{y}_{ext})}  (\widetilde{y}_{i} - \overset{-}{\widetilde{y}_{ext}})} 
+{\sqrt{\sum_{i=1}^{N} (y_{i} - \bar{y}_{ext})^{2} \sum{ (\widetilde{y}_{i} - \overset{-}{\widetilde{y}_{ext}})^{2}}}}
+\end{equation}
+
+\begin{equation}
+R_{0\:ext}^2 = 1 - \frac {\sum_{j=1}^{N} (y_{j} - \widetilde{y}_{j}^{ r0})^{2}} {\sum_{j=1}^{N} (y_{j} - \bar{y}_{ext})^{2}} 
+\end{equation}
+
+where $N$, $y_j$, $\widetilde{y}_j$, $\bar{y}_{ext}$ and $\breve{y}_j$ represent the size of the training set, the observed, the predicted, the averaged values and the fitted
+values of the response variable for those datapoints comprising the external set. The {\it j}th position within the external set is defined by {\it j}. $R_{0\:ext}^2$ is the square of the coefficient of determination through the origin, being $\widetilde{y}_{j}^{ r0} = k \widetilde{y}_j$ the regression through the origin (observed versus predicted) and $k$ its slope.\\
+For a detailed discussion of both the evaluation of the predictive ability through the external set and different formulations for $q^{2}$, see ref.\cite{consonni}. 
+To be considered as predictive, a model must satisfy the following criteria:\cite{beware,earnest}
+\\
+\begin{enumerate}
+\item $q_{{\it int}}^{2} > 0.5$
+\item $R_{ext}^2 > 0.6$
+\item $ \frac {(R_{ext}^2 - R_{0\:ext}^2)} {R_{ext}^2} < 0.1$
+\item $0.85 \leq k \leq 1.15$
+\end{enumerate}
+
+The metrics for the external validatin are given by:
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE>>=
+MetricsRf <- Validation(holdout.predictions,dataset$y.holdout)
+MetricsRf
+@
+
+To have a look at the correlation between predicted and observed values, we can use the 'ObsPred' function:
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,fig.align='center',fig.cap=TRUE,out.width='12cm'>>=
+ObsPred(pred=holdout.predictions,obs=dataset$y.holdout,PointSize=3,ColMargin='green',TitleSize=26,XAxisSize=20,YAxisSize=20,TitleAxesSize=24,margin=1,PointColor="black",PointShape=16,MarginWidth=2)
+@
+
+\section{Bibliography}
+\printbibliography
+
+\end{document}
