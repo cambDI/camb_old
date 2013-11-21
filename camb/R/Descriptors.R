@@ -71,31 +71,41 @@ RemoveStandardisedPrefix <- function(descriptors) {
   descriptors
 }
 
-GeneratePadelDescriptors <- function(standardised.file, threads = -1, limit = -1) {
+GeneratePadelDescriptors <- function(standardised.file, types = c("2D"), threads = -1, limit = -1) {
   descriptors.file <- tempfile("descriptors", fileext=".csv")
-  GeneratePadelDescriptors.internal(standardised.file, descriptors.file, threads)
+  GeneratePadelDescriptors.internal(standardised.file, descriptors.file, types, threads)
   read.csv(descriptors.file)
 }
 
-GeneratePadelDescriptorsFile <- function(standardised.file, descriptors.file, threads = -1, limit = -1) {
-  GeneratePadelDescriptors.internal(standardised.file, descriptors.file, threads)
+GeneratePadelDescriptorsFile <- function(standardised.file, descriptors.file, types = c("2D"), threads = -1, limit = -1) {
+  GeneratePadelDescriptors.internal(standardised.file, descriptors.file, types, threads)
 }
 
-GeneratePadelDescriptors.internal <- function(structures.file, descriptors.file, threads = -1) {
+# options for types "2D", "Fingerprinter", "ExtendedFingerprinter", "EStateFingerprinter", "GraphOnlyFingerprinter",
+# "MACCSFingerprinter", "PubchemFingerprinter", "SubstructureFingerprinter", "SubstructureFingerprintCount", 
+# "KlekotaRothFingerprinter", "KlekotaRothFingerprintCount"
+GeneratePadelDescriptors.internal <- function(structures.file, descriptors.file, types, threads = -1) {
   print("Generating Descriptors")
   .jinit()
   .jcall("java/lang/System","S","setProperty","java.awt.headless","true")
   # add all JARs
   .jaddClassPath(Sys.glob("lib/*.jar"))
   # call the main() method on the main class
-  padel_config_file <- system.file("extdata", "config.txt", package="camb")
+  
+  # replace the options in the padel_config.txt file
+  padel_config_file <- system.file("extdata", "padel_config.txt", package="camb")
   readCon  <- file(padel_config_file, open = "r")
-  writefile <- tempfile("config", fileext=".txt")
-  writeCon <- file(writefile)
+  conffile <- tempfile("padel_config", fileext=".txt")
+  confCon <- file(conffile)
   lines <- c()
   while (length(line <- readLines(readCon, n = 1, warn = FALSE)) > 0) {
     vec <- unlist(strsplit(line, "="))
-    if(vec[1]=="MaxThreads") {
+    if(vec[1]=="Compute2D") {
+      if("2D" %in% types) {
+        lines <- c(lines, "Compute2D=true")
+      }
+    }
+    else if(vec[1]=="MaxThreads") {
       lines <- c(lines, paste("MaxThreads=", threads, sep=""))
     }
     else if(vec[1]=="DescriptorFile") {
@@ -108,11 +118,31 @@ GeneratePadelDescriptors.internal <- function(structures.file, descriptors.file,
       lines <- c(lines, line)
     }
   }
-  writeLines(lines, writeCon)
+  writeLines(lines, confCon)
   close(readCon)
-  close(writeCon)
+  close(confCon)
   
-  .jcall("padeldescriptor.PaDELDescriptorApp", , "main", c("-config", writefile))
+  # replace the options in the padel_types.xml file
+  padel_types_file <- system.file("extdata", "padel_types.xml", package="camb")
+  readCon  <- file(padel_types_file, open = "r")
+  descfile <- tempfile("padel_types", fileext=".xml")
+  descCon <- file(descfile)
+  lines <- c()
+  while (length(line <- readLines(readCon, n = 1, warn = FALSE)) > 0) {
+    vec <- unlist(strsplit(line, "\""))
+    if(vec[2] %in% types) {
+      vec[4] <- "true"
+      lines <- c(lines, paste(vec, collapse="\""))
+    }
+    else {
+      lines <- c(lines, line)
+    }
+  }
+  writeLines(lines, descCon)
+  close(readCon)
+  close(descCon)
+  
+  .jcall("padeldescriptor.PaDELDescriptorApp", , "main", c("-config", conffile, "-descriptortypes", descfile))
 }
 
 ##############
