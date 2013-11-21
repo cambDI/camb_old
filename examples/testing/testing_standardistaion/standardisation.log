@@ -1,0 +1,4 @@
+Reading SDF (C)
+Tolazamide (#1) warning: while converting to Inchi:  Problems/mismatches: Mobile-H( Hydrogens: Number; Mobile-H groups: Number; Charge(s): Do not match)
+Mitotane (#19) warning: molecule contains more than 3 chlorines
+Marimastat (#35) warning: while converting to Inchi:  Problems/mismatches: Mobile-H( Hydrogens: Locations or number, Number; Mobile-H groups: Multiple instead of one, Attachment points, Number; Charge(s): Do not match)
