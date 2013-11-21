@@ -1,0 +1,202 @@
+% $ biblatex auxiliary file $
+% $ biblatex version 1.7 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated as
+% required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+\entry{consonni}{article}{}
+  \name{author}{3}{}{%
+    {{}%
+     {Consonni}{C.}%
+     {Viviana}{V.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Ballabio}{B.}%
+     {Davide}{D.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Todeschini}{T.}%
+     {Roberto}{R.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{language}{1}{%
+    {en}%
+  }
+  \keyw{external test set, Validation}
+  \strng{namehash}{CVBDTR1}
+  \strng{fullhash}{CVBDTR1}
+  \field{abstract}{%
+  This paper deals with the problem of evaluating the predictive ability of
+  regression models. In some cases, model validation by internal
+  cross-validation technique is not enough and validation by an external test
+  set has been suggested as an effective way of evaluating the model predictive
+  ability. Different functions for calculating the predictive squared
+  correlation coefficient Q2 from an external set were proposed, which lead to
+  occasionally different estimates of the model predictive ability and
+  therefore to contrasting decisions about model adequacy. In this paper,
+  advantages and drawbacks of these functions in estimating model predictive
+  ability from some simulated datasets are discussed by comparison. Copyright
+  © 2010 John Wiley \& Sons, Ltd.%
+  }
+  \verb{doi}
+  \verb 10.1002/cem.1290
+  \endverb
+  \field{issn}{1099-{128X}}
+  \field{number}{3-4}
+  \field{pages}{194–201}
+  \field{title}{{Evaluation of model predictive ability by external validation
+  techniques}}
+  \verb{url}
+  \verb http://onlinelibrary.wiley.com/doi/10.1002/cem.1290/abstract
+  \endverb
+  \field{volume}{24}
+  \verb{file}
+  \verb Snapshot:/Bis/home/icortes/.zotero/zotero/46f1slvv.default/zotero/stora
+  \verb ge/SUGT7MAR/abstract.html:text/html
+  \endverb
+  \field{journaltitle}{Journal of Chemometrics}
+  \field{year}{2010}
+  \field{urlday}{04}
+  \field{urlmonth}{04}
+  \field{urlyear}{2013}
+\endentry
+
+\entry{beware}{article}{}
+  \name{author}{2}{}{%
+    {{}%
+     {Golbraikh}{G.}%
+     {Alexander}{A.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Tropsha}{T.}%
+     {Alexander}{A.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{language}{1}{%
+    {eng}%
+  }
+  \keyw{Databases, Factual, Data Interpretation, Statistical, Ecdysteroids,
+  Ligands, Mathematical Computing, Models, Molecular, Quantitative
+  Structure-Activity Relationship, Receptors, Histamine H1, Steroids,
+  Transcortin}
+  \strng{namehash}{GATA1}
+  \strng{fullhash}{GATA1}
+  \field{abstract}{%
+  Validation is a crucial aspect of any quantitative structure-activity
+  relationship ({QSAR)} modeling. This paper examines one of the most popular
+  validation criteria, leave-one-out cross-validated R2 ({LOO} q2). Often, a
+  high value of this statistical characteristic (q2 {\textgreater} 0.5) is
+  considered as a proof of the high predictive ability of the model. In this
+  paper, we show that this assumption is generally incorrect. In the case of
+  {3D} {QSAR}, the lack of the correlation between the high {LOO} q2 and the
+  high predictive ability of a {QSAR} model has been established earlier
+  [Pharm. Acta Helv. 70 (1995) 149; J. Chemomet. 10(1996)95; J. Med. Chem. 41
+  (1998) 2553]. In this paper, we use two-dimensional ({2D)} molecular
+  descriptors and k nearest neighbors ({kNN)} {QSAR} method for the analysis of
+  several datasets. No correlation between the values of q2 for the training
+  set and predictive ability for the test set was found for any of the
+  datasets. Thus, the high value of {LOO} q2 appears to be the necessary but
+  not the sufficient condition for the model to have a high predictive power.
+  We argue that this is the general property of {QSAR} models developed using
+  {LOO} cross-validation. We emphasize that the external validation is the only
+  way to establish a reliable {QSAR} model. We formulate a set of criteria for
+  evaluation of predictive ability of {QSAR} models.%
+  }
+  \field{issn}{1093-3263}
+  \field{note}{{PMID:} 11858635}
+  \field{number}{4}
+  \field{pages}{269\bibrangedash 276}
+  \field{title}{{Beware of q2!}}
+  \field{volume}{20}
+  \field{journaltitle}{Journal of molecular graphics \& modelling}
+  \field{month}{01}
+  \field{year}{2002}
+\endentry
+
+\entry{earnest}{article}{}
+  \name{author}{3}{}{%
+    {{}%
+     {Tropsha}{T.}%
+     {Alexander}{A.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Gramatica}{G.}%
+     {Paola}{P.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Gombar}{G.}%
+     {Vijay~K.}{V.~K.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{language}{1}{%
+    {en}%
+  }
+  \keyw{applicability domain, model validation, {QSAR}, Structure-property
+  relationship modeling}
+  \strng{namehash}{TAGPGVK1}
+  \strng{fullhash}{TAGPGVK1}
+  \field{abstract}{%
+  This paper emphasizes the importance of rigorous validation as a crucial,
+  integral component of Quantitative Structure Property Relationship ({QSPR)}
+  model development. We consider some examples of published {QSPR} models,
+  which in spite of their high fitted accuracy for the training sets and
+  apparent mechanistic appeal, fail rigorous validation tests, and, thus, may
+  lack practical utility as reliable screening tools. We present a set of
+  simple guidelines for developing validated and predictive {QSPR} models. To
+  this end, we discuss several validation strategies including (1)
+  randomization of the modelled property, also called Y-scrambling, (2)
+  multiple leave-many-out cross-validations, and (3) external validation using
+  rational division of a dataset into training and test sets. We also highlight
+  the need to establish the domain of model applicability in the chemical space
+  to flag molecules for which predictions may be unreliable, and discuss some
+  algorithms that can be used for this purpose. We advocate the broad use of
+  these guidelines in the development of predictive {QSPR} models.%
+  }
+  \verb{doi}
+  \verb 10.1002/qsar.200390007
+  \endverb
+  \field{issn}{1611-0218}
+  \field{number}{1}
+  \field{pages}{69–77}
+  \field{shorttitle}{{The Importance of Being Earnest}}
+  \field{title}{{The Importance of Being Earnest: Validation is the Absolute
+  Essential for Successful Application and Interpretation of {{QSPR}} Models}}
+  \verb{url}
+  \verb http://onlinelibrary.wiley.com/doi/10.1002/qsar.200390007/abstract
+  \endverb
+  \field{volume}{22}
+  \verb{file}
+  \verb Snapshot:/Bis/home/icortes/.zotero/zotero/46f1slvv.default/zotero/stora
+  \verb ge/DWBX5BS6/abstract.html:text/html
+  \endverb
+  \field{journaltitle}{{QSAR} \& Combinatorial Science}
+  \field{year}{2003}
+  \field{urlday}{04}
+  \field{urlmonth}{04}
+  \field{urlyear}{2013}
+\endentry
+
+\lossort
+\endlossort
+
+\endinput

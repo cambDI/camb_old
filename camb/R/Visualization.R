@@ -119,7 +119,7 @@ PairwiseDist <- function(Data,method="jaccard",..){
 
 ##############
 PairwiseDistPlot <- function(Data,xlab="",ylab="",main="",TextSize=15,TitleSize=15,XAxisSize=15,YAxisSize=15,
-                             TitleAxesSize=15,tmar=1,bmar=1,rmar=1,lmar=1,LegendPosition="right",AngleLab=30,
+                             TitleAxesSize=15,tmar=1,bmar=1,rmar=1,lmar=1,AngleLab=30,
                              binwidth=NULL,fillCol="white",Colour="black",DensityFill="#FF6666",DensityAlpha=.2){
   if (is.matrix(Data) || is.data.frame(Data)){
     if (is.null(binwidth)) binwidth <- abs(range(Data)[1] - range(Data)[2]) / 20
@@ -128,7 +128,7 @@ PairwiseDistPlot <- function(Data,xlab="",ylab="",main="",TextSize=15,TitleSize=
       geom_density(alpha=DensityAlpha, fill=DensityFill)+ ylab(ylab) + xlab(xlab) + ggtitle(main) +
       theme(text = element_text(size=TextSize),axis.text.x = element_text(size=XAxisSize,angle = AngleLab, hjust = 1),
             axis.title.x=element_text(size=TitleAxesSize),axis.title.y=element_text(size=TitleAxesSize),
-            axis.text.y=element_text(size=YAxisSize),legend.position=LegendPosition,plot.title=element_text(size=TitleSize),
+            axis.text.y=element_text(size=YAxisSize),plot.title=element_text(size=TitleSize),
             legend.key=element_blank(), plot.margin=unit(c(tmar,rmar,bmar,lmar),"cm")) 
     return(p)
   } else {
