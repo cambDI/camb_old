@@ -4,7 +4,17 @@
 
 ##############
 ## Standardize Compounds
-StandardiseMolecules <- function(structures.file, standardised.file, is.training = FALSE, limit = -1) {
+StandardiseMolecules <- function(structures.file, 
+                                 standardised.file,
+                                 removed.file,
+                                 remove.inorganic = FALSE, 
+                                 fluorine.limit = -1,
+                                 chlorine.limit = -1,
+                                 bromine.limit = -1,
+                                 iodine.limit = -1,
+                                 min.mass.limit = -1,
+                                 max.mass.limit = -1,                      
+                                 number.processed = -1) {
   # handle non-existant file
   if (!file.exists(structures.file)) {
     print("File does not exist")
@@ -16,13 +26,37 @@ StandardiseMolecules <- function(structures.file, standardised.file, is.training
   if(tolower(filetype) == "sdf") {
     print("Standardising Structures: Reading SDF (R)")
     sink(file="standardisation.log", append=FALSE, split=FALSE)
-    .C("R_standardiseMolecules", structures.file, standardised.file, as.integer(1), as.integer(is.training), as.integer(limit)) 
+    .C("R_standardiseMolecules", 
+       structures.file, 
+       standardised.file, 
+       removed.file, 
+       as.integer(1), # process SDF
+       as.integer(remove.inorganic), 
+       as.integer(fluorine.limit),
+       as.integer(chlorine.limit),
+       as.integer(bromine.limit),
+       as.integer(iodine.limit),
+       as.integer(min.mass.limit),
+       as.integer(max.mass.limit),
+       as.integer(number.processed)) 
     sink()
   }
   else if(tolower(filetype) == "smi") {
     print("Standardising Structures: Reading SMILES (R)")
     sink(file="standardisation.log", append=FALSE, split=FALSE)
-    .C("R_standardiseMolecules", structures.file, standardised.file, as.integer(0), as.integer(is.training), as.integer(limit))
+    .C("R_standardiseMolecules", 
+       structures.file, 
+       standardised.file, 
+       removed.file, 
+       as.integer(0), # process SMILES
+       as.integer(remove.inorganic), 
+       as.integer(fluorine.limit),
+       as.integer(chlorine.limit),
+       as.integer(bromine.limit),
+       as.integer(iodine.limit),
+       as.integer(min.mass.limit),
+       as.integer(max.mass.limit),
+       as.integer(number.processed)) 
     sink()
   }
   else {
