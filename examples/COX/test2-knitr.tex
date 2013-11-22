@@ -54,9 +54,12 @@
 \usepackage{amsmath} 
 \usepackage[affil-it]{authblk}
 \usepackage{hyperref}
+\usepackage{fullpage}
+\usepackage{pdflscape}
 \usepackage[backend=bibtex,sorting=none,style=ieee]{biblatex}
 \usepackage{setspace}
 \bibliography{biblio}
+
 
 \title{Proteochemoemtrics (PCM) with 'camb'\\
 {\bf C}hemistry {\bf A}ware {\bf M}odel {\bf B}uilder\\
@@ -281,14 +284,25 @@ Plotting a PCA analysis of the target descriptors gives:
     \hlkwc{RowLegend} \hlstd{=} \hlnum{2}\hlstd{,} \hlkwc{ColLegend} \hlstd{=} \hlnum{6}\hlstd{,} \hlkwc{LegendTitleSize} \hlstd{=} \hlnum{10}\hlstd{,}
     \hlkwc{LegendTextSize} \hlstd{=} \hlnum{10}\hlstd{)}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: unused arguments (LegendTitleSize = 10, LegendTextSize = 10)}}\begin{alltt}
+\begin{verbatim}
+## [1] "Sequence names provided in the third column of the data.frame"
+\end{verbatim}
+\begin{alltt}
 \hlstd{plot_PCA_Cox}
 \end{alltt}
+\end{kframe}\begin{figure}[]
 
 
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'plot\_PCA\_Cox' not found}}\end{kframe}
+{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-16} 
+
+}
+
+\caption[PCA Analysis on the
+Amino Acid Descriptors]{PCA Analysis on the
+Amino Acid Descriptors\label{fig:unnamed-chunk-16}}
+\end{figure}
+
+
 \end{knitrout}
 
 
@@ -304,15 +318,40 @@ Similarly, we can analyze the chemical space by calculating pairwise compound si
     \hlkwc{ylab} \hlstd{=} \hlstr{"Density"}\hlstd{,} \hlkwc{TitleSize} \hlstd{=} \hlnum{26}\hlstd{,} \hlkwc{XAxisSize} \hlstd{=} \hlnum{20}\hlstd{,}
     \hlkwc{YAxisSize} \hlstd{=} \hlnum{20}\hlstd{,} \hlkwc{TitleAxesSize} \hlstd{=} \hlnum{24}\hlstd{)}
 
-\hlkwd{plotGrid}\hlstd{(}\hlkwd{c}\hlstd{(}\hlstr{"dens_resp"}\hlstd{,} \hlstr{"plot_pwd"}\hlstd{),} \hlkwc{HeightBlocks} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{1}\hlstd{),}
-    \hlkwc{NCols} \hlstd{=} \hlnum{2}\hlstd{,} \hlkwc{NRows} \hlstd{=} \hlnum{1}\hlstd{)}
+\hlkwd{library}\hlstd{(ggplot2)}
+\hlcom{# library(grid) library(gplots) (.packages())}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: unused arguments (HeightBlocks = c(1), NCols = 2, NRows = 1)}}\end{kframe}
+\end{kframe}
 \end{knitrout}
 
 
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{grid_plot} \hlkwb{<-} \hlkwd{plotGrid}\hlstd{(}\hlkwd{c}\hlstd{(}\hlstr{"dens_resp"}\hlstd{,} \hlstr{"plot_pwd"}\hlstd{),} \hlkwc{HeightBlocks} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{1}\hlstd{),}
+    \hlkwc{NCols} \hlstd{=} \hlnum{2}\hlstd{,} \hlkwc{NRows} \hlstd{=} \hlnum{1}\hlstd{)}
+\end{alltt}
+\end{kframe}\begin{figure}[]
+
+
+{\centering \includegraphics[width=\maxwidth,angle=90]{figure/unnamed-chunk-18} 
+
+}
+
+\caption[Density of the response variable (left)]{Density of the response variable (left). Pairwise Compound Jaccard Similarity (right)\label{fig:unnamed-chunk-18}}
+\end{figure}
+
+\begin{kframe}\begin{alltt}
+\hlstd{grid_plot}
+\end{alltt}
+\begin{verbatim}
+## NULL
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+%\newpage
 Before any modeling attempt, it is interesting to know which is the maximum performance achievable {\it on the basis} of the available data.\\ 
 By that, we consider the experimental uncertainty and the size of our data-set. 
 In this case, a Gaussian Process (GP) model was trained in Matlab (data not shown) where the experimental uncertainty was optimized as a hyperparameter. The obtained value was 0.60.\\
@@ -607,11 +646,11 @@ To have a look at the correlation between predicted and observed values, we can 
 \end{kframe}\begin{figure}[]
 
 
-{\centering \includegraphics[width=12cm]{figure/unnamed-chunk-32} 
+{\centering \includegraphics[width=12cm]{figure/unnamed-chunk-33} 
 
 }
 
-\caption[Predicted vs Observed]{Predicted vs Observed. The blue line corresponds to a margin of 2 pIC50 units.\label{fig:unnamed-chunk-32}}
+\caption[Predicted vs Observed]{Predicted vs Observed. The blue line corresponds to a margin of 2 pIC50 units.\label{fig:unnamed-chunk-33}}
 \end{figure}
 
 

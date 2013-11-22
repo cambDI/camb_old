@@ -5,9 +5,12 @@
 \usepackage{amsmath} 
 \usepackage[affil-it]{authblk}
 \usepackage{hyperref}
+\usepackage{fullpage}
+\usepackage{pdflscape}
 \usepackage[backend=bibtex,sorting=none,style=ieee]{biblatex}
 \usepackage{setspace}
 \bibliography{biblio}
+
 
 \title{Proteochemoemtrics (PCM) with 'camb'\\
 {\bf C}hemistry {\bf A}ware {\bf M}odel {\bf B}uilder\\
@@ -149,15 +152,24 @@ plot_PCA_Cox
 @
 
 Similarly, we can analyze the chemical space by calculating pairwise compound similarities based upon the compound descriptors. In this case, we use the Jaccard metric to calculate the distance between compounds.
-<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,fig.align='center',fig.cap="Density of the response variable (left). Pairwise Compound Jaccard Similarity (right)",out.width='15cm'>>=
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE>>=
 #pw_dist_comp_fps <- PairwiseDist(fps_COX_512,method="jaccard")
 #saveRDS(pw_dist_comp_fps,file="pairwise_dist_COX.rds")
 pw_dist_comp_fps <- readRDS("pairwise_dist_COX.rds")
 plot_pwd <- PairwiseDistPlot(pw_dist_comp_fps,xlab="Jaccard Similarity",ylab="Density",TitleSize=26,XAxisSize=20,YAxisSize=20,TitleAxesSize=24)
 
-plotGrid(c("dens_resp","plot_pwd"),HeightBlocks=c(1),NCols=2,NRows=1)
+library(ggplot2)
+#library(grid)
+#library(gplots)
+#(.packages())
 @
 
+<<out.extra='angle=90',highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,fig.align='center',fig.cap="Density of the response variable (left). Pairwise Compound Jaccard Similarity (right)",fig.width='5cm'>>=
+grid_plot <- plotGrid(c("dens_resp","plot_pwd"),HeightBlocks=c(1),NCols=2,NRows=1)
+grid_plot
+@
+
+%\newpage
 Before any modeling attempt, it is interesting to know which is the maximum performance achievable {\it on the basis} of the available data.\\ 
 By that, we consider the experimental uncertainty and the size of our data-set. 
 In this case, a Gaussian Process (GP) model was trained in Matlab (data not shown) where the experimental uncertainty was optimized as a hyperparameter. The obtained value was 0.60.\\
