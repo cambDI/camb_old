@@ -16,6 +16,36 @@
   {}
 \endgroup
 
+\entry{protr}{manual}{}
+  \name{author}{4}{}{%
+    {{}%
+     {Nan}{N.}%
+     {Xiao}{X.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Cao}{C.}%
+     {Dongsheng}{D.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Xu}{X.}%
+     {Qingsong}{Q.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Liang}{L.}%
+     {Yizeng}{Y.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{NX+1}
+  \strng{fullhash}{NXCDXQLY1}
+  \field{note}{R package version 0.1-0}
+  \field{title}{protr: Protein Sequence Feature Extraction with R}
+  \field{year}{2012}
+\endentry
+
 \entry{consonni}{article}{}
   \name{author}{3}{}{%
     {{}%

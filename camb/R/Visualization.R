@@ -51,7 +51,7 @@ PCAProt <- function(Data,SeqsName=NULL){
 PCAProtPlot <- function (Data,main="",ylab="PC2",xlab="PC1",Seqs=NULL,PointSize=4,
                          LegendPosition="right",LegendName="Sequences",ColLegend=1,RowLegend=NULL,
                          TitleSize=15,TextSize=15,XAxisSize=15,YAxisSize=15,AngleLab=30,
-                         TitleAxesSize=15,tmar=1,bmar=1,rmar=1,lmar=1) 
+                         TitleAxesSize=15,LegendTitleSize=15,LegendTextSize=15,tmar=1,bmar=1,rmar=1,lmar=1) 
 {
   if (length(names(Data)) < 2 || length(names(Data)) > 3){
     stop("Two PCA required. The Data.frame provided has less than two columns (PCA) or more than 3")
@@ -65,6 +65,7 @@ PCAProtPlot <- function (Data,main="",ylab="PC2",xlab="PC1",Seqs=NULL,PointSize=
             axis.title.x=element_text(size=TitleAxesSize),axis.title.y=element_text(size=TitleAxesSize),
             axis.text.y=element_text(size=YAxisSize),legend.position=LegendPosition,
             plot.title=element_text(size=TitleSize),legend.key=element_blank(),
+            legend.text = element_text(size=LegendTextSize),legend.title= element_text(size=LegendTitleSize),
             plot.margin=unit(c(tmar,rmar,bmar,lmar),"cm")) +
       guides(colour = guide_legend(LegendName,ncol=ColLegend,nrow=RowLegend),
              shape = guide_legend(LegendName,ncol=ColLegend,nrow=RowLegend))
@@ -79,8 +80,9 @@ PCAProtPlot <- function (Data,main="",ylab="PC2",xlab="PC1",Seqs=NULL,PointSize=
         geom_point(size=PointSize)  + scale_shape_manual(values=1:a) + theme_bw() + ggtitle(main) + ylab(ylab) + xlab(xlab) +
         theme(text = element_text(size=TextSize),axis.text.x = element_text(size=XAxisSize,angle = AngleLab, hjust = 1),
               axis.title.x=element_text(size=TitleAxesSize),axis.title.y=element_text(size=TitleAxesSize),
-              axis.text.y=element_text(size=YAxisSize),legend.position=LegendPosition,plot.title=element_text(size=TitleSize),
-              legend.key=element_blank(), plot.margin=unit(c(tmar,rmar,bmar,lmar),"cm")) +
+              axis.text.y=element_text(size=YAxisSize),legend.position=LegendPosition,
+              legend.text = element_text(size=LegendTextSize),legend.title= element_text(size=LegendTitleSize),
+              plot.title=element_text(size=TitleSize),legend.key=element_blank(), plot.margin=unit(c(tmar,rmar,bmar,lmar),"cm")) +
         guides(colour = guide_legend(LegendName,ncol=ColLegend,nrow=RowLegend),
                shape = guide_legend(LegendName,ncol=ColLegend,nrow=RowLegend))
     } 
@@ -94,6 +96,7 @@ PCAProtPlot <- function (Data,main="",ylab="PC2",xlab="PC1",Seqs=NULL,PointSize=
       theme(text = element_text(size=TextSize),axis.text.x = element_text(size=XAxisSize,angle = AngleLab, hjust = 1),
             axis.title.x=element_text(size=TitleAxesSize),axis.title.y=element_text(size=TitleAxesSize),
             axis.text.y=element_text(size=YAxisSize),legend.position=LegendPosition,plot.title=element_text(size=TitleSize),
+            legend.text = element_text(size=LegendTextSize),legend.title= element_text(size=LegendTitleSize),
             legend.key=element_blank(), plot.margin=unit(c(tmar,rmar,bmar,lmar),"cm")) +
       guides(colour = guide_legend(LegendName,ncol=ColLegend,nrow=RowLegend), shape = guide_legend(LegendName,ncol=ColLegend,nrow=RowLegend))
   }
@@ -139,12 +142,12 @@ PairwiseDistPlot <- function(Data,xlab="",ylab="",main="",TextSize=15,TitleSize=
 ##############
 ##############
 ## Maximum Model Performance
-vplayout <- function(x, y) viewport(layout.pos.row = x, layout.pos.col = y)
 
 MaxPerf <- function(meanNoise=0,sdNoise,meanResp,sdResp,lenPred,iters=1000,
                     filename=NULL,pdfW=10,pdfH=10,TextSize=15,TitleSize=15,
                     XAxisSize=15,YAxisSize=15,TitleAxesSize=15,tmar=1,bmar=1,
                     rmar=1,lmar=1,AngleLab=30,LegendPosition="right"){
+  vplayout <- function(x, y) viewport(layout.pos.row = x, layout.pos.col = y)
   R2 <- c()
   R02 <- c()
   Q2 <- c()
@@ -213,14 +216,14 @@ MaxPerf <- function(meanNoise=0,sdNoise,meanResp,sdResp,lenPred,iters=1000,
     print(p3, vp = vplayout(2,1))
     print(p4, vp = vplayout(2,2))
     dev.off()
-  } else {
-    grid.newpage()
-    pushViewport(viewport(layout = grid.layout(2, 2)))
-    print(p1, vp = vplayout(1,1))
-    print(p2, vp = vplayout(1,2))
-    print(p3, vp = vplayout(2,1))
-    print(p4, vp = vplayout(2,2))
-  }
+  } #else {
+    #grid.newpage()
+    #pushViewport(viewport(layout = grid.layout(2, 2)))
+    #print(p1, vp = vplayout(1,1))
+    #print(p2, vp = vplayout(1,2))
+    #print(p3, vp = vplayout(2,1))
+    #print(p4, vp = vplayout(2,2))
+  #}
   p <- list()
   p$p1 <- p1
   p$p2 <- p2
@@ -230,4 +233,10 @@ MaxPerf <- function(meanNoise=0,sdNoise,meanResp,sdResp,lenPred,iters=1000,
 }
 
 ##########
-# Diversity selection of compounds
+# Get Legend
+GetLegend <- function(a.gplot){
+  tmp <- ggplot_gtable(ggplot_build(a.gplot))
+  leg <- which(sapply(tmp$grobs, function(x) x$name) == "guide-box")
+  legend <- tmp$grobs[[leg]]
+  return(legend)
+}
