@@ -82,6 +82,7 @@ void R_drawMoleculeInSDFbyID(char **structures_file, char **structureIDIn, char 
 void R_standardiseMolecules(char **structures_file,
                             char **standardised_file,
                             char **removed_file,
+                            char **target_field_name,
                             int *isSDFInt,
                             int *removeInorganicInt,
                             int *fluorineLimitInt,
@@ -95,6 +96,7 @@ void R_standardiseMolecules(char **structures_file,
     indigoSetOption("dearomatize-verification", "false"); // enable the dearomatization to work properly
    
     bool isSDF = (*isSDFInt!=0);
+    bool write_targets = !(*target_field_name && *target_field_name[0] == '\0');
     bool removeInorganic = (*removeInorganicInt!=0);
     int numberProcessed = *numberProcessedInt;
     int fluorineLimit = *fluorineLimitInt;
@@ -109,6 +111,14 @@ void R_standardiseMolecules(char **structures_file,
     int structure, structureIter;
     int sdfWriter = indigoWriteFile(*standardised_file);
     int removedWriter = indigoWriteFile(*removed_file);
+    
+    ofstream target_stream;
+    if(write_targets) {
+        target_stream.open("targets.csv", ios::out | ios::trunc); // delete the current file
+        target_stream.close();
+        target_stream.open("targets.csv", ios::out | ios::ate | ios::app | ios::binary);
+    }
+    
     if(isSDF) {
         Rprintf("Reading SDF (C)\n");
         structureIter = indigoIterateSDFile(*structures_file);
@@ -132,6 +142,16 @@ void R_standardiseMolecules(char **structures_file,
         if(numberProcessed != -1 && readCount > numberProcessed) break;
         if (indigoCountAtoms(structure) != -1) {
             int structureIndex = indigoIndex(structure);
+            double target_value = 0;
+            if(write_targets) {
+                if(indigoHasProperty(structure, *target_field_name)) {
+                    target_value = atof(indigoGetProperty(structure, *target_field_name));
+                }
+                else {
+                   write_targets = false;
+                   target_stream << "no property found on first molecule in file with fieldname: " << *target_field_name << endl;
+                }
+            }
             
             //printf("Structure Index: %d, readCount: %d\n", structureIndex+1, readCount);
             string structureName = indigoName(structure);
@@ -260,6 +280,9 @@ void R_standardiseMolecules(char **structures_file,
             std::string name = indigoName(structureClone);
             indigoSetName(structure, (addition + name).c_str());
             indigoSdfAppend(sdfWriter, structure);
+            if(write_targets) {
+                target_stream << name << "," << target_value << endl;
+            }
             indigoFree(structureClone);
             indigoFree(structure);
         }
@@ -273,6 +296,7 @@ void R_standardiseMolecules(char **structures_file,
     indigoFree(sdfWriter);
     indigoClose(removedWriter);
     indigoFree(removedWriter);
+    target_stream.close();
     
     printf("\ninorganicCount: %d\n", inorganicCount);
     printf("tooLightCount: %d\n", tooLightCount);

@@ -1,5 +1,5 @@
 Standardised_Tolazamide
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  21 22  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 S   0  0  0  0  0  0  0  0  0  0  0  0
@@ -148,7 +148,7 @@ N/A
 
 $$$$
 Standardised_Oseltamivir
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  22 22  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -198,7 +198,7 @@ Standardised_Oseltamivir
 M  END
 $$$$
 Standardised_Granisetron
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  23 26  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -253,7 +253,7 @@ Standardised_Granisetron
 M  END
 $$$$
 Standardised_Levonorgestrel
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  23 26  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -308,7 +308,7 @@ Standardised_Levonorgestrel
 M  END
 $$$$
 Standardised_Ethopropazine
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  22 24  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -360,7 +360,7 @@ Standardised_Ethopropazine
 M  END
 $$$$
 Standardised_Rofecoxib
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  22 24  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -412,7 +412,7 @@ Standardised_Rofecoxib
 M  END
 $$$$
 Standardised_Alizapride
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  23 25  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -466,7 +466,7 @@ Standardised_Alizapride
 M  END
 $$$$
 Standardised_Timolol
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  21 22  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -515,7 +515,7 @@ Standardised_Timolol
 M  END
 $$$$
 Standardised_Zimeldine
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  19 20  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -560,7 +560,7 @@ Standardised_Zimeldine
 M  END
 $$$$
 Standardised_Arbutamine
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  23 24  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -613,7 +613,7 @@ Standardised_Arbutamine
 M  END
 $$$$
 Standardised_Nateglinide
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  23 24  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -666,7 +666,7 @@ Standardised_Nateglinide
 M  END
 $$$$
 Standardised_Butenafine
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  24 26  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -722,7 +722,7 @@ Standardised_Butenafine
 M  END
 $$$$
 Standardised_Methylscopolamine
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  23 26  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -778,7 +778,7 @@ M  CHG  1  19   1
 M  END
 $$$$
 Standardised_Glycopyrrolate
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  23 25  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -833,7 +833,7 @@ M  CHG  1  20   1
 M  END
 $$$$
 Standardised_Tiludronate
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  17 17  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -873,7 +873,7 @@ Standardised_Tiludronate
 M  END
 $$$$
 Standardised_Chlorpromazine
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  21 23  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -923,7 +923,7 @@ Standardised_Chlorpromazine
 M  END
 $$$$
 Standardised_Etodolac
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  23 25  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -977,7 +977,7 @@ Standardised_Etodolac
 M  END
 $$$$
 Standardised_Chloroquine
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  22 23  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -1028,7 +1028,7 @@ Standardised_Chloroquine
 M  END
 $$$$
 Standardised_Tenoxicam
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  21 23  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -1078,7 +1078,7 @@ Standardised_Tenoxicam
 M  END
 $$$$
 Standardised_Aprindine
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  24 26  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -1134,7 +1134,7 @@ Standardised_Aprindine
 M  END
 $$$$
 Standardised_Escitalopram
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  24 26  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -1190,7 +1190,7 @@ Standardised_Escitalopram
 M  END
 $$$$
 Standardised_Dolasetron
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  24 28  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -1248,7 +1248,7 @@ Standardised_Dolasetron
 M  END
 $$$$
 Standardised_Quinidine
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  24 27  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -1305,7 +1305,7 @@ Standardised_Quinidine
 M  END
 $$$$
 Standardised_Piritrexim
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  24 26  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -1361,7 +1361,7 @@ Standardised_Piritrexim
 M  END
 $$$$
 Standardised_Acepromazine
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  23 25  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -1415,7 +1415,7 @@ Standardised_Acepromazine
 M  END
 $$$$
 Standardised_Docosanol
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  23 22  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -1466,7 +1466,7 @@ Standardised_Docosanol
 M  END
 $$$$
 Standardised_Bezafibrate
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  24 25  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -1521,7 +1521,7 @@ Standardised_Bezafibrate
 M  END
 $$$$
 Standardised_Dilevalol
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  24 25  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -1576,7 +1576,7 @@ Standardised_Dilevalol
 M  END
 $$$$
 Standardised_Butorphanol
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  24 28  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -1634,7 +1634,7 @@ Standardised_Butorphanol
 M  END
 $$$$
 Standardised_Trilostane
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  24 28  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -1692,7 +1692,7 @@ Standardised_Trilostane
 M  END
 $$$$
 Standardised_Furosemide
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  21 22  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -1741,7 +1741,7 @@ Standardised_Furosemide
 M  END
 $$$$
 Standardised_Tienilic Acid
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  20 21  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -1788,7 +1788,7 @@ Standardised_Tienilic Acid
 M  END
 $$$$
 Standardised_Ciprofloxacin
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  24 27  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -1845,7 +1845,7 @@ Standardised_Ciprofloxacin
 M  END
 $$$$
 Standardised_Marimastat
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  23 22  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
@@ -1996,7 +1996,7 @@ N/A
 
 $$$$
 Standardised_Fluorescein
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  25 29  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -2056,7 +2056,7 @@ Standardised_Fluorescein
 M  END
 $$$$
 Standardised_Spectinomycin
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  23 25  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -2110,7 +2110,7 @@ Standardised_Spectinomycin
 M  END
 $$$$
 Standardised_Alfaxalone
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  24 27  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -2167,7 +2167,7 @@ Standardised_Alfaxalone
 M  END
 $$$$
 Standardised_Penicillin_G
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  23 25  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -2221,7 +2221,7 @@ Standardised_Penicillin_G
 M  END
 $$$$
 Standardised_Bromfenac
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  20 21  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -2268,7 +2268,7 @@ Standardised_Bromfenac
 M  END
 $$$$
 Standardised_Bromodiphenhydramine
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  20 21  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -2315,7 +2315,7 @@ Standardised_Bromodiphenhydramine
 M  END
 $$$$
 Standardised_Isoxicam
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  23 25  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -2369,7 +2369,7 @@ Standardised_Isoxicam
 M  END
 $$$$
 Standardised_Progabide
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  23 24  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -2422,7 +2422,7 @@ Standardised_Progabide
 M  END
 $$$$
 Standardised_Almotriptan
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  23 25  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -2476,7 +2476,7 @@ Standardised_Almotriptan
 M  END
 $$$$
 Standardised_Mesalazine
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  11 11  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -2504,7 +2504,7 @@ Standardised_Mesalazine
 M  END
 $$$$
 Standardised_Paramethadione
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  11 11  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -2532,7 +2532,7 @@ Standardised_Paramethadione
 M  END
 $$$$
 Standardised_Dicoumarol
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  25 28  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -2591,7 +2591,7 @@ Standardised_Dicoumarol
 M  END
 $$$$
 Standardised_Olopatadine
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  25 27  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -2649,7 +2649,7 @@ Standardised_Olopatadine
 M  END
 $$$$
 Standardised_Lisuride
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  25 28  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
@@ -2708,7 +2708,7 @@ Standardised_Lisuride
 M  END
 $$$$
 Standardised_Chlorthalidone
-  -INDIGO-11211316002D
+  -INDIGO-11211321362D
 
  22 24  0  0  0  0  0  0  0  0999 V2000
     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
