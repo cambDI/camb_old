@@ -2,7 +2,8 @@ library(camb)
 
 StandardiseMolecules(structures.file="structures.sdf", 
                      standardised.file="standardised.sdf", 
-                     removed.file="removed.sdf", 
+                     removed.file="removed.sdf",
+                     target.field.name = "EXPT",
                      remove.inorganic=TRUE, 
                      fluorine.limit=3, 
                      chlorine.limit=3, 
