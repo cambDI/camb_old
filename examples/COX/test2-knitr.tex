@@ -50,15 +50,15 @@
 \usepackage{alltt}
 %\DefineVerbatimEnvironment{Sinput}{Verbatim} {xleftmargin=2em,frame=single}
 %\DefineVerbatimEnvironment{Soutput}{Verbatim} {xleftmargin=2em,frame=single}
-\usepackage[left=2.5cm,top=2cm,right=2.5cm,bottom=2.5cm,bindingoffset=0.5cm]{geometry}
+\usepackage[left=2.5cm,top=2cm,right=2cm,bottom=2.5cm,bindingoffset=0.5cm]{geometry}
 \usepackage{amsmath} 
 \usepackage[affil-it]{authblk}
 \usepackage{hyperref}
-\usepackage[backend=bibtex, sorting=none]{biblatex}
+\usepackage[backend=bibtex,sorting=none,style=ieee]{biblatex}
 \usepackage{setspace}
 \bibliography{biblio}
 
-\title{PCM with 'camb'\\
+\title{Proteochemoemtrics (PCM) with 'camb'\\
 {\bf C}hemistry {\bf A}ware {\bf M}odel {\bf B}uilder\\
 Cambridge. November 2013}
 
@@ -67,6 +67,8 @@ Cambridge. November 2013}
 \affil[1]{Unite de Bioinformatique Structurale, Institut Pasteur and CNRS UMR 3825, Structural Biology and Chemistry Department, 25-28, rue Dr. Roux, 75 724 Paris, France.}
 \affil[2]{Unilever Centre for Molecular Science Informatics, Department of Chemistry, University of Cambridge, Cambridge, United Kingdom.}
 \affil[*]{Equal contributors}
+
+\setlength{\parindent}{0pt}
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 
 \begin{document}
@@ -110,6 +112,24 @@ Firstly, we load the package and set the working directory:
 \hlstd{descriptors} \hlkwb{<-} \hlkwd{readRDS}\hlstd{(}\hlstr{"descriptors.rds"}\hlstd{)}
 \end{alltt}
 \end{kframe}
+\end{knitrout}
+
+
+Sometimes, some descriptors are not calcualted for all molecules, thus giving a 'NA' or 'Inf' as descriptor values. Instead of removing that descriptor for all molecules, the missing descriptor values can be {\it imputed} from the corresponding descriptor values of the rest of molecules. To do that, 'Inf' values are converted to 'NA', and then imputed:
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{descriptors} \hlkwb{<-} \hlkwd{ReplaceInfinitesWithNA}\hlstd{(descriptors)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'descriptors' not found}}\begin{alltt}
+\hlstd{descriptors} \hlkwb{<-} \hlkwd{ImputeFeatures}\hlstd{(descriptors)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'descriptors' not found}}\end{kframe}
 \end{knitrout}
 
 
@@ -166,6 +186,51 @@ Ensuingly, we save the descriptors in a .rds file.
 \end{knitrout}
 
 
+In the case that we needed whole sequence descriptors, they can be calculated with the function 'SeqDescs'. The functin takes as argument either a UniProt identifier, or a \{matrix, dataframe\} with the protein sequences. If a UniProt identifier is provided, the function gets firstly the sequence and then calculates the descriptors on the sequence.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{Seq_descriptors_P00374} \hlkwb{<-} \hlkwd{SeqDescs}\hlstd{(}\hlstr{"P00374"}\hlstd{,} \hlkwc{UniProtID} \hlstd{=} \hlnum{TRUE}\hlstd{,}
+    \hlkwc{type} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{"AAC"}\hlstd{,} \hlstr{"DC"}\hlstd{))}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+The available types of descriptor are:\cite{protr}
+- Amino Acid Composition ("AAC")\\
+- Dipeptide Composition ("DC")\\
+- Tripeptide Composition ("TC")\\
+- Normalized Moreau-Broto Autocorrelation ("MoreauBroto")\\
+- Moran Autocorrelation ("Moran")\\
+- Geary Autocorrelation ("Geary")\\
+- CTD (Composition/Transition/Distribution) ("CTD")\\
+- Conjoint Traid ("CTriad")\\
+- Sequence Order Coupling Number ("SOCN")\\
+- Quasi-sequence Order Descriptors ("QSO")\\
+- Pseudo Amino Acid Composition ("PACC")\\
+- Amphiphilic Pseudo Amino Acid Composition ("APAAC")\\
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{Seq_descriptors_P00374} \hlkwb{<-} \hlkwd{SeqDescs}\hlstd{(}\hlstr{"P00374"}\hlstd{)}
+\hlstd{Seq_descriptors_P00374}
+\end{alltt}
+\begin{verbatim}
+##              A       R       N       D        C       E
+## P00374 0.02674 0.04278 0.05348 0.04813 0.005348 0.08556
+##              Q       G       H       I      L       K
+## P00374 0.03743 0.06952 0.01604 0.04813 0.1016 0.09091
+##              M       F       P       S       T       W
+## P00374 0.03743 0.04813 0.06417 0.06417 0.03743 0.01604
+##              Y       V
+## P00374 0.03209 0.07487
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
 \subsection{Reading the Data-set Information}
 Now, we are going to read the file with the information about the dataset, namely: target names, bioctivities, etc..
 Be careful: when reading smiles from a .csv file into an R dataframe, the smils are clipped after a hash ('\#') symbol.
@@ -196,21 +261,11 @@ We can have a look at the response variable:
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{DensityResponse}\hlstd{(bioactivity,} \hlkwc{xlab} \hlstd{=} \hlstr{"pIC50"}\hlstd{,} \hlkwc{main} \hlstd{=} \hlstr{""}\hlstd{,}
-    \hlkwc{ylab} \hlstd{=} \hlstr{"Densitiy"}\hlstd{,} \hlkwc{TitleSize} \hlstd{=} \hlnum{26}\hlstd{,} \hlkwc{XAxisSize} \hlstd{=} \hlnum{20}\hlstd{,}
-    \hlkwc{YAxisSize} \hlstd{=} \hlnum{20}\hlstd{,} \hlkwc{TitleAxesSize} \hlstd{=} \hlnum{24}\hlstd{)}
+\hlstd{dens_resp} \hlkwb{<-} \hlkwd{DensityResponse}\hlstd{(bioactivity,} \hlkwc{xlab} \hlstd{=} \hlstr{"pIC50"}\hlstd{,}
+    \hlkwc{main} \hlstd{=} \hlstr{""}\hlstd{,} \hlkwc{ylab} \hlstd{=} \hlstr{"Densitiy"}\hlstd{,} \hlkwc{TitleSize} \hlstd{=} \hlnum{26}\hlstd{,} \hlkwc{XAxisSize} \hlstd{=} \hlnum{20}\hlstd{,}
+    \hlkwc{YAxisSize} \hlstd{=} \hlnum{20}\hlstd{,} \hlkwc{TitleAxesSize} \hlstd{=} \hlnum{24}\hlstd{,} \hlkwc{AngleLab} \hlstd{=} \hlnum{0}\hlstd{)}
 \end{alltt}
-\end{kframe}\begin{figure}[]
-
-
-{\centering \includegraphics[width=12cm]{figure/unnamed-chunk-12} 
-
-}
-
-\caption[Bioactivity Distribution]{Bioactivity Distribution\label{fig:unnamed-chunk-12}}
-\end{figure}
-
-
+\end{kframe}
 \end{knitrout}
 
 
@@ -220,25 +275,20 @@ Plotting a PCA analysis of the target descriptors gives:
 \begin{alltt}
 \hlstd{target_PCA} \hlkwb{<-} \hlkwd{PCAProt}\hlstd{(amino_accompound_IDs_zscales,}
     \hlkwc{SeqsName} \hlstd{= dataset}\hlopt{$}\hlstd{accession)}
-\hlkwd{PCAProtPlot}\hlstd{(target_PCA,} \hlkwc{PointSize} \hlstd{=} \hlnum{8}\hlstd{,} \hlkwc{main} \hlstd{=} \hlstr{""}\hlstd{,} \hlkwc{TitleSize} \hlstd{=} \hlnum{26}\hlstd{,}
-    \hlkwc{XAxisSize} \hlstd{=} \hlnum{20}\hlstd{,} \hlkwc{YAxisSize} \hlstd{=} \hlnum{20}\hlstd{,} \hlkwc{TitleAxesSize} \hlstd{=} \hlnum{24}\hlstd{)}
+\hlstd{plot_PCA_Cox} \hlkwb{<-} \hlkwd{PCAProtPlot}\hlstd{(target_PCA,} \hlkwc{PointSize} \hlstd{=} \hlnum{8}\hlstd{,}
+    \hlkwc{main} \hlstd{=} \hlstr{""}\hlstd{,} \hlkwc{TitleSize} \hlstd{=} \hlnum{26}\hlstd{,} \hlkwc{XAxisSize} \hlstd{=} \hlnum{20}\hlstd{,} \hlkwc{YAxisSize} \hlstd{=} \hlnum{20}\hlstd{,}
+    \hlkwc{TitleAxesSize} \hlstd{=} \hlnum{24}\hlstd{,} \hlkwc{LegendPosition} \hlstd{=} \hlstr{"bottom"}\hlstd{,}
+    \hlkwc{RowLegend} \hlstd{=} \hlnum{2}\hlstd{,} \hlkwc{ColLegend} \hlstd{=} \hlnum{6}\hlstd{,} \hlkwc{LegendTitleSize} \hlstd{=} \hlnum{10}\hlstd{,}
+    \hlkwc{LegendTextSize} \hlstd{=} \hlnum{10}\hlstd{)}
 \end{alltt}
-\begin{verbatim}
-## [1] "Sequence names provided in the third column of the data.frame"
-\end{verbatim}
-\end{kframe}\begin{figure}[]
 
 
-{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-13} 
-
-}
-
-\caption[PCA Analysis on the
-Amino Acid Descriptors]{PCA Analysis on the
-Amino Acid Descriptors\label{fig:unnamed-chunk-13}}
-\end{figure}
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: unused arguments (LegendTitleSize = 10, LegendTextSize = 10)}}\begin{alltt}
+\hlstd{plot_PCA_Cox}
+\end{alltt}
 
 
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'plot\_PCA\_Cox' not found}}\end{kframe}
 \end{knitrout}
 
 
@@ -250,21 +300,16 @@ Similarly, we can analyze the chemical space by calculating pairwise compound si
 \hlcom{# PairwiseDist(fps_COX_512,method='jaccard')}
 \hlcom{# saveRDS(pw_dist_comp_fps,file='pairwise_dist_COX.rds')}
 \hlstd{pw_dist_comp_fps} \hlkwb{<-} \hlkwd{readRDS}\hlstd{(}\hlstr{"pairwise_dist_COX.rds"}\hlstd{)}
-\hlkwd{PairwiseDistPlot}\hlstd{(pw_dist_comp_fps,} \hlkwc{xlab} \hlstd{=} \hlstr{"Jaccard Similarity"}\hlstd{,}
+\hlstd{plot_pwd} \hlkwb{<-} \hlkwd{PairwiseDistPlot}\hlstd{(pw_dist_comp_fps,} \hlkwc{xlab} \hlstd{=} \hlstr{"Jaccard Similarity"}\hlstd{,}
     \hlkwc{ylab} \hlstd{=} \hlstr{"Density"}\hlstd{,} \hlkwc{TitleSize} \hlstd{=} \hlnum{26}\hlstd{,} \hlkwc{XAxisSize} \hlstd{=} \hlnum{20}\hlstd{,}
     \hlkwc{YAxisSize} \hlstd{=} \hlnum{20}\hlstd{,} \hlkwc{TitleAxesSize} \hlstd{=} \hlnum{24}\hlstd{)}
+
+\hlkwd{plotGrid}\hlstd{(}\hlkwd{c}\hlstd{(}\hlstr{"dens_resp"}\hlstd{,} \hlstr{"plot_pwd"}\hlstd{),} \hlkwc{HeightBlocks} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{1}\hlstd{),}
+    \hlkwc{NCols} \hlstd{=} \hlnum{2}\hlstd{,} \hlkwc{NRows} \hlstd{=} \hlnum{1}\hlstd{)}
 \end{alltt}
-\end{kframe}\begin{figure}[]
 
 
-{\centering \includegraphics[width=15cm]{figure/unnamed-chunk-14} 
-
-}
-
-\caption[Pairwise Compound Jaccard Similarity]{Pairwise Compound Jaccard Similarity\label{fig:unnamed-chunk-14}}
-\end{figure}
-
-
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: unused arguments (HeightBlocks = c(1), NCols = 2, NRows = 1)}}\end{kframe}
 \end{knitrout}
 
 
@@ -277,8 +322,21 @@ With the function 'MaxPerf', we can calculate the manximum achievable performanc
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{MaxPerf}\hlstd{(}\hlkwc{meanNoise} \hlstd{=} \hlnum{0}\hlstd{,} \hlkwc{sdNoise} \hlstd{=} \hlnum{0.6}\hlstd{,} \hlkwc{meanResp} \hlstd{=} \hlkwd{mean}\hlstd{(bioactivity),}
-    \hlkwc{sdResp} \hlstd{=} \hlkwd{sd}\hlstd{(bioactivity),} \hlkwc{lenPred} \hlstd{=} \hlnum{800}\hlstd{)}
+\hlstd{max_performance} \hlkwb{<-} \hlkwd{MaxPerf}\hlstd{(}\hlkwc{meanNoise} \hlstd{=} \hlnum{0}\hlstd{,} \hlkwc{sdNoise} \hlstd{=} \hlnum{0.6}\hlstd{,}
+    \hlkwc{meanResp} \hlstd{=} \hlkwd{mean}\hlstd{(bioactivity),} \hlkwc{sdResp} \hlstd{=} \hlkwd{sd}\hlstd{(bioactivity),}
+    \hlkwc{lenPred} \hlstd{=} \hlnum{800}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+The function returns a list of four plots. By using the function 'plotGrid' we can create a grid of plots in the following way:
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{plotGrid}\hlstd{(}\hlkwc{plots} \hlstd{=} \hlkwd{c}\hlstd{(max_performance}\hlopt{$}\hlstd{p1, max_performance}\hlopt{$}\hlstd{p2,}
+    \hlstd{max_performance}\hlopt{$}\hlstd{p3, max_performance}\hlopt{$}\hlstd{p4))}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
@@ -541,19 +599,19 @@ To have a look at the correlation between predicted and observed values, we can 
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlkwd{ObsPred}\hlstd{(}\hlkwc{pred} \hlstd{= holdout.predictions,} \hlkwc{obs} \hlstd{= dataset}\hlopt{$}\hlstd{y.holdout,}
-    \hlkwc{PointSize} \hlstd{=} \hlnum{3}\hlstd{,} \hlkwc{ColMargin} \hlstd{=} \hlstr{"green"}\hlstd{,} \hlkwc{TitleSize} \hlstd{=} \hlnum{26}\hlstd{,}
+    \hlkwc{PointSize} \hlstd{=} \hlnum{3}\hlstd{,} \hlkwc{ColMargin} \hlstd{=} \hlstr{"blue"}\hlstd{,} \hlkwc{TitleSize} \hlstd{=} \hlnum{26}\hlstd{,}
     \hlkwc{XAxisSize} \hlstd{=} \hlnum{20}\hlstd{,} \hlkwc{YAxisSize} \hlstd{=} \hlnum{20}\hlstd{,} \hlkwc{TitleAxesSize} \hlstd{=} \hlnum{24}\hlstd{,}
-    \hlkwc{margin} \hlstd{=} \hlnum{1}\hlstd{,} \hlkwc{PointColor} \hlstd{=} \hlstr{"black"}\hlstd{,} \hlkwc{PointShape} \hlstd{=} \hlnum{16}\hlstd{,}
-    \hlkwc{MarginWidth} \hlstd{=} \hlnum{2}\hlstd{)}
+    \hlkwc{margin} \hlstd{=} \hlnum{2}\hlstd{,} \hlkwc{PointColor} \hlstd{=} \hlstr{"black"}\hlstd{,} \hlkwc{PointShape} \hlstd{=} \hlnum{16}\hlstd{,}
+    \hlkwc{MarginWidth} \hlstd{=} \hlnum{1.5}\hlstd{)}
 \end{alltt}
 \end{kframe}\begin{figure}[]
 
 
-{\centering \includegraphics[width=12cm]{figure/unnamed-chunk-28} 
+{\centering \includegraphics[width=12cm]{figure/unnamed-chunk-32} 
 
 }
 
-\caption[TRUE]{TRUE\label{fig:unnamed-chunk-28}}
+\caption[Predicted vs Observed]{Predicted vs Observed. The blue line corresponds to a margin of 2 pIC50 units.\label{fig:unnamed-chunk-32}}
 \end{figure}
 
 
