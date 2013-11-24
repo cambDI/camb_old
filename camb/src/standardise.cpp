@@ -56,6 +56,7 @@ void R_drawMoleculeInSDF(char **structures_file, int *structureNumberIn, char **
 }
 
 void R_drawMoleculeInSDFbyID(char **structures_file, char **structureIDIn, char **filename, int *useNameAsTitleInt) {
+    printf("hello");
     int structure, fileIter;
     bool useNameAsTitle = (*useNameAsTitleInt!=0);
     fileIter = indigoIterateSDFile(*structures_file);
