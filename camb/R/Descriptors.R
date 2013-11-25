@@ -7,7 +7,7 @@
 StandardiseMolecules <- function(structures.file, 
                                  standardised.file,
                                  removed.file = "",
-                                 target.field.name = "",
+##                                 target.field.name = "",
                                  remove.inorganic = FALSE, 
                                  fluorine.limit = -1,
                                  chlorine.limit = -1,
@@ -18,7 +18,7 @@ StandardiseMolecules <- function(structures.file,
                                  number.processed = -1) {
   # handle non-existant file
   if (!file.exists(structures.file)) {
-    print("File does not exist")
+    stop("File does not exist")
   }
   
   # deal with sdf or smi difference
@@ -31,7 +31,7 @@ StandardiseMolecules <- function(structures.file,
        structures.file, 
        standardised.file, 
        removed.file,
-       target.field.name,
+  ##     target.field.name,
        as.integer(1), # process SDF
        as.integer(remove.inorganic), 
        as.integer(fluorine.limit),
@@ -50,7 +50,7 @@ StandardiseMolecules <- function(structures.file,
        structures.file, 
        standardised.file, 
        removed.file,
-       target.field.name,
+    ##   target.field.name,
        as.integer(0), # process SMILES
        as.integer(remove.inorganic), 
        as.integer(fluorine.limit),
@@ -67,6 +67,38 @@ StandardiseMolecules <- function(structures.file,
   }
 }
 
+GetPropertiesSDF <- function(structures.file,number_processed=-1, type=1 ){ ## 1 refers to not smiles
+##print("Get properties from SDF")
+if (!file.exists(structures.file)) {stop("File does not exist")}
+sink(file="getPropertiesSDF.log", append=FALSE, split=FALSE)
+output <- tempfile("props_temp",fileext=".csv")
+.C("R_GetPropertiesSDF",structures.file,as.integer(number_processed),as.integer(type),output)
+print("Reading..")
+properties <- read.table(output,sep=",",header=TRUE)
+properties <- properties[, !apply(is.na(properties), 2, all)]
+sink()
+return(properties)
+}
+
+ShowPropertiesSDF <- function(structures.file,type=1 ){ ## 1 refers to not smiles
+if (!file.exists(structures.file)) {stop("File does not exist")}
+output <- tempfile("props_temp",fileext=".csv")
+.C("R_ShowPropertiesSDF",structures.file,output,as.integer(type))
+props <- read.csv(output)
+return(props)
+}
+
+GetPropertySDF <- function(structures.file, property="", number_processed=-1, type=1 ){ ## 1 refers to not smiles
+##print("Get properties from SDF")
+if (!file.exists(structures.file)) {stop("File does not exist")}
+sink(file="getPropertySDF.log", append=FALSE, split=FALSE)
+output <- tempfile("prop_temp",fileext=".csv")
+.C("R_GetPropertySDF",structures.file,property,as.integer(number_processed),as.integer(type),output)
+sink()
+prop <- read.table(output)
+names(prop) <- property
+return(prop)
+}
 ##############
 ## Compound Descriptors
 RemoveStandardisedPrefix <- function(descriptors) {
