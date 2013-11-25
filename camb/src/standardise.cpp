@@ -30,6 +30,7 @@ string trimInchi(const char* inchi) {
 
 extern "C" {
     
+<<<<<<< HEAD
     void R_drawMoleculeInSDF(char **structures_file, int *structureNumberIn, char **filename, int *useNameAsTitleInt) {
         int structure, fileIter;
         int structureNumber = structureNumberIn[0];
@@ -49,6 +50,50 @@ extern "C" {
                     renderMolecule(structure, "", *filename, -1, "");
                 }
                 break;
+=======
+void R_drawMoleculeInSDF(char **structures_file, int *structureNumberIn, char **filename, int *useNameAsTitleInt) {
+    int structure, fileIter;
+    int structureNumber = structureNumberIn[0];
+    printf("structureNumber: %d\n", structureNumber);
+    bool useNameAsTitle = (*useNameAsTitleInt!=0);
+    fileIter = indigoIterateSDFile(*structures_file);
+    int i = 0;   
+    while ((structure = indigoNext(fileIter))) {
+        i++;
+        if(i==structureNumber) {
+            indigoFoldHydrogens(structure);
+            printf("filename: %s", *filename);
+            if(useNameAsTitle) {
+                renderMolecule(structure, *filename);
+            }
+            else {
+                renderMolecule(structure, "", *filename, -1, "");
+            }
+            break;
+        }
+        indigoFree(structure);
+    }
+    indigoFree(fileIter);
+}
+
+void R_drawMoleculeInSDFbyID(char **structures_file, char **structureIDIn, char **filename, int *useNameAsTitleInt) {
+    printf("hello");
+    int structure, fileIter;
+    bool useNameAsTitle = (*useNameAsTitleInt!=0);
+    fileIter = indigoIterateSDFile(*structures_file);
+    int i = 0;   
+    while ((structure = indigoNext(fileIter))) {
+        i++;
+        char str[256];
+        sprintf(str, "%s", *structureIDIn);
+        if(strcmp(str,indigoName(structure)) == 0) {
+            indigoFoldHydrogens(structure);
+            if(useNameAsTitle) {
+                renderMolecule(structure, *filename);
+            }
+            else {
+                renderMolecule(structure, "", *filename, -1, "");
+>>>>>>> 0f7554baf8f3e146f3eab6c6ca1919bb1a5aeb42
             }
             indigoFree(structure);
         }
