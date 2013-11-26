@@ -85,6 +85,7 @@ extern "C" {
                                     char **standardised_file,
                                     char **removed_file,
                                     // char **target_field_name,
+                                    char **output,
                                     int *isSDFInt,
                                     int *removeInorganicInt,
                                     int *fluorineLimitInt,
@@ -117,9 +118,9 @@ extern "C" {
             ofstream target_stream;
             
             //if(write_targets) {
-            target_stream.open("targets.csv", ios::out | ios::trunc); // delete the current file
+            target_stream.open(*output, ios::out | ios::trunc); // delete the current file
             target_stream.close();
-            target_stream.open("targets.csv", ios::out | ios::ate | ios::app | ios::binary);
+            target_stream.open(*output, ios::out | ios::ate | ios::app | ios::binary);
             // }
             
             if(isSDF) {
