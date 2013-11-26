@@ -61,7 +61,7 @@
 \bibliography{biblio}
 
 
-\title{Proteochemoemtrics (PCM) with 'camb'\\
+\title{Proteochemometrics (PCM) with 'camb'\\
 {\bf C}hemistry {\bf A}ware {\bf M}odel {\bf B}uilder\\
 Cambridge. November 2013}
 
@@ -87,7 +87,14 @@ Cambridge. November 2013}
 \maketitle
 
 Firstly, we load the package and set the working directory:
-
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{library}\hlstd{(camb)}
+\hlkwd{setwd}\hlstd{(}\hlstr{"/Users/icortes/Desktop/camb_final/camb/examples/COX"}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
 
 \section{Compounds}
 
@@ -95,10 +102,57 @@ Firstly, we load the package and set the working directory:
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{smiles} \hlkwb{<-} \hlkwd{read.table}\hlstd{(}\hlstr{"smiles_COX.smi"}\hlstd{,} \hlkwc{header} \hlstd{=} \hlnum{FALSE}\hlstd{)}
-\hlkwd{StandardiseMolecules}\hlstd{(}\hlkwc{structures.file} \hlstd{=} \hlstr{"smiles_COX.smi"}\hlstd{,}
-    \hlkwc{standardised.file} \hlstd{=} \hlstr{"smiles_COX_processed.sdf"}\hlstd{,}
-    \hlkwc{is.training} \hlstd{=} \hlnum{TRUE}\hlstd{)}
+\hlstd{smiles} \hlkwb{<-} \hlkwd{read.table}\hlstd{(}\hlstr{"smiles_COX.smi"}\hlstd{,} \hlkwc{header} \hlstd{=} \hlnum{FALSE}\hlstd{,}
+    \hlkwc{comment.char} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{""}\hlstd{))}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+Given that some smiles contain smarts patterns where the hash symbol is present, we need to avoid switch of the argumment comment.char in order not to clip the smiles:
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{StandardiseMolecules}\hlstd{(}\hlkwc{structures.file} \hlstd{=} \hlstr{"smiles_COX.smi"}\hlstd{,} \hlkwc{standardised.file} \hlstd{=} \hlstr{"standardised.sdf"}\hlstd{,}
+    \hlkwc{removed.file} \hlstd{=} \hlstr{"removed.sdf"}\hlstd{,} \hlkwc{output} \hlstd{=} \hlstr{"standardisation_COX_info.csv"}\hlstd{,}
+    \hlkwc{remove.inorganic} \hlstd{=} \hlnum{TRUE}\hlstd{,} \hlkwc{fluorine.limit} \hlstd{=} \hlnum{10}\hlstd{,} \hlkwc{chlorine.limit} \hlstd{=} \hlnum{10}\hlstd{,}
+    \hlkwc{bromine.limit} \hlstd{=} \hlnum{10}\hlstd{,} \hlkwc{iodine.limit} \hlstd{=} \hlnum{10}\hlstd{,} \hlkwc{min.mass.limit} \hlstd{=} \hlnum{20}\hlstd{,}
+    \hlkwc{max.mass.limit} \hlstd{=} \hlnum{2500}\hlstd{)}  \hlcom{#900)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+The properties of all molecules and the index (in the column 'kept') indicating which molecules were deleted are written to a file called standardisation\_COX\_info.csv.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{standardised_info} \hlkwb{<-} \hlkwd{read.table}\hlstd{(}\hlstr{"standardisation_COX_info.csv"}\hlstd{,}
+    \hlkwc{header} \hlstd{=} \hlnum{TRUE}\hlstd{,} \hlkwc{sep} \hlstd{=} \hlstr{","}\hlstd{)}
+\hlkwd{head}\hlstd{(standardised_info)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+In this case, the criteria we chose to remove compounds (the arguments of the StandardiseMolecules function) were not really stringent, so all molecules were kept. This can be seen in the kept field, given that for all compounds (rows) we have a 1.\\
+Similarly, the properties of a .sdf file can be accessed witn the function:
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{ShowPropertiesSDF}\hlstd{(}\hlstr{"standardised.sdf"}\hlstd{,} \hlkwc{type} \hlstd{=} \hlnum{1}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+A given property can be accessed, or all of them. In the latter case, a data.frame with all properties is returned:
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{logS} \hlkwb{<-} \hlkwd{GetPropertySDF}\hlstd{(}\hlstr{"standardised.sdf"}\hlstd{,} \hlkwc{property} \hlstd{=} \hlstr{"logS"}\hlstd{,}
+    \hlkwc{number_processed} \hlstd{=} \hlnum{10}\hlstd{,} \hlkwc{type} \hlstd{=} \hlnum{1}\hlstd{)}
+\hlstd{all_properties} \hlkwb{<-} \hlkwd{GetPropertiesSDF}\hlstd{(}\hlstr{"standardised.sdf"}\hlstd{,} \hlkwc{number_processed} \hlstd{=} \hlnum{10}\hlstd{,}
+    \hlkwc{type} \hlstd{=} \hlnum{1}\hlstd{)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
@@ -124,15 +178,9 @@ Sometimes, some descriptors are not calcualted for all molecules, thus giving a 
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{descriptors} \hlkwb{<-} \hlkwd{ReplaceInfinitesWithNA}\hlstd{(descriptors)}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'descriptors' not found}}\begin{alltt}
 \hlstd{descriptors} \hlkwb{<-} \hlkwd{ImputeFeatures}\hlstd{(descriptors)}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'descriptors' not found}}\end{kframe}
+\end{kframe}
 \end{knitrout}
 
 
@@ -218,19 +266,17 @@ The available types of descriptor are:\cite{protr}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{Seq_descriptors_P00374} \hlkwb{<-} \hlkwd{SeqDescs}\hlstd{(}\hlstr{"P00374"}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning: cannot open: HTTP status was '407 Proxy Authentication Required'}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: cannot open the connection}}\begin{alltt}
 \hlstd{Seq_descriptors_P00374}
 \end{alltt}
-\begin{verbatim}
-##              A       R       N       D        C       E
-## P00374 0.02674 0.04278 0.05348 0.04813 0.005348 0.08556
-##              Q       G       H       I      L       K
-## P00374 0.03743 0.06952 0.01604 0.04813 0.1016 0.09091
-##              M       F       P       S       T       W
-## P00374 0.03743 0.04813 0.06417 0.06417 0.03743 0.01604
-##              Y       V
-## P00374 0.03209 0.07487
-\end{verbatim}
-\end{kframe}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'Seq\_descriptors\_P00374' not found}}\end{kframe}
 \end{knitrout}
 
 
@@ -260,13 +306,33 @@ The bioactivity is in nM. We convert it to pIC50:
 
 
 \section{Data-set Visualization}
+Compounds can be depicted with the function 'PlotMolecules'. It returns a list of four plots, and plots can also be written into a .pdf file.
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{plot_molecules} \hlkwb{<-} \hlkwd{PlotMolecules}\hlstd{(}\hlstr{"standardised.sdf"}\hlstd{,}
+    \hlkwc{IDs} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{1}\hlstd{,} \hlnum{2}\hlstd{,} \hlnum{3}\hlstd{,} \hlnum{4}\hlstd{),} \hlkwc{pdf.file} \hlstd{=} \hlstr{"test_comp_visualization.pdf"}\hlstd{,}
+    \hlkwc{useNameAsTitle} \hlstd{=} \hlnum{TRUE}\hlstd{,} \hlkwc{PDFMain} \hlstd{=} \hlkwa{NULL}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: unused argument (useNameAsTitle = TRUE)}}\begin{alltt}
+\hlstd{plot_molecules[[}\hlnum{1}\hlstd{]]}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'plot\_molecules' not found}}\end{kframe}
+\end{knitrout}
+
+
 We can have a look at the response variable:
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{dens_resp} \hlkwb{<-} \hlkwd{DensityResponse}\hlstd{(bioactivity,} \hlkwc{xlab} \hlstd{=} \hlstr{"pIC50"}\hlstd{,}
     \hlkwc{main} \hlstd{=} \hlstr{""}\hlstd{,} \hlkwc{ylab} \hlstd{=} \hlstr{"Densitiy"}\hlstd{,} \hlkwc{TitleSize} \hlstd{=} \hlnum{26}\hlstd{,} \hlkwc{XAxisSize} \hlstd{=} \hlnum{20}\hlstd{,}
-    \hlkwc{YAxisSize} \hlstd{=} \hlnum{20}\hlstd{,} \hlkwc{TitleAxesSize} \hlstd{=} \hlnum{24}\hlstd{,} \hlkwc{AngleLab} \hlstd{=} \hlnum{0}\hlstd{)}
+    \hlkwc{YAxisSize} \hlstd{=} \hlnum{20}\hlstd{,} \hlkwc{TitleAxesSize} \hlstd{=} \hlnum{24}\hlstd{,} \hlkwc{AngleLab} \hlstd{=} \hlnum{0}\hlstd{,}
+    \hlkwc{lmar} \hlstd{=} \hlnum{0}\hlstd{,} \hlkwc{rmar} \hlstd{=} \hlnum{0}\hlstd{,} \hlkwc{bmar} \hlstd{=} \hlnum{0}\hlstd{,} \hlkwc{tmar} \hlstd{=} \hlnum{0}\hlstd{)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
@@ -293,13 +359,13 @@ Plotting a PCA analysis of the target descriptors gives:
 \end{kframe}\begin{figure}[]
 
 
-{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-16} 
+{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-21} 
 
 }
 
 \caption[PCA Analysis on the
 Amino Acid Descriptors]{PCA Analysis on the
-Amino Acid Descriptors\label{fig:unnamed-chunk-16}}
+Amino Acid Descriptors\label{fig:unnamed-chunk-21}}
 \end{figure}
 
 
@@ -316,10 +382,8 @@ Similarly, we can analyze the chemical space by calculating pairwise compound si
 \hlstd{pw_dist_comp_fps} \hlkwb{<-} \hlkwd{readRDS}\hlstd{(}\hlstr{"pairwise_dist_COX.rds"}\hlstd{)}
 \hlstd{plot_pwd} \hlkwb{<-} \hlkwd{PairwiseDistPlot}\hlstd{(pw_dist_comp_fps,} \hlkwc{xlab} \hlstd{=} \hlstr{"Jaccard Similarity"}\hlstd{,}
     \hlkwc{ylab} \hlstd{=} \hlstr{"Density"}\hlstd{,} \hlkwc{TitleSize} \hlstd{=} \hlnum{26}\hlstd{,} \hlkwc{XAxisSize} \hlstd{=} \hlnum{20}\hlstd{,}
-    \hlkwc{YAxisSize} \hlstd{=} \hlnum{20}\hlstd{,} \hlkwc{TitleAxesSize} \hlstd{=} \hlnum{24}\hlstd{)}
-
-\hlkwd{library}\hlstd{(ggplot2)}
-\hlcom{# library(grid) library(gplots) (.packages())}
+    \hlkwc{YAxisSize} \hlstd{=} \hlnum{20}\hlstd{,} \hlkwc{TitleAxesSize} \hlstd{=} \hlnum{24}\hlstd{,} \hlkwc{lmar} \hlstd{=} \hlnum{0}\hlstd{,} \hlkwc{rmar} \hlstd{=} \hlnum{0}\hlstd{,}
+    \hlkwc{bmar} \hlstd{=} \hlnum{0}\hlstd{,} \hlkwc{tmar} \hlstd{=} \hlnum{0}\hlstd{)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
@@ -328,26 +392,20 @@ Similarly, we can analyze the chemical space by calculating pairwise compound si
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{grid_plot} \hlkwb{<-} \hlkwd{plotGrid}\hlstd{(}\hlkwd{c}\hlstd{(}\hlstr{"dens_resp"}\hlstd{,} \hlstr{"plot_pwd"}\hlstd{),} \hlkwc{HeightBlocks} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{1}\hlstd{),}
-    \hlkwc{NCols} \hlstd{=} \hlnum{2}\hlstd{,} \hlkwc{NRows} \hlstd{=} \hlnum{1}\hlstd{)}
+\hlkwd{library}\hlstd{(ggplot2)}
+\hlkwd{grid.arrange}\hlstd{(dens_resp, plot_pwd,} \hlkwc{nrow} \hlstd{=} \hlnum{2}\hlstd{)}
 \end{alltt}
 \end{kframe}\begin{figure}[]
 
 
-{\centering \includegraphics[width=\maxwidth,angle=90]{figure/unnamed-chunk-18} 
+{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-23} 
 
 }
 
-\caption[Density of the response variable (left)]{Density of the response variable (left). Pairwise Compound Jaccard Similarity (right)\label{fig:unnamed-chunk-18}}
+\caption[Density of the response variable (left)]{Density of the response variable (left). Pairwise Compound Jaccard Similarity (right)\label{fig:unnamed-chunk-23}}
 \end{figure}
 
-\begin{kframe}\begin{alltt}
-\hlstd{grid_plot}
-\end{alltt}
-\begin{verbatim}
-## NULL
-\end{verbatim}
-\end{kframe}
+
 \end{knitrout}
 
 
@@ -646,18 +704,19 @@ To have a look at the correlation between predicted and observed values, we can 
 \end{kframe}\begin{figure}[]
 
 
-{\centering \includegraphics[width=12cm]{figure/unnamed-chunk-33} 
+{\centering \includegraphics[width=12cm]{figure/unnamed-chunk-38} 
 
 }
 
-\caption[Predicted vs Observed]{Predicted vs Observed. The blue line corresponds to a margin of 2 pIC50 units.\label{fig:unnamed-chunk-33}}
+\caption[Predicted vs Observed]{Predicted vs Observed. The blue line corresponds to a margin of 2 pIC50 units.\label{fig:unnamed-chunk-38}}
 \end{figure}
 
 
 \end{knitrout}
 
 
-\section{Bibliography}
+%\section{Bibliography}
+\newpage
 \printbibliography
 
 \end{document}

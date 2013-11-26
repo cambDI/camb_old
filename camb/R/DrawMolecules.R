@@ -7,8 +7,8 @@ DrawMoleculeInSDF <- function(structures.file, structure.number, file.name, useN
   .C("R_drawMoleculeInSDF", structures.file, as.integer(structure.number), file.name, useNameAsTitle)
 }
 
-PlotMolecules <- function(sdf.file, IDs,pdf.file="aaa.pdf",PDFMain="") {
-  if (length(IDs) !=4) {stop("Only for compounds per plot supported at the moment..")}
+PlotMolecules <- function(sdf.file, IDs,pdf.file=NULL,PDFMain=NULL,useNameAsTitle=TRUE) {
+  if (length(IDs) !=4) {stop("Only four compounds per plot supported at the moment..")}
   temp.png <- tempfile("temp", fileext=".png")
   base <- theme(axis.line = element_blank(), 
                 axis.text.x = element_blank(), 
@@ -21,17 +21,18 @@ PlotMolecules <- function(sdf.file, IDs,pdf.file="aaa.pdf",PDFMain="") {
                 plot.margin=unit(c(0,0,0,0), "cm"))
   i <- 1
   for(id in IDs) {
-    DrawMoleculeInSDF(structures.file=sdf.file, structure.number=id, temp.png, TRUE)
+    DrawMoleculeInSDF(structures.file=sdf.file, structure.number=id, temp.png,useNameAsTitle=TRUE)
     img <- readPNG(temp.png)
     g <- rasterGrob(img, interpolate=TRUE)
     p <- qplot(1, 1, geom="blank") + theme_bw() 
     assign(paste("p",i,sep=""), p +annotation_custom(g, xmin=-Inf, xmax=Inf, ymin=-Inf, ymax=Inf) + base)
     i <- i+1
   }
+  if (isnot.null(pdf.file)){
   pdf(pdf.file)
   grid.arrange(p1,p2,p3,p4,nrow=2,main=PDFMain)
   dev.off()
-  
+  }
   return(list(p1,p2,p3,p4))
 }
 
