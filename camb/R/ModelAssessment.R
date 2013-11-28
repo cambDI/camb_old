@@ -90,19 +90,8 @@ plotGrid <- function(plots,NRows,NCols,HeightBlocks,MyLegend=NULL,LegendRight=NU
 }
 
 ##############
-## Validation of models
-Validation <- function(pred,obs){
-  if (is.vector(pred) && is.vector(obs) && length(pred)==length(obs)){
-    metrics <- list(R2 = Rsquared(pred,obs), R02 = Rsquared0(pred,obs), Q2 = Qsquared(pred,obs), RMSEP = RMSE(pred,obs), Slope=slope(pred,obs))
-  } else {
-    stop("Wrong input: input arguments are not vector or have unequal length")
-  }
-  return(metrics)
-}
-
-##############
 ## Observed vs predicted
-ObsPred <- function (pred,obs,margin=NULL,main="",ylab="Observed",xlab="Predicted",
+CorrelationPlot <- function (pred,obs,margin=NULL,main="",ylab="Observed",xlab="Predicted",
                    PointSize=4,ColMargin="blue",TextSize=15,TitleSize=15,
                    XAxisSize=15,YAxisSize=15,TitleAxesSize=15,tmar=1,bmar=1,
                    rmar=1,lmar=1,AngleLab=30,LegendPosition="right",PointColor="black",
@@ -153,6 +142,10 @@ RMSE <- function(v1, v2) {
   return(as.numeric(sqrt( (residuals%*%residuals)/length(v1) )))
 }
 
+RMSE_CV <- function(model, digits = 3) {
+  signif(min(as.vector(na.omit(model$results$RMSE))), digits=3)
+}  
+
 # calculates the MAE between two vectors
 MAE <- function (v1, v2) {
   i1 <- which(!is.na(v1))
@@ -193,8 +186,11 @@ Rsquared <- function(v1,v2) { # v1=z.test (y), v2=y.test (x)
     return(division * division)
   }
   else {print("Wrong input: input arguments are not vector or have unequal length")}
-  
 }
+
+Rsquared_CV <- function(model, digits = 3) {
+  model$results$Rsquared[which(model$results$RMSE %in% min(model$results$RMSE, na.rm=TRUE))]
+} 
 
 # Calculates the Q squared 
 #Qsquared (z.test,y.test) (predicted vs observed)
@@ -206,6 +202,17 @@ Qsquared <- function(v1, v2) {
     return(1-(sum(first_term)/sum(second_term)))
   }
   else {print("Wrong input: input arguments are not vector or have unequal length")}
+}
+
+##############
+## Validation of models
+Validation <- function(pred,obs){
+  if (is.vector(pred) && is.vector(obs) && length(pred)==length(obs)){
+    metrics <- list(R2 = Rsquared(pred,obs), R02 = Rsquared0(pred,obs), Q2 = Qsquared(pred,obs), RMSE = RMSE(pred,obs), Slope=slope(pred,obs), MAE = MAE(pred, obs))
+  } else {
+    stop("Wrong input: input arguments are not vector or have unequal length")
+  }
+  return(metrics)
 }
 
 ################################
