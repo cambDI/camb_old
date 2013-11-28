@@ -1,0 +1,504 @@
+A new version of Bioconductor is available after installing the most
+  recent version of R; see http://bioconductor.org/install
+Bioconductor version 2.11 (BiocInstaller 1.8.3), ?biocLite for help
+Loading required package: cluster
+Loading required package: foreach
+Loading required package: lattice
+Loading required package: methods
+Loading required package: plyr
+Loading required package: reshape2
+Loading required package: iterators
+Loading required package: parallel
++ Fold1.Rep1: sigma= 0.003906, C=1e-04 
++ Fold1.Rep1: sigma= 0.015625, C=1e-04 
++ Fold1.Rep1: sigma= 0.062500, C=1e-04 
++ Fold1.Rep1: sigma= 0.250000, C=1e-04 
++ Fold1.Rep1: sigma= 1.000000, C=1e-04 
++ Fold1.Rep1: sigma= 4.000000, C=1e-04 
++ Fold1.Rep1: sigma=16.000000, C=1e-04 
++ Fold1.Rep1: sigma= 0.003906, C=1e-03 
++ Fold1.Rep1: sigma= 0.015625, C=1e-03 
++ Fold1.Rep1: sigma= 0.062500, C=1e-03 
+- Fold1.Rep1: sigma= 0.003906, C=1e-03 
++ Fold1.Rep1: sigma= 0.250000, C=1e-02 
+- Fold1.Rep1: sigma= 1.000000, C=1e-04 
++ Fold1.Rep1: sigma= 0.003906, C=1e-02 
+- Fold1.Rep1: sigma= 0.062500, C=1e-04 
++ Fold1.Rep1: sigma= 4.000000, C=1e-03 
+- Fold1.Rep1: sigma=16.000000, C=1e-04 
++ Fold1.Rep1: sigma= 0.062500, C=1e-02 
+- Fold1.Rep1: sigma= 4.000000, C=1e-04 
+- Fold1.Rep1: sigma= 0.015625, C=1e-04 
++ Fold1.Rep1: sigma= 0.015625, C=1e-02 
++ Fold1.Rep1: sigma= 1.000000, C=1e-03 
+- Fold1.Rep1: sigma= 0.003906, C=1e-04 
++ Fold1.Rep1: sigma= 0.250000, C=1e-03 
+- Fold1.Rep1: sigma= 0.015625, C=1e-03 
+- Fold1.Rep1: sigma= 0.062500, C=1e-03 
++ Fold1.Rep1: sigma= 1.000000, C=1e-02 
++ Fold1.Rep1: sigma= 4.000000, C=1e-02 
+- Fold1.Rep1: sigma= 0.250000, C=1e-04 
++ Fold1.Rep1: sigma=16.000000, C=1e-03 
+- Fold1.Rep1: sigma= 0.250000, C=1e-02 
++ Fold1.Rep1: sigma=16.000000, C=1e-01 
+- Fold1.Rep1: sigma= 0.003906, C=1e-02 
++ Fold1.Rep1: sigma= 0.250000, C=1e-01 
+- Fold1.Rep1: sigma= 4.000000, C=1e-03 
++ Fold1.Rep1: sigma= 0.015625, C=1e-01 
+- Fold1.Rep1: sigma= 0.015625, C=1e-02 
++ Fold1.Rep1: sigma= 1.000000, C=1e-01 
+- Fold1.Rep1: sigma= 0.062500, C=1e-02 
++ Fold1.Rep1: sigma= 4.000000, C=1e-01 
+- Fold1.Rep1: sigma=16.000000, C=1e-03 
++ Fold1.Rep1: sigma= 0.062500, C=1e-01 
+- Fold1.Rep1: sigma=16.000000, C=1e-01 
++ Fold1.Rep1: sigma= 0.062500, C=1e+01 
+- Fold1.Rep1: sigma= 4.000000, C=1e-02 
++ Fold1.Rep1: sigma= 0.015625, C=1e+00 
+- Fold1.Rep1: sigma= 1.000000, C=1e-03 
++ Fold1.Rep1: sigma= 0.003906, C=1e-01 
+- Fold1.Rep1: sigma= 0.250000, C=1e-03 
++ Fold1.Rep1: sigma=16.000000, C=1e-02 
+- Fold1.Rep1: sigma= 1.000000, C=1e-02 
++ Fold1.Rep1: sigma= 0.003906, C=1e+00 
+- Fold1.Rep1: sigma= 0.015625, C=1e-01 
++ Fold1.Rep1: sigma= 1.000000, C=1e+00 
+- Fold1.Rep1: sigma= 0.250000, C=1e-01 
++ Fold1.Rep1: sigma=16.000000, C=1e+00 
+- Fold1.Rep1: sigma= 0.062500, C=1e+01 
++ Fold1.Rep1: sigma= 4.000000, C=1e+02 
+- Fold1.Rep1: sigma= 0.003906, C=1e-01 
++ Fold1.Rep1: sigma= 0.250000, C=1e+00 
+- Fold1.Rep1: sigma= 1.000000, C=1e-01 
++ Fold1.Rep1: sigma= 0.003906, C=1e+01 
+- Fold1.Rep1: sigma= 0.015625, C=1e+00 
++ Fold1.Rep1: sigma= 1.000000, C=1e+01 
+- Fold1.Rep1: sigma= 4.000000, C=1e-01 
++ Fold1.Rep1: sigma= 0.015625, C=1e+01 
+- Fold1.Rep1: sigma= 0.003906, C=1e+00 
++ Fold1.Rep1: sigma= 0.250000, C=1e+01 
+- Fold1.Rep1: sigma= 1.000000, C=1e+00 
++ Fold1.Rep1: sigma= 0.003906, C=1e+02 
+- Fold1.Rep1: sigma= 0.062500, C=1e-01 
++ Fold1.Rep1: sigma= 4.000000, C=1e+00 
+- Fold1.Rep1: sigma=16.000000, C=1e-02 
++ Fold1.Rep1: sigma= 0.062500, C=1e+00 
+- Fold1.Rep1: sigma=16.000000, C=1e+00 
++ Fold1.Rep1: sigma= 0.062500, C=1e+02 
+- Fold1.Rep1: sigma= 4.000000, C=1e+02 
++ Fold2.Rep1: sigma= 0.015625, C=1e-03 
+- Fold1.Rep1: sigma= 0.003906, C=1e+02 
++ Fold2.Rep1: sigma= 0.250000, C=1e-04 
+- Fold1.Rep1: sigma= 1.000000, C=1e+01 
++ Fold2.Rep1: sigma= 0.003906, C=1e-04 
+- Fold1.Rep1: sigma= 0.015625, C=1e+01 
++ Fold1.Rep1: sigma= 1.000000, C=1e+02 
+- Fold1.Rep1: sigma= 0.062500, C=1e+00 
++ Fold1.Rep1: sigma= 4.000000, C=1e+01 
+- Fold1.Rep1: sigma= 0.003906, C=1e+01 
++ Fold1.Rep1: sigma= 0.250000, C=1e+02 
+- Fold1.Rep1: sigma= 0.250000, C=1e+01 
++ Fold1.Rep1: sigma=16.000000, C=1e+02 
+- Fold1.Rep1: sigma= 0.250000, C=1e+00 
++ Fold1.Rep1: sigma=16.000000, C=1e+01 
+- Fold1.Rep1: sigma= 4.000000, C=1e+00 
++ Fold1.Rep1: sigma= 0.015625, C=1e+02 
+- Fold1.Rep1: sigma= 0.062500, C=1e+02 
++ Fold2.Rep1: sigma= 4.000000, C=1e-04 
+- Fold2.Rep1: sigma= 0.015625, C=1e-03 
++ Fold2.Rep1: sigma= 1.000000, C=1e-02 
+- Fold2.Rep1: sigma= 0.003906, C=1e-04 
++ Fold2.Rep1: sigma= 0.250000, C=1e-03 
+- Fold2.Rep1: sigma= 0.250000, C=1e-04 
++ Fold2.Rep1: sigma=16.000000, C=1e-03 
+- Fold1.Rep1: sigma= 4.000000, C=1e+01 
++ Fold2.Rep1: sigma= 0.015625, C=1e-04 
+- Fold1.Rep1: sigma= 0.250000, C=1e+02 
++ Fold2.Rep1: sigma=16.000000, C=1e-04 
+- Fold1.Rep1: sigma= 1.000000, C=1e+02 
++ Fold2.Rep1: sigma= 0.003906, C=1e-03 
+- Fold1.Rep1: sigma= 0.015625, C=1e+02 
++ Fold2.Rep1: sigma= 1.000000, C=1e-04 
+- Fold1.Rep1: sigma=16.000000, C=1e+02 
++ Fold2.Rep1: sigma= 0.062500, C=1e-03 
+- Fold1.Rep1: sigma=16.000000, C=1e+01 
++ Fold2.Rep1: sigma= 0.062500, C=1e-04 
+- Fold2.Rep1: sigma= 4.000000, C=1e-04 
++ Fold2.Rep1: sigma= 0.015625, C=1e-02 
+- Fold2.Rep1: sigma= 1.000000, C=1e-02 
++ Fold2.Rep1: sigma= 0.003906, C=1e+00 
+- Fold2.Rep1: sigma= 0.250000, C=1e-03 
++ Fold2.Rep1: sigma=16.000000, C=1e-02 
+- Fold2.Rep1: sigma= 0.015625, C=1e-04 
++ Fold2.Rep1: sigma= 1.000000, C=1e-03 
+- Fold2.Rep1: sigma=16.000000, C=1e-04 
++ Fold2.Rep1: sigma= 0.062500, C=1e-02 
+- Fold2.Rep1: sigma=16.000000, C=1e-03 
++ Fold2.Rep1: sigma= 0.062500, C=1e-01 
+- Fold2.Rep1: sigma= 0.003906, C=1e-03 
++ Fold2.Rep1: sigma= 0.250000, C=1e-02 
+- Fold2.Rep1: sigma= 0.062500, C=1e-04 
++ Fold2.Rep1: sigma= 4.000000, C=1e-03 
+- Fold2.Rep1: sigma= 0.003906, C=1e+00 
++ Fold2.Rep1: sigma= 0.250000, C=1e+01 
+- Fold2.Rep1: sigma= 0.062500, C=1e-03 
++ Fold2.Rep1: sigma= 4.000000, C=1e-02 
+- Fold2.Rep1: sigma= 1.000000, C=1e-04 
++ Fold2.Rep1: sigma= 0.003906, C=1e-02 
+- Fold2.Rep1: sigma=16.000000, C=1e-02 
++ Fold2.Rep1: sigma= 0.062500, C=1e+00 
+- Fold2.Rep1: sigma= 0.062500, C=1e-01 
++ Fold2.Rep1: sigma= 4.000000, C=1e+00 
+- Fold2.Rep1: sigma= 0.015625, C=1e-02 
++ Fold2.Rep1: sigma= 1.000000, C=1e-01 
+- Fold2.Rep1: sigma= 1.000000, C=1e-03 
++ Fold2.Rep1: sigma= 0.003906, C=1e-01 
+- Fold2.Rep1: sigma= 0.062500, C=1e-02 
++ Fold2.Rep1: sigma= 4.000000, C=1e-01 
+- Fold2.Rep1: sigma= 4.000000, C=1e-03 
++ Fold2.Rep1: sigma= 0.015625, C=1e-01 
+- Fold2.Rep1: sigma= 0.250000, C=1e+01 
++ Fold2.Rep1: sigma=16.000000, C=1e+02 
+- Fold2.Rep1: sigma= 0.250000, C=1e-02 
++ Fold2.Rep1: sigma=16.000000, C=1e-01 
+- Fold2.Rep1: sigma= 0.003906, C=1e-02 
++ Fold2.Rep1: sigma= 0.250000, C=1e-01 
+- Fold2.Rep1: sigma= 0.003906, C=1e-01 
++ Fold2.Rep1: sigma= 0.250000, C=1e+00 
+- Fold2.Rep1: sigma= 4.000000, C=1e-02 
++ Fold2.Rep1: sigma= 0.015625, C=1e+00 
+- Fold2.Rep1: sigma= 4.000000, C=1e+00 
++ Fold2.Rep1: sigma= 0.015625, C=1e+02 
+- Fold2.Rep1: sigma= 0.062500, C=1e+00 
++ Fold2.Rep1: sigma= 4.000000, C=1e+01 
+- Fold2.Rep1: sigma= 4.000000, C=1e-01 
++ Fold2.Rep1: sigma= 0.015625, C=1e+01 
+- Fold2.Rep1: sigma= 1.000000, C=1e-01 
++ Fold2.Rep1: sigma= 0.003906, C=1e+01 
+- Fold2.Rep1: sigma= 0.015625, C=1e+00 
++ Fold2.Rep1: sigma= 1.000000, C=1e+01 
+- Fold2.Rep1: sigma=16.000000, C=1e+02 
++ Fold3.Rep1: sigma= 0.062500, C=1e-03 
+- Fold2.Rep1: sigma= 0.015625, C=1e-01 
++ Fold2.Rep1: sigma= 1.000000, C=1e+00 
+- Fold2.Rep1: sigma= 0.250000, C=1e+00 
++ Fold2.Rep1: sigma=16.000000, C=1e+01 
+- Fold2.Rep1: sigma=16.000000, C=1e-01 
++ Fold2.Rep1: sigma= 0.062500, C=1e+01 
+- Fold2.Rep1: sigma= 0.015625, C=1e+01 
++ Fold2.Rep1: sigma= 1.000000, C=1e+02 
+- Fold2.Rep1: sigma= 0.015625, C=1e+02 
++ Fold3.Rep1: sigma= 1.000000, C=1e-04 
+- Fold2.Rep1: sigma= 0.250000, C=1e-01 
++ Fold2.Rep1: sigma=16.000000, C=1e+00 
+- Fold2.Rep1: sigma= 4.000000, C=1e+01 
++ Fold3.Rep1: sigma= 0.015625, C=1e-04 
+- Fold2.Rep1: sigma= 0.003906, C=1e+01 
++ Fold2.Rep1: sigma= 0.250000, C=1e+02 
+- Fold2.Rep1: sigma= 1.000000, C=1e+01 
++ Fold3.Rep1: sigma= 0.003906, C=1e-04 
+- Fold3.Rep1: sigma= 0.062500, C=1e-03 
++ Fold3.Rep1: sigma= 4.000000, C=1e-02 
+- Fold2.Rep1: sigma= 0.062500, C=1e+01 
++ Fold2.Rep1: sigma= 4.000000, C=1e+02 
+- Fold2.Rep1: sigma=16.000000, C=1e+01 
++ Fold3.Rep1: sigma= 0.062500, C=1e-04 
+- Fold2.Rep1: sigma= 1.000000, C=1e+00 
++ Fold2.Rep1: sigma= 0.003906, C=1e+02 
+- Fold2.Rep1: sigma= 1.000000, C=1e+02 
++ Fold3.Rep1: sigma= 0.003906, C=1e-03 
+- Fold3.Rep1: sigma= 1.000000, C=1e-04 
++ Fold3.Rep1: sigma= 0.003906, C=1e-02 
+- Fold2.Rep1: sigma=16.000000, C=1e+00 
++ Fold2.Rep1: sigma= 0.062500, C=1e+02 
+- Fold3.Rep1: sigma= 0.003906, C=1e-04 
++ Fold3.Rep1: sigma= 0.250000, C=1e-03 
+- Fold3.Rep1: sigma= 0.015625, C=1e-04 
++ Fold3.Rep1: sigma= 1.000000, C=1e-03 
+- Fold3.Rep1: sigma= 0.062500, C=1e-04 
++ Fold3.Rep1: sigma= 4.000000, C=1e-03 
+- Fold2.Rep1: sigma= 4.000000, C=1e+02 
++ Fold3.Rep1: sigma= 0.015625, C=1e-03 
+- Fold3.Rep1: sigma= 4.000000, C=1e-02 
++ Fold3.Rep1: sigma= 0.015625, C=1e+00 
+- Fold2.Rep1: sigma= 0.250000, C=1e+02 
++ Fold3.Rep1: sigma=16.000000, C=1e-04 
+- Fold2.Rep1: sigma= 0.003906, C=1e+02 
++ Fold3.Rep1: sigma= 0.250000, C=1e-04 
+- Fold3.Rep1: sigma= 0.015625, C=1e+00 
++ Fold3.Rep1: sigma= 1.000000, C=1e+01 
+- Fold3.Rep1: sigma= 4.000000, C=1e-03 
++ Fold3.Rep1: sigma= 0.015625, C=1e-01 
+- Fold3.Rep1: sigma= 0.003906, C=1e-03 
++ Fold3.Rep1: sigma= 0.250000, C=1e-02 
+- Fold2.Rep1: sigma= 0.062500, C=1e+02 
++ Fold3.Rep1: sigma= 4.000000, C=1e-04 
+- Fold3.Rep1: sigma= 0.003906, C=1e-02 
++ Fold3.Rep1: sigma= 0.250000, C=1e-01 
+- Fold3.Rep1: sigma= 0.250000, C=1e-03 
++ Fold3.Rep1: sigma=16.000000, C=1e-02 
+- Fold3.Rep1: sigma= 1.000000, C=1e-03 
++ Fold3.Rep1: sigma= 0.003906, C=1e-01 
+- Fold3.Rep1: sigma= 0.015625, C=1e-03 
++ Fold3.Rep1: sigma= 1.000000, C=1e-02 
+- Fold3.Rep1: sigma=16.000000, C=1e-04 
++ Fold3.Rep1: sigma= 0.062500, C=1e-02 
+- Fold3.Rep1: sigma= 1.000000, C=1e+01 
++ Fold4.Rep1: sigma= 0.003906, C=1e-04 
+- Fold3.Rep1: sigma= 0.015625, C=1e-01 
++ Fold3.Rep1: sigma= 1.000000, C=1e+00 
+- Fold3.Rep1: sigma= 0.250000, C=1e-04 
++ Fold3.Rep1: sigma=16.000000, C=1e-03 
+- Fold3.Rep1: sigma= 1.000000, C=1e-02 
++ Fold3.Rep1: sigma= 0.003906, C=1e+00 
+- Fold3.Rep1: sigma= 0.250000, C=1e-01 
++ Fold3.Rep1: sigma=16.000000, C=1e+00 
+- Fold3.Rep1: sigma=16.000000, C=1e-02 
++ Fold3.Rep1: sigma= 0.062500, C=1e+00 
+- Fold3.Rep1: sigma= 0.250000, C=1e-02 
++ Fold3.Rep1: sigma=16.000000, C=1e-01 
+- Fold3.Rep1: sigma= 4.000000, C=1e-04 
++ Fold3.Rep1: sigma= 0.015625, C=1e-02 
+- Fold3.Rep1: sigma= 0.003906, C=1e-01 
++ Fold3.Rep1: sigma= 0.250000, C=1e+00 
+- Fold3.Rep1: sigma= 0.062500, C=1e-02 
++ Fold3.Rep1: sigma= 4.000000, C=1e-01 
+- Fold4.Rep1: sigma= 0.003906, C=1e-04 
++ Fold4.Rep1: sigma= 0.250000, C=1e-03 
+- Fold3.Rep1: sigma= 1.000000, C=1e+00 
++ Fold3.Rep1: sigma= 0.003906, C=1e+02 
+- Fold3.Rep1: sigma=16.000000, C=1e-03 
++ Fold3.Rep1: sigma= 0.062500, C=1e-01 
+- Fold3.Rep1: sigma= 0.003906, C=1e+00 
++ Fold3.Rep1: sigma= 0.250000, C=1e+01 
+- Fold3.Rep1: sigma= 0.062500, C=1e+00 
++ Fold3.Rep1: sigma= 4.000000, C=1e+01 
+- Fold3.Rep1: sigma= 4.000000, C=1e-01 
++ Fold3.Rep1: sigma= 0.015625, C=1e+01 
+- Fold3.Rep1: sigma=16.000000, C=1e+00 
++ Fold3.Rep1: sigma= 0.062500, C=1e+02 
+- Fold3.Rep1: sigma= 0.015625, C=1e-02 
++ Fold3.Rep1: sigma= 1.000000, C=1e-01 
+- Fold3.Rep1: sigma= 0.003906, C=1e+02 
++ Fold4.Rep1: sigma= 0.250000, C=1e-04 
+- Fold3.Rep1: sigma= 0.062500, C=1e-01 
++ Fold3.Rep1: sigma= 4.000000, C=1e+00 
+- Fold3.Rep1: sigma=16.000000, C=1e-01 
++ Fold3.Rep1: sigma= 0.062500, C=1e+01 
+- Fold4.Rep1: sigma= 0.250000, C=1e-03 
++ Fold4.Rep1: sigma=16.000000, C=1e-02 
+- Fold3.Rep1: sigma= 0.250000, C=1e+00 
++ Fold3.Rep1: sigma=16.000000, C=1e+01 
+- Fold3.Rep1: sigma= 0.250000, C=1e+01 
++ Fold3.Rep1: sigma=16.000000, C=1e+02 
+- Fold3.Rep1: sigma= 0.015625, C=1e+01 
++ Fold3.Rep1: sigma= 1.000000, C=1e+02 
+- Fold3.Rep1: sigma= 0.062500, C=1e+02 
++ Fold4.Rep1: sigma= 4.000000, C=1e-04 
+- Fold3.Rep1: sigma= 4.000000, C=1e+01 
++ Fold4.Rep1: sigma= 0.015625, C=1e-04 
+- Fold4.Rep1: sigma= 0.250000, C=1e-04 
++ Fold4.Rep1: sigma=16.000000, C=1e-03 
+- Fold3.Rep1: sigma=16.000000, C=1e+02 
++ Fold4.Rep1: sigma= 0.062500, C=1e-03 
+- Fold3.Rep1: sigma= 4.000000, C=1e+00 
++ Fold3.Rep1: sigma= 0.015625, C=1e+02 
+- Fold3.Rep1: sigma= 0.062500, C=1e+01 
++ Fold3.Rep1: sigma= 4.000000, C=1e+02 
+- Fold3.Rep1: sigma= 1.000000, C=1e-01 
++ Fold3.Rep1: sigma= 0.003906, C=1e+01 
+- Fold4.Rep1: sigma=16.000000, C=1e-02 
++ Fold4.Rep1: sigma= 0.062500, C=1e+00 
+- Fold3.Rep1: sigma=16.000000, C=1e+01 
++ Fold4.Rep1: sigma= 0.062500, C=1e-04 
+- Fold4.Rep1: sigma= 0.062500, C=1e-03 
++ Fold4.Rep1: sigma= 4.000000, C=1e-02 
+- Fold4.Rep1: sigma= 0.015625, C=1e-04 
++ Fold4.Rep1: sigma= 1.000000, C=1e-03 
+- Fold4.Rep1: sigma= 4.000000, C=1e-04 
++ Fold4.Rep1: sigma= 0.015625, C=1e-02 
+- Fold3.Rep1: sigma= 1.000000, C=1e+02 
++ Fold4.Rep1: sigma= 0.003906, C=1e-03 
+- Fold3.Rep1: sigma= 0.015625, C=1e+02 
++ Fold4.Rep1: sigma= 1.000000, C=1e-04 
+- Fold3.Rep1: sigma= 0.003906, C=1e+01 
++ Fold3.Rep1: sigma= 0.250000, C=1e+02 
+- Fold4.Rep1: sigma=16.000000, C=1e-03 
++ Fold4.Rep1: sigma= 0.062500, C=1e-01 
+- Fold3.Rep1: sigma= 4.000000, C=1e+02 
++ Fold4.Rep1: sigma= 0.015625, C=1e-03 
+- Fold4.Rep1: sigma= 0.062500, C=1e+00 
++ Fold4.Rep1: sigma= 4.000000, C=1e+01 
+- Fold4.Rep1: sigma= 0.062500, C=1e-04 
++ Fold4.Rep1: sigma= 4.000000, C=1e-03 
+- Fold4.Rep1: sigma= 4.000000, C=1e-02 
++ Fold4.Rep1: sigma= 0.015625, C=1e+00 
+- Fold4.Rep1: sigma= 0.015625, C=1e-02 
++ Fold4.Rep1: sigma= 1.000000, C=1e-01 
+- Fold4.Rep1: sigma= 0.003906, C=1e-03 
+- Fold4.Rep1: sigma= 1.000000, C=1e-03 
++ Fold4.Rep1: sigma= 0.250000, C=1e-02 
++ Fold4.Rep1: sigma= 0.003906, C=1e-01 
+- Fold4.Rep1: sigma= 1.000000, C=1e-04 
++ Fold4.Rep1: sigma= 0.003906, C=1e-02 
+- Fold4.Rep1: sigma= 0.062500, C=1e-01 
++ Fold4.Rep1: sigma= 4.000000, C=1e+00 
+- Fold4.Rep1: sigma= 0.015625, C=1e+00 
++ Fold4.Rep1: sigma= 1.000000, C=1e+01 
+- Fold3.Rep1: sigma= 0.250000, C=1e+02 
++ Fold4.Rep1: sigma=16.000000, C=1e-04 
+- Fold4.Rep1: sigma= 0.015625, C=1e-03 
++ Fold4.Rep1: sigma= 1.000000, C=1e-02 
+- Fold4.Rep1: sigma= 4.000000, C=1e+01 
++ Fold5.Rep1: sigma= 0.015625, C=1e-04 
+- Fold4.Rep1: sigma= 4.000000, C=1e-03 
++ Fold4.Rep1: sigma= 0.015625, C=1e-01 
+- Fold4.Rep1: sigma= 0.003906, C=1e-02 
++ Fold4.Rep1: sigma= 0.250000, C=1e-01 
+- Fold4.Rep1: sigma= 4.000000, C=1e+00 
++ Fold4.Rep1: sigma= 0.015625, C=1e+02 
+- Fold4.Rep1: sigma= 0.003906, C=1e-01 
++ Fold4.Rep1: sigma= 0.250000, C=1e+00 
+- Fold4.Rep1: sigma= 1.000000, C=1e-01 
++ Fold4.Rep1: sigma= 0.003906, C=1e+01 
+- Fold4.Rep1: sigma= 0.250000, C=1e-02 
++ Fold4.Rep1: sigma=16.000000, C=1e-01 
+- Fold4.Rep1: sigma= 1.000000, C=1e+01 
++ Fold5.Rep1: sigma= 0.003906, C=1e-04 
+- Fold4.Rep1: sigma= 0.015625, C=1e+02 
++ Fold5.Rep1: sigma= 1.000000, C=1e-04 
+- Fold4.Rep1: sigma= 0.250000, C=1e-01 
++ Fold4.Rep1: sigma=16.000000, C=1e+00 
+- Fold4.Rep1: sigma= 0.015625, C=1e-01 
++ Fold4.Rep1: sigma= 1.000000, C=1e+00 
+- Fold4.Rep1: sigma=16.000000, C=1e-04 
++ Fold4.Rep1: sigma= 0.062500, C=1e-02 
+- Fold4.Rep1: sigma= 1.000000, C=1e-02 
++ Fold4.Rep1: sigma= 0.003906, C=1e+00 
+- Fold5.Rep1: sigma= 0.015625, C=1e-04 
++ Fold5.Rep1: sigma= 1.000000, C=1e-03 
+- Fold4.Rep1: sigma= 0.003906, C=1e+01 
++ Fold4.Rep1: sigma= 0.250000, C=1e+02 
+- Fold4.Rep1: sigma= 0.250000, C=1e+00 
++ Fold4.Rep1: sigma=16.000000, C=1e+01 
+- Fold4.Rep1: sigma=16.000000, C=1e+00 
++ Fold4.Rep1: sigma= 0.062500, C=1e+02 
+- Fold4.Rep1: sigma=16.000000, C=1e-01 
++ Fold4.Rep1: sigma= 0.062500, C=1e+01 
+- Fold5.Rep1: sigma= 0.003906, C=1e-04 
++ Fold5.Rep1: sigma= 0.250000, C=1e-03 
+- Fold5.Rep1: sigma= 1.000000, C=1e-04 
++ Fold5.Rep1: sigma= 0.003906, C=1e-02 
+- Fold4.Rep1: sigma= 0.003906, C=1e+00 
++ Fold4.Rep1: sigma= 0.250000, C=1e+01 
+- Fold4.Rep1: sigma= 1.000000, C=1e+00 
++ Fold4.Rep1: sigma= 0.003906, C=1e+02 
+- Fold4.Rep1: sigma= 0.062500, C=1e-02 
++ Fold4.Rep1: sigma= 4.000000, C=1e-01 
+- Fold5.Rep1: sigma= 1.000000, C=1e-03 
++ Fold5.Rep1: sigma= 0.003906, C=1e-01 
+- Fold4.Rep1: sigma= 0.062500, C=1e+02 
++ Fold5.Rep1: sigma= 4.000000, C=1e-04 
+- Fold5.Rep1: sigma= 0.250000, C=1e-03 
++ Fold5.Rep1: sigma=16.000000, C=1e-02 
+- Fold4.Rep1: sigma= 0.062500, C=1e+01 
++ Fold4.Rep1: sigma= 4.000000, C=1e+02 
+- Fold4.Rep1: sigma= 0.250000, C=1e+02 
++ Fold5.Rep1: sigma=16.000000, C=1e-04 
+- Fold4.Rep1: sigma=16.000000, C=1e+01 
++ Fold5.Rep1: sigma= 0.062500, C=1e-04 
+- Fold5.Rep1: sigma= 0.003906, C=1e-02 
++ Fold5.Rep1: sigma= 0.250000, C=1e-01 
+- Fold4.Rep1: sigma= 0.250000, C=1e+01 
++ Fold4.Rep1: sigma=16.000000, C=1e+02 
+- Fold4.Rep1: sigma= 0.003906, C=1e+02 
++ Fold5.Rep1: sigma= 0.250000, C=1e-04 
+- Fold4.Rep1: sigma= 4.000000, C=1e-01 
++ Fold4.Rep1: sigma= 0.015625, C=1e+01 
+- Fold5.Rep1: sigma=16.000000, C=1e-02 
++ Fold5.Rep1: sigma= 0.062500, C=1e+00 
+- Fold5.Rep1: sigma= 0.003906, C=1e-01 
++ Fold5.Rep1: sigma= 0.250000, C=1e+00 
+- Fold4.Rep1: sigma= 4.000000, C=1e+02 
++ Fold5.Rep1: sigma= 0.015625, C=1e-03 
+- Fold5.Rep1: sigma= 4.000000, C=1e-04 
++ Fold5.Rep1: sigma= 0.015625, C=1e-02 
+- Fold4.Rep1: sigma= 0.015625, C=1e+01 
++ Fold4.Rep1: sigma= 1.000000, C=1e+02 
+- Fold5.Rep1: sigma=16.000000, C=1e-04 
++ Fold5.Rep1: sigma= 0.062500, C=1e-02 
+- Fold5.Rep1: sigma= 0.062500, C=1e+00 
++ Fold5.Rep1: sigma= 4.000000, C=1e+01 
+- Fold5.Rep1: sigma= 0.062500, C=1e-04 
++ Fold5.Rep1: sigma= 4.000000, C=1e-03 
+- Fold5.Rep1: sigma= 0.250000, C=1e-01 
++ Fold5.Rep1: sigma=16.000000, C=1e+00 
+- Fold5.Rep1: sigma= 0.015625, C=1e-03 
++ Fold5.Rep1: sigma= 1.000000, C=1e-02 
+- Fold4.Rep1: sigma=16.000000, C=1e+02 
++ Fold5.Rep1: sigma= 0.062500, C=1e-03 
+- Fold5.Rep1: sigma= 0.250000, C=1e-04 
++ Fold5.Rep1: sigma=16.000000, C=1e-03 
+- Fold5.Rep1: sigma= 0.250000, C=1e+00 
++ Fold5.Rep1: sigma=16.000000, C=1e+01 
+- Fold5.Rep1: sigma= 4.000000, C=1e+01 
+- Fold5.Rep1: sigma= 0.015625, C=1e-02 
++ Fold5.Rep1: sigma= 1.000000, C=1e-01 
+- Fold4.Rep1: sigma= 1.000000, C=1e+02 
++ Fold5.Rep1: sigma= 0.003906, C=1e-03 
+- Fold5.Rep1: sigma= 0.062500, C=1e-02 
++ Fold5.Rep1: sigma= 4.000000, C=1e-01 
+- Fold5.Rep1: sigma= 1.000000, C=1e-02 
++ Fold5.Rep1: sigma= 0.003906, C=1e+00 
+- Fold5.Rep1: sigma=16.000000, C=1e+00 
++ Fold5.Rep1: sigma= 0.062500, C=1e+02 
+- Fold5.Rep1: sigma= 4.000000, C=1e-03 
++ Fold5.Rep1: sigma= 0.015625, C=1e-01 
+- Fold5.Rep1: sigma= 0.062500, C=1e-03 
++ Fold5.Rep1: sigma= 4.000000, C=1e-02 
+- Fold5.Rep1: sigma=16.000000, C=1e-03 
++ Fold5.Rep1: sigma= 0.062500, C=1e-01 
+- Fold5.Rep1: sigma=16.000000, C=1e+01 
+- Fold5.Rep1: sigma= 0.003906, C=1e-03 
++ Fold5.Rep1: sigma= 0.250000, C=1e-02 
+- Fold5.Rep1: sigma= 0.062500, C=1e+02 
+- Fold5.Rep1: sigma= 1.000000, C=1e-01 
++ Fold5.Rep1: sigma= 0.003906, C=1e+01 
+- Fold5.Rep1: sigma= 0.003906, C=1e+00 
++ Fold5.Rep1: sigma= 0.250000, C=1e+01 
+- Fold5.Rep1: sigma= 4.000000, C=1e-01 
++ Fold5.Rep1: sigma= 0.015625, C=1e+01 
+- Fold5.Rep1: sigma= 0.062500, C=1e-01 
++ Fold5.Rep1: sigma= 4.000000, C=1e+00 
+- Fold5.Rep1: sigma= 0.015625, C=1e-01 
++ Fold5.Rep1: sigma= 1.000000, C=1e+00 
+- Fold5.Rep1: sigma= 4.000000, C=1e-02 
++ Fold5.Rep1: sigma= 0.015625, C=1e+00 
+- Fold5.Rep1: sigma= 0.250000, C=1e-02 
++ Fold5.Rep1: sigma=16.000000, C=1e-01 
+- Fold5.Rep1: sigma= 0.003906, C=1e+01 
++ Fold5.Rep1: sigma= 0.250000, C=1e+02 
+- Fold5.Rep1: sigma= 0.015625, C=1e+01 
++ Fold5.Rep1: sigma= 1.000000, C=1e+02 
+- Fold5.Rep1: sigma= 4.000000, C=1e+00 
++ Fold5.Rep1: sigma= 0.015625, C=1e+02 
+- Fold5.Rep1: sigma= 1.000000, C=1e+00 
++ Fold5.Rep1: sigma= 0.003906, C=1e+02 
+- Fold5.Rep1: sigma= 0.250000, C=1e+01 
++ Fold5.Rep1: sigma=16.000000, C=1e+02 
+- Fold5.Rep1: sigma=16.000000, C=1e-01 
++ Fold5.Rep1: sigma= 0.062500, C=1e+01 
+- Fold5.Rep1: sigma= 0.015625, C=1e+00 
++ Fold5.Rep1: sigma= 1.000000, C=1e+01 
+- Fold5.Rep1: sigma= 0.250000, C=1e+02 
+- Fold5.Rep1: sigma= 0.015625, C=1e+02 
+- Fold5.Rep1: sigma= 1.000000, C=1e+02 
+- Fold5.Rep1: sigma= 0.003906, C=1e+02 
+- Fold5.Rep1: sigma= 0.062500, C=1e+01 
++ Fold5.Rep1: sigma= 4.000000, C=1e+02 
+- Fold5.Rep1: sigma=16.000000, C=1e+02 
+- Fold5.Rep1: sigma= 1.000000, C=1e+01 
+- Fold5.Rep1: sigma= 4.000000, C=1e+02 
+Aggregating results
+Selecting tuning parameters
+Fitting C = 10, sigma = 0.00390625 on full training set

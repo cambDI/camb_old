@@ -100,4 +100,4 @@ Molecule610 (#610) warning: molecule contains more than 3 iodines
 Molecule611 (#611) warning: molecule contains more than 3 iodines
 Molecule852 (#852) warning: molecule contains more than 3 chlorines
 Molecule857 (#857) warning: molecule contains more than 3 flourines
-Molecule1640 (#1640) skipped over: NOT_ORGANIC
+Molecule1640 (#1640) warning: molecule contains one or more inorganic atoms

@@ -94,9 +94,6 @@ tune.grid <- expand.grid(.mtry = seq(5,100,5))
 model <- train(dataset$x.train, dataset$y.train, method, tuneGrid=tune.grid, trControl=dataset$trControl)
 saveRDS(model, file=paste(method,".rds",sep=""))
 
-model <- readRDS("svmRadial.rds")
-
-
 #########################################
 # Training an SVM
 #########################################
@@ -119,14 +116,20 @@ saveRDS(model, file=paste(method,".rds",sep=""))
 # This can e chacke by: _my_model_$metric
 RMSE_CV = signif(min(as.vector(na.omit(model$results$RMSE))), digits=3)
 
-RMSE_CV(model)
-Rsquared_CV(model)
+RMSE_CV = RMSE_CV(model)
+
+Rsquared_CV = modelCoxRF$results$Rsquared[which( modelCoxRF$results$RMSE %in% min(modelCoxRF$results$RMSE, na.rm=TRUE))]
 
 # Predict the values of the hold-out (external) set
 holdout.predictions <- as.vector(predict(model, newdata = dataset$x.holdout))
+
 CorrelationPlot(pred=holdout.predictions, obs=dataset$y.holdout)
 
-CorrelationPlot(pred=holdout.predictions, obs=dataset$y.holdout, margin=1, main="LogS Observered vs Predicted", PointSize=3, ColMargin="red")
+
 
 # Statistics for Model Validation
-metrics <- Validation(holdout.predictions, dataset$y.holdout)
+MetricsRf <- Validation(holdout.predictions,dataset$y.holdout)
+
+# Correlation between observed and predicted
+ObsPred(pred=holdout.predictions,obs=dataset$y.holdout,PointSize=3,ColMargin='green',
+        margin=1,PointColor="black",PointShape=16,MarginWidth=2)

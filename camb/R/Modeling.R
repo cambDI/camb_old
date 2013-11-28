@@ -88,16 +88,16 @@ PreProcess <- function(ss, steps = c("center", "scale")) {
 GetCVTrainControl <- function(ss, seed = 1, folds = 5, repeats = 1) {
   set.seed(seed)
   ss$trControl <- trainControl(method='cv', number=folds, repeats=repeats, returnResamp='none',
-                               returnData=FALSE, savePredictions=TRUE,
+                               returnData=TRUE, savePredictions=TRUE,
                                verboseIter=TRUE, allowParallel=TRUE,
                                index=createMultiFolds(ss$y.train, k=folds, times=repeats))
   ss
 }
 
 ##############
-expGrid <- function(ini,end,stride,base){
+expGrid <- function(power.from, power.to, power.by, base){
   grid <- c()
-  for (i in seq(ini,end,stride)){
+  for (i in seq(power.from, power.to, power.by)){
     grid <- append(grid,base^i)
   }
   return(grid)
