@@ -98,7 +98,7 @@ model <- readRDS("svmRadial.rds")
 
 
 #########################################
-# Training an SVM
+# Training Models
 #########################################
 method <- "svmRadial"
 tune.grid <- expand.grid(.sigma = expGrid(-8, 4, 2, 2), .C = c(0.0001, 0.001, 0.01, 0.1, 1, 10, 100))
@@ -116,8 +116,8 @@ saveRDS(model, file=paste(method,".rds",sep=""))
 
 # Cross Validation Metrics.
 # We assume the metric used for the choice of the best combination of hyperparameters is 'RMSE'.
-# This can e chacke by: _my_model_$metric
-RMSE_CV = signif(min(as.vector(na.omit(model$results$RMSE))), digits=3)
+dataset <- readRDS("dataset.rds")
+model <- readRDS("rf.rds")
 
 RMSE_CV(model)
 Rsquared_CV(model)
@@ -125,8 +125,7 @@ Rsquared_CV(model)
 # Predict the values of the hold-out (external) set
 holdout.predictions <- as.vector(predict(model, newdata = dataset$x.holdout))
 CorrelationPlot(pred=holdout.predictions, obs=dataset$y.holdout)
-
 CorrelationPlot(pred=holdout.predictions, obs=dataset$y.holdout, margin=1, main="LogS Observered vs Predicted", PointSize=3, ColMargin="red")
 
 # Statistics for Model Validation
-metrics <- Validation(holdout.predictions, dataset$y.holdout)
+Validation(holdout.predictions, dataset$y.holdout)

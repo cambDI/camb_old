@@ -1,0 +1,220 @@
+\documentclass[twoside,a4wide,12pt]{article}
+%\DefineVerbatimEnvironment{Sinput}{Verbatim} {xleftmargin=2em,frame=single}
+%\DefineVerbatimEnvironment{Soutput}{Verbatim} {xleftmargin=2em,frame=single}
+\usepackage[left=2.5cm,top=2cm,right=2.5cm,bottom=2.5cm,bindingoffset=0.5cm]{geometry}
+\usepackage{amsmath} 
+\usepackage[affil-it]{authblk}
+\usepackage{hyperref}
+\usepackage[backend=bibtex, sorting=none]{biblatex}
+\usepackage{setspace}
+\bibliography{biblio}
+
+\title{QSPR with 'camb'\\
+{\bf C}hemistry {\bf A}ware {\bf M}odel {\bf B}uilder\\
+Cambridge. November 2013}
+
+\author[1,3]{\rm Daniel Murrell\thanks{dsmurrell@gmail.com}}
+\author[2,3]{\rm Isidro Cortes-Ciriano\thanks{isidrolauscher@gmail.com}} 
+\affil[1]{Unilever Centre for Molecular Science Informatics, Department of Chemistry, University of Cambridge, Cambridge, United Kingdom.}
+\affil[2]{Unite de Bioinformatique Structurale, Institut Pasteur and CNRS UMR 3825, Structural Biology and Chemistry Department, 25-28, rue Dr. Roux, 75 724 Paris, France.}
+\affil[*]{Equal contributors}
+
+\begin{document}
+
+\maketitle
+\onehalfspacing
+
+<<include=FALSE>>=
+opts_chunk$set(concordance=TRUE)
+opts_chunk$set(dev='pdf')
+setwd("~/Dropbox/projects/camb/examples/LogS/Reference_2")
+Sys.setenv(TEXINPUTS=getwd(),
+           BIBINPUTS=getwd(),
+           BSTINPUTS=getwd())
+@
+
+<<echo=FALSE>>=
+options(width=60)
+@
+\maketitle
+
+Install the camb package and it's dependencies. Then load the package.
+
+<<echo=FALSE,results='hide',warning=FALSE,message=FALSE>>=
+library(camb)
+library(ggplot2)
+setwd("~/Dropbox/projects/camb/examples/LogS/Reference_2")
+@
+\section{Molecules}
+
+\subsection{Reading and Preprocessing}
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
+StandardiseMolecules(structures.file="solubility_2007_ref2.sdf", 
+                     standardised.file="standardised.sdf", 
+                     removed.file="removed.sdf",
+                     output = "properties.csv",
+                     remove.inorganic=TRUE, 
+                     fluorine.limit=3, 
+                     chlorine.limit=3, 
+                     bromine.limit=3, 
+                     iodine.limit=3, 
+                     min.mass.limit=20, 
+                     max.mass.limit=900)
+@
+
+\subsection{Calculating PaDEL Descriptors}
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
+descriptors <- GeneratePadelDescriptors(standardised.file = "standardised.sdf", types=c("2D"), threads = 1)
+descriptors <- RemoveStandardisedPrefix(descriptors)
+@
+
+\section{Target Visualization}
+We can have a look at the response variable:
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,fig.align='center',fig.cap="Bioactivity Distribution",out.width='12cm'>>=
+properties <- read.csv("properties.csv")
+properties <- properties[properties$Kept==1, ]
+targets <- data.frame(Name = properties$Name, target = properties$EXPT)
+p <- DensityResponse(targets$target)
+p + labs(title="LogS target value distribution")
+@
+
+\section{Statistical Pre-processing}
+Merge the calculated descriptors and the target values by name into a single data.frame. Check that the number of rows of the merged and original data.frames are the same. Split the data.frame into ids, x and y where ids are the molecule names, x are the descriptor values and y is the target values.  
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
+all <- merge(x=targets, y=descriptors, by="Name")
+# check the number of rows are the same
+dim(all)
+dim(targets)
+dim(descriptors)
+ids <- all$Name
+x <- all[3:ncol(all)]
+y <- all$target
+@
+
+Split the dataset into a training (80\%) and a holdout (20\%) set that will be used to assess the predictive ability of the models. Remove the following descriptors: (i) those with a variance close to zero (near-zero variance), and (ii) those highly correlated:
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
+# replace the infinite values with NA and impute the remaining NA values
+x.finite <- ReplaceInfinitesWithNA(x)
+x.imputed <- ImputeFeatures(x.finite)
+
+# split the dataset into a training and holdout set
+dataset <- SplitSet(ids, x.imputed, y, percentage=20)
+
+# remove the descriptors that are highly correlated or have low variance
+dataset <- RemoveNearZeroVarianceFeatures(dataset)
+dataset <- RemoveHighlyCorrelatedFeatures(dataset)
+@
+
+Center and scale the descriptors:
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
+dataset <- PreProcess(dataset)
+@
+
+Given that cross-validation (CV) will be used to optimize the hyperparameters of the models, we divide the training setin 5 folds:
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
+dataset <- GetCVTrainControl(dataset)
+saveRDS(dataset, file="dataset.rds")
+@
+
+\section{Model Training}
+
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE, eval=FALSE>>=
+# register the number of cores to use in training
+registerDoMC(cores=1)
+
+# train and save a support vector machine model
+method <- "svmRadial"
+tune.grid <- expand.grid(.sigma = expGrid(-8, 4, 2, 2), .C = c(0.0001, 0.001, 0.01, 0.1, 1, 10, 100))
+model <- train(dataset$x.train, dataset$y.train, method, tuneGrid=tune.grid, trControl=dataset$trControl)
+saveRDS(model, file=paste(method,".rds",sep=""))
+
+# train and save a random forest model
+method <- "rf"
+tune.grid <- expand.grid(.mtry = seq(5,100,5))
+model <- train(dataset$x.train, dataset$y.train, method, tuneGrid=tune.grid, trControl=dataset$trControl)
+saveRDS(model, file=paste(method,".rds",sep=""))
+
+# train and save a generalised boosted regression model
+method <- "gbm"
+tune.grid <- expand.grid(.n.trees=c(500,1000), .interaction.depth=c(25), .shrinkage = c(0.04, 0.08, 0.16))
+model <- train(dataset$x.train, dataset$y.train, method, tuneGrid=tune.grid, trControl=dataset$trControl)
+saveRDS(model, file=paste(method,".rds",sep=""))
+@
+
+\section{Model Evaluation}
+
+Once the models are trained, the cross validated metrics can be calculated:
+
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE>>=
+dataset <- readRDS("dataset.rds")
+model <- readRDS("svmRadial.rds")
+
+# Cross Validation Metrics.
+RMSE_CV(model)
+Rsquared_CV(model)
+@
+
+On the basis of the soundness of the obtained models, we predict the values for the holdout set:
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,warning=FALSE,message=FALSE>>=
+holdout.predictions <- as.vector(predict(model, newdata = dataset$x.holdout))
+CorrelationPlot(pred=holdout.predictions, obs=dataset$y.holdout)
+@
+
+We evaluate the predictive ability of our models by calculation the following statistical metrics:\\
+
+{\bf Internal validation:}
+\\
+\begin{equation}
+q_{{\it int}}^{2} = 1 - \frac {\sum_{i=1}^{N} (y_{i} - \widetilde{y}_{i})^{2}} {\sum_{i=1}^{N} (y_{i} - \bar{y}_{tr})^{2}}
+\end{equation}
+% cross-validated correlation coefficient
+
+\begin{equation}
+RMSE_{int} = \frac {\sqrt {(y_i - \widetilde{y}_i)^{2}}} {N}
+\end{equation}
+
+where $N$, $y_i$, $\widetilde{y}_i$ and $\bar{y}_{tr}$ represent the size of the training set, the observed, the predicted and the averaged values of the response variable for those datapoints included in the training set. The {\it i}th position within the training set is defined by {\it i}.  
+\\
+\\
+{\bf External validation:}
+\\
+
+\begin{equation}
+q_{{\it ext}}^{2} = 1 - \frac {\sum_{j=1}^{N} (y_j-\widetilde{y}_j)^{2}}  {\sum_{j=1}^{N} (y_j - \bar{y}_{ext})^{2}}
+\end{equation}
+
+\begin{equation}
+RMSE_{ext} = \frac {\sqrt {(y_i - \widetilde{y}_i)^{2}}} {N} 
+\end{equation}
+
+\begin{equation}
+R_{ext}^{2} = \frac {{\sum_{i=1}^{N} (y_{i} - \bar{y}_{ext})}  (\widetilde{y}_{i} - \overset{-}{\widetilde{y}_{ext}})} 
+{\sqrt{\sum_{i=1}^{N} (y_{i} - \bar{y}_{ext})^{2} \sum{ (\widetilde{y}_{i} - \overset{-}{\widetilde{y}_{ext}})^{2}}}}
+\end{equation}
+
+\begin{equation}
+R_{0\:ext}^2 = 1 - \frac {\sum_{j=1}^{N} (y_{j} - \widetilde{y}_{j}^{ r0})^{2}} {\sum_{j=1}^{N} (y_{j} - \bar{y}_{ext})^{2}} 
+\end{equation}
+
+where $N$, $y_j$, $\widetilde{y}_j$, $\bar{y}_{ext}$ and $\breve{y}_j$ represent the size of the training set, the observed, the predicted, the averaged values and the fitted
+values of the response variable for those datapoints comprising the external set. The {\it j}th position within the external set is defined by {\it j}. $R_{0\:ext}^2$ is the square of the coefficient of determination through the origin, being $\widetilde{y}_{j}^{ r0} = k \widetilde{y}_j$ the regression through the origin (observed versus predicted) and $k$ its slope.\\
+For a detailed discussion of both the evaluation of the predictive ability through the external set and different formulations for $q^{2}$, see ref.\cite{consonni}. 
+To be considered as predictive, a model must satisfy the following criteria:\cite{beware,earnest}
+\\
+\begin{enumerate}
+\item $q_{{\it int}}^{2} > 0.5$
+\item $R_{ext}^2 > 0.6$
+\item $ \frac {(R_{ext}^2 - R_{0\:ext}^2)} {R_{ext}^2} < 0.1$
+\item $0.85 \leq k \leq 1.15$
+\end{enumerate}
+
+The metrics for the external validatin are given by:
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE>>=
+# Statistics for Model Validation
+Validation(holdout.predictions, dataset$y.holdout)
+@
+
+%\section{Bibliography}
+%\printbibliography
+
+\end{document}
