@@ -357,7 +357,7 @@ extern "C" {
                     std::string Mname = indigoName(structureClone);
                     if (Mname.size() == 0){
                         std::ostringstream ss;
-                        ss << writeCount;
+                        ss << readCount;
                         Mname = ss.str();
                     }
                     
