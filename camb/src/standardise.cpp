@@ -4,8 +4,13 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <sstream>
+
+
 
 #include <boost/algorithm/string.hpp>
+#include <boost/lexical_cast.hpp>
+
 
 #include "indigo.h"
 #include "indigo-renderer.h"
@@ -152,7 +157,7 @@ extern "C" {
             
             int props,prop,propFirst,propsFirst;
             int propss = 0;
-            int namesprop = true;
+            int namesprop = TRUE;
             
             while (structure = indigoNext(structureIter)) {
                 readCount++;
@@ -178,6 +183,12 @@ extern "C" {
                     
                     props = indigoIterateProperties(structure);
                     string comp_name = indigoName(structure);
+                    if (comp_name.size() == 0){ //comp_name.length()
+                        std::ostringstream ss;
+                        ss << readCount;
+                        comp_name = ss.str();
+                    }
+                    
                     property_stream << comp_name << "\t";
                     property_stream2 << comp_name << "\t";
                     while (prop = indigoNext(props)) {
@@ -249,7 +260,6 @@ extern "C" {
                         const char* inchi = indigoInchiGetInchi(structure);
                         string trimmedInchi = trimInchi(inchi);
                         int temp = indigoInchiLoadMolecule(trimmedInchi.c_str());
-                        
                         if(strcmp(indigoInchiGetWarning(), "") != 0) {
                             Rprintf("%s (#%d) warning: while converting to Inchi: %s\n", structureName.c_str(), structureIndex+1, indigoInchiGetWarning());
 
@@ -305,37 +315,54 @@ extern "C" {
                     }
                     
                     // remove 'bad' molecules (normally used during training)
-                    if(molecularMass < minMassLimit || molecularMass > maxMassLimit || highFlourine || highChlorine || highBromine || highIodine) {
-                        indigoSdfAppend(removedWriter, structure);
-                        indigoFree(structureClone);
-                        indigoFree(structure);
-                        property_stream << "0" << endl;
-                        property_stream2 << "0" << endl;
-                        continue;
+                    if(maxMassLimit != -1){
+                        if(molecularMass < minMassLimit || molecularMass > maxMassLimit || highFlourine || highChlorine || highBromine || highIodine) {
+                            indigoSdfAppend(removedWriter, structure);
+                            indigoFree(structureClone);
+                            indigoFree(structure);
+                            property_stream << "0" << endl;
+                            property_stream2 << "0" << endl;
+                            continue;
+                        } else {
+                            
+                            property_stream << "1" << endl;
+                            property_stream2 << "1" << endl;
+                            
+                        }
                     } else {
                         
-                        property_stream << "1" << endl;
-                        property_stream2 << "1" << endl;
-                        
+                        if(molecularMass < minMassLimit || highFlourine || highChlorine || highBromine || highIodine) {
+                            indigoSdfAppend(removedWriter, structure);
+                            indigoFree(structureClone);
+                            indigoFree(structure);
+                            property_stream << "0" << endl;
+                            property_stream2 << "0" << endl;
+                            continue;
+                        } else {
+                            
+                            property_stream << "1" << endl;
+                            property_stream2 << "1" << endl;
+                        }
                     }
                     
                     
                     // use the largest substructure
                     if (debug) Rprintf("selecting the largest substructure\n");
                     int temp2 = pickLargestSubstructure(structure);
-                    
-                    
                     indigoFree(structure);
                     structure = temp2;
                     
                     writeCount++;
                     std::string addition = "Standardised_";
-                    std::string name = indigoName(structureClone);
-                    indigoSetName(structure, (addition + name).c_str());
-                   
+                    std::string Mname = indigoName(structureClone);
+                    if (Mname.size() == 0){
+                        std::ostringstream ss;
+                        ss << writeCount;
+                        Mname = ss.str();
+                    }
+                    
+                    indigoSetName(structure, (addition + Mname).c_str());
                     indigoSdfAppend(sdfWriter, structure);
-                    
-                    
                     indigoFree(structureClone);
                     indigoFree(structure);
                 }
@@ -361,6 +388,9 @@ extern "C" {
             printf("readCount: %d\n", readCount);
             printf("writeCount: %d\n", writeCount);
         }
+    
+    
+    
         
     } // extern "C"
     

@@ -32,7 +32,6 @@ Cambridge. November 2013}
 <<include=FALSE>>=
 opts_chunk$set(concordance=TRUE)
 opts_chunk$set(dev='pdf')
-setwd('/Users/icortes/Desktop/camb_final/camb/examples/COX')
 Sys.setenv(TEXINPUTS=getwd(),
            BIBINPUTS=getwd(),
            BSTINPUTS=getwd())
@@ -53,12 +52,12 @@ setwd('/Users/icortes/Desktop/camb_final/camb/examples/COX')
 \section{Compounds}
 
 \subsection{Reading and Preprocessing}
-<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE>>=
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
 smiles <- read.table("smiles_COX.smi", header=FALSE,comment.char=c(""))
 @
 Given that some smiles contain smarts patterns where the hash symbol is present, we need to avoid switch of the argumment comment.char in order not to clip the smiles:
 
-<<echo=TRUE,results='hide',warning=FALSE,message=FALSE>>=
+<<echo=TRUE,results='hide',warning=FALSE,message=FALSE,eval=FALSE>>=
 StandardiseMolecules(structures.file="smiles_COX.smi",
 standardised.file="standardised.sdf",
 removed.file="removed.sdf",
@@ -68,8 +67,8 @@ fluorine.limit=-1,
 chlorine.limit=-1,
 bromine.limit=-1,
 iodine.limit=-1,
-min.mass.limit=-1, #suggested value 20
-max.mass.limit=-1)#suggested value  900)
+min.mass.limit=20, #suggested value 20
+max.mass.limit=900)#suggested value  900)
 @
 The properties of all molecules and the index (in the column 'kept') indicating which molecules were deleted are written to a file called standardisation\_COX\_info.csv.
 
@@ -80,7 +79,7 @@ head(standardised_info)
 
 In this case, the criteria we chose to remove compounds (the arguments of the StandardiseMolecules function) were not really stringent, so all molecules were kept. This can be seen in the kept field, given that for all compounds (rows) we have a 1.\\
 Similarly, the properties of a .sdf file can be accessed witn the function:
-<<echo=TRUE,results='hide',warning=FALSE,message=FALSE,eval=TRUE>>=
+<<echo=TRUE,results='hide',warning=FALSE,message=FALSE,eval=FALSE>>=
 ShowPropertiesSDF("standardised.sdf",type=1)
 @
 A given property can be accessed, or all of them. In the latter case, a data.frame with all properties is returned:
@@ -106,11 +105,11 @@ descriptors <- ImputeFeatures(descriptors)
 @
 
 \subsection{Circular Morgan Fingerprints}
-<<highlight=TRUE,tidy.opts=list(width.cutoff=50),eval=TRUE>>=
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),eval=FALSE>>=
 Sys.setenv(RDBASE="/usr/local/share/RDKit")
 Sys.setenv(PYTHONPATH="/usr/local/lib/python2.7/site-packages")
-#fps_COX_512 <- MorganFPs(bits=512,radius=2,type='smi',mols='smiles_COX.smi', output='COX',keep='hashed_counts')
-#saveRDS(fps_COX_512,file="fps_COX_512.rds")
+fps_COX_512 <- MorganFPs(bits=512,radius=2,type='smi',mols='smiles_COX.smi', output='COX',keep='hashed_counts')
+saveRDS(fps_COX_512,file="fps_COX_512.rds")
 fps_COX_512 <- readRDS("fps_COX_512.rds")
 @
 
