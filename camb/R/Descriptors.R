@@ -20,6 +20,7 @@ StandardiseMolecules <- function(structures.file,
   if (!file.exists(structures.file)) {
     stop("File does not exist")
   }
+  if (file.info(structures.file)$size  == 0) {stop("Input file is empty")}
   
   # deal with sdf or smi difference
   split <- strsplit(structures.file, "\\.")[[1]]
@@ -70,6 +71,7 @@ StandardiseMolecules <- function(structures.file,
 GetPropertiesSDF <- function(structures.file,number_processed=-1, type=1){ ## 1 refers to not smiles
 ##print("Get properties from SDF")
 if (!file.exists(structures.file)) {stop("File does not exist")}
+if (file.info(structures.file)$size  == 0) {stop("Input file is empty")}
 sink(file="getPropertiesSDF.log", append=FALSE, split=FALSE)
 output <- tempfile("props_temp",fileext=".csv")
 .C("R_GetPropertiesSDF",structures.file,as.integer(number_processed),as.integer(type),output)
@@ -82,6 +84,7 @@ return(properties)
 
 ShowPropertiesSDF <- function(structures.file,type=1 ){ ## 1 refers to not smiles
 if (!file.exists(structures.file)) {stop("File does not exist")}
+if (file.info(structures.file)$size  == 0) {stop("Input file is empty")}
 output <- tempfile("props_temp",fileext=".csv")
 .C("R_ShowPropertiesSDF",structures.file,output,as.integer(type))
 props <- read.csv(output)
@@ -91,6 +94,7 @@ return(props)
 GetPropertySDF <- function(structures.file, property="", number_processed=-1, type=1 ){ ## 1 refers to not smiles
 ##print("Get properties from SDF")
 if (!file.exists(structures.file)) {stop("File does not exist")}
+if (file.info(structures.file)$size  == 0) {stop("Input file is empty")}
 sink(file="getPropertySDF.log", append=FALSE, split=FALSE)
 output <- tempfile("prop_temp",fileext=".csv")
 .C("R_GetPropertySDF",structures.file,property,as.integer(number_processed),as.integer(type),output)
@@ -107,12 +111,14 @@ RemoveStandardisedPrefix <- function(descriptors) {
 }
 
 GeneratePadelDescriptors <- function(standardised.file, types = c("2D"), threads = -1, limit = -1) {
+  if (file.info(standardised.file)$size  == 0) {stop("Input file is empty")}
   descriptors.file <- tempfile("descriptors", fileext=".csv")
   GeneratePadelDescriptors.internal(standardised.file, descriptors.file, types, threads)
   read.csv(descriptors.file)
 }
 
 GeneratePadelDescriptorsFile <- function(standardised.file, descriptors.file, types = c("2D"), threads = -1, limit = -1) {
+  if (file.info(standardised.file)$size  == 0) {stop("Input file is empty")}
   GeneratePadelDescriptors.internal(standardised.file, descriptors.file, types, threads)
 }
 

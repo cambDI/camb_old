@@ -122,8 +122,8 @@ Given that some smiles contain smarts patterns where the hash symbol is present,
 \hlkwc{chlorine.limit}\hlstd{=}\hlopt{-}\hlnum{1}\hlstd{,}
 \hlkwc{bromine.limit}\hlstd{=}\hlopt{-}\hlnum{1}\hlstd{,}
 \hlkwc{iodine.limit}\hlstd{=}\hlopt{-}\hlnum{1}\hlstd{,}
-\hlkwc{min.mass.limit}\hlstd{=}\hlopt{-}\hlnum{1}\hlstd{,} \hlcom{#suggested value 20}
-\hlkwc{max.mass.limit}\hlstd{=}\hlopt{-}\hlnum{1}\hlstd{)}\hlcom{#suggested value  900)}
+\hlkwc{min.mass.limit}\hlstd{=}\hlnum{20}\hlstd{,} \hlcom{#suggested value 20}
+\hlkwc{max.mass.limit}\hlstd{=}\hlnum{900}\hlstd{)}\hlcom{#suggested value  900)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
@@ -157,10 +157,21 @@ A given property can be accessed, or all of them. In the latter case, a data.fra
 \begin{alltt}
 \hlstd{logS} \hlkwb{<-} \hlkwd{GetPropertySDF}\hlstd{(}\hlstr{"standardised.sdf"}\hlstd{,} \hlkwc{property} \hlstd{=} \hlstr{"logS"}\hlstd{,}
     \hlkwc{number_processed} \hlstd{=} \hlnum{10}\hlstd{,} \hlkwc{type} \hlstd{=} \hlnum{1}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: line 2 did not have 11 elements}}\begin{alltt}
 \hlstd{all_properties} \hlkwb{<-} \hlkwd{GetPropertiesSDF}\hlstd{(}\hlstr{"standardised.sdf"}\hlstd{,} \hlkwc{number_processed} \hlstd{=} \hlnum{10}\hlstd{,}
     \hlkwc{type} \hlstd{=} \hlnum{1}\hlstd{)}
 \end{alltt}
-\end{kframe}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: no lines available in input}}\begin{alltt}
+\hlkwd{head}\hlstd{(all_properties)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: error in evaluating the argument 'x' in selecting a method for function 'head': Error: object 'all\_properties' not found}}\end{kframe}
 \end{knitrout}
 
 
@@ -196,10 +207,9 @@ Sometimes, some descriptors are not calcualted for all molecules, thus giving a 
 \begin{alltt}
 \hlkwd{Sys.setenv}\hlstd{(}\hlkwc{RDBASE} \hlstd{=} \hlstr{"/usr/local/share/RDKit"}\hlstd{)}
 \hlkwd{Sys.setenv}\hlstd{(}\hlkwc{PYTHONPATH} \hlstd{=} \hlstr{"/usr/local/lib/python2.7/site-packages"}\hlstd{)}
-\hlcom{# fps_COX_512 <-}
-\hlcom{# MorganFPs(bits=512,radius=2,type='smi',mols='smiles_COX.smi',}
-\hlcom{# output='COX',keep='hashed_counts')}
-\hlcom{# saveRDS(fps_COX_512,file='fps_COX_512.rds')}
+\hlstd{fps_COX_512} \hlkwb{<-} \hlkwd{MorganFPs}\hlstd{(}\hlkwc{bits} \hlstd{=} \hlnum{512}\hlstd{,} \hlkwc{radius} \hlstd{=} \hlnum{2}\hlstd{,} \hlkwc{type} \hlstd{=} \hlstr{"smi"}\hlstd{,}
+    \hlkwc{mols} \hlstd{=} \hlstr{"smiles_COX.smi"}\hlstd{,} \hlkwc{output} \hlstd{=} \hlstr{"COX"}\hlstd{,} \hlkwc{keep} \hlstd{=} \hlstr{"hashed_counts"}\hlstd{)}
+\hlkwd{saveRDS}\hlstd{(fps_COX_512,} \hlkwc{file} \hlstd{=} \hlstr{"fps_COX_512.rds"}\hlstd{)}
 \hlstd{fps_COX_512} \hlkwb{<-} \hlkwd{readRDS}\hlstd{(}\hlstr{"fps_COX_512.rds"}\hlstd{)}
 \end{alltt}
 \end{kframe}
@@ -272,17 +282,19 @@ The available types of descriptor are:\cite{protr}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{Seq_descriptors_P00374} \hlkwb{<-} \hlkwd{SeqDescs}\hlstd{(}\hlstr{"P00374"}\hlstd{)}
-\end{alltt}
-
-
-{\ttfamily\noindent\color{warningcolor}{\#\# Warning: cannot open: HTTP status was '407 Proxy Authentication Required'}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: cannot open the connection}}\begin{alltt}
 \hlstd{Seq_descriptors_P00374}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'Seq\_descriptors\_P00374' not found}}\end{kframe}
+\begin{verbatim}
+##              A       R       N       D        C       E
+## P00374 0.02674 0.04278 0.05348 0.04813 0.005348 0.08556
+##              Q       G       H       I      L       K
+## P00374 0.03743 0.06952 0.01604 0.04813 0.1016 0.09091
+##              M       F       P       S       T       W
+## P00374 0.03743 0.04813 0.06417 0.06417 0.03743 0.01604
+##              Y       V
+## P00374 0.03209 0.07487
+\end{verbatim}
+\end{kframe}
 \end{knitrout}
 
 
@@ -319,9 +331,27 @@ Compounds can be depicted with the function 'PlotMolecules'. It returns a list o
 \hlstd{plot_molecules} \hlkwb{<-} \hlkwd{PlotMolecules}\hlstd{(}\hlstr{"standardised.sdf"}\hlstd{,}
     \hlkwc{IDs} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{1}\hlstd{,} \hlnum{2}\hlstd{,} \hlnum{3}\hlstd{,} \hlnum{4}\hlstd{),} \hlkwc{pdf.file} \hlstd{=} \hlstr{"test_comp_visualization.pdf"}\hlstd{,}
     \hlkwc{useNameAsTitle} \hlstd{=} \hlnum{TRUE}\hlstd{,} \hlkwc{PDFMain} \hlstd{=} \hlkwa{NULL}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## [1] 1
+## [1] 2
+## [1] 3
+## [1] 4
+\end{verbatim}
+\begin{alltt}
 \hlstd{plot_molecules[[}\hlnum{1}\hlstd{]]}
 \end{alltt}
-\end{kframe}
+\end{kframe}\begin{figure}[]
+
+
+{\centering \includegraphics[width=12cm]{figure/unnamed-chunk-19} 
+
+}
+
+\caption[Example of compoud depiction]{Example of compoud depiction.\label{fig:unnamed-chunk-19}}
+\end{figure}
+
+
 \end{knitrout}
 
 
