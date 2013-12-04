@@ -7,7 +7,6 @@
 StandardiseMolecules <- function(structures.file, 
                                  standardised.file,
                                  removed.file = "",
-##                                 target.field.name = "",
                                  output="standardisation_info.csv",
                                  remove.inorganic = FALSE, 
                                  fluorine.limit = -1,
@@ -33,7 +32,6 @@ StandardiseMolecules <- function(structures.file,
        standardised.file, 
        removed.file,
        output,
-  ##     target.field.name,
        as.integer(1), # process SDF
        as.integer(remove.inorganic), 
        as.integer(fluorine.limit),
@@ -53,7 +51,6 @@ StandardiseMolecules <- function(structures.file,
        standardised.file, 
        removed.file,
        output,
-    ##   target.field.name,
        as.integer(0), # process SMILES
        as.integer(remove.inorganic), 
        as.integer(fluorine.limit),
@@ -70,14 +67,14 @@ StandardiseMolecules <- function(structures.file,
   }
 }
 
-GetPropertiesSDF <- function(structures.file,number_processed=-1, type=1 ){ ## 1 refers to not smiles
+GetPropertiesSDF <- function(structures.file,number_processed=-1, type=1){ ## 1 refers to not smiles
 ##print("Get properties from SDF")
 if (!file.exists(structures.file)) {stop("File does not exist")}
 sink(file="getPropertiesSDF.log", append=FALSE, split=FALSE)
 output <- tempfile("props_temp",fileext=".csv")
 .C("R_GetPropertiesSDF",structures.file,as.integer(number_processed),as.integer(type),output)
 print("Reading..")
-properties <- read.table(output,sep=",",header=TRUE)
+properties <- read.table(output,sep="\t",header=TRUE)
 properties <- properties[, !apply(is.na(properties), 2, all)]
 sink()
 return(properties)

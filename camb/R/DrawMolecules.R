@@ -1,6 +1,6 @@
-DrawMoleculeInSDFbyID <- function(structures.file, structure.ID, file.name, useNameAsTitle) {
-  .C("R_drawMoleculeInSDFbyID", structures.file, as.character(structure.ID), file.name, useNameAsTitle)
-}
+##DrawMoleculeInSDFbyID <- function(structures.file, structure.ID, file.name, useNameAsTitle) {
+##  .C("R_drawMoleculeInSDFbyID", structures.file, as.character(structure.ID), file.name, useNameAsTitle)
+##}
 
 DrawMoleculeInSDF <- function(structures.file, structure.number, file.name, useNameAsTitle) {
   print(structure.number)
