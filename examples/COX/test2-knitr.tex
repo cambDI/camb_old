@@ -113,11 +113,17 @@ Given that some smiles contain smarts patterns where the hash symbol is present,
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{StandardiseMolecules}\hlstd{(}\hlkwc{structures.file} \hlstd{=} \hlstr{"smiles_COX.smi"}\hlstd{,} \hlkwc{standardised.file} \hlstd{=} \hlstr{"standardised.sdf"}\hlstd{,}
-    \hlkwc{removed.file} \hlstd{=} \hlstr{"removed.sdf"}\hlstd{,} \hlkwc{output} \hlstd{=} \hlstr{"standardisation_COX_info.csv"}\hlstd{,}
-    \hlkwc{remove.inorganic} \hlstd{=} \hlnum{TRUE}\hlstd{,} \hlkwc{fluorine.limit} \hlstd{=} \hlnum{10}\hlstd{,} \hlkwc{chlorine.limit} \hlstd{=} \hlnum{10}\hlstd{,}
-    \hlkwc{bromine.limit} \hlstd{=} \hlnum{10}\hlstd{,} \hlkwc{iodine.limit} \hlstd{=} \hlnum{10}\hlstd{,} \hlkwc{min.mass.limit} \hlstd{=} \hlnum{20}\hlstd{,}
-    \hlkwc{max.mass.limit} \hlstd{=} \hlnum{2500}\hlstd{)}  \hlcom{#900)}
+\hlkwd{StandardiseMolecules}\hlstd{(}\hlkwc{structures.file}\hlstd{=}\hlstr{"smiles_COX.smi"}\hlstd{,}
+\hlkwc{standardised.file}\hlstd{=}\hlstr{"standardised.sdf"}\hlstd{,}
+\hlkwc{removed.file}\hlstd{=}\hlstr{"removed.sdf"}\hlstd{,}
+\hlkwc{output}\hlstd{=}\hlstr{"standardisation_COX_info.csv"}\hlstd{,}
+\hlkwc{remove.inorganic}\hlstd{=}\hlnum{TRUE}\hlstd{,}
+\hlkwc{fluorine.limit}\hlstd{=}\hlopt{-}\hlnum{1}\hlstd{,}
+\hlkwc{chlorine.limit}\hlstd{=}\hlopt{-}\hlnum{1}\hlstd{,}
+\hlkwc{bromine.limit}\hlstd{=}\hlopt{-}\hlnum{1}\hlstd{,}
+\hlkwc{iodine.limit}\hlstd{=}\hlopt{-}\hlnum{1}\hlstd{,}
+\hlkwc{min.mass.limit}\hlstd{=}\hlopt{-}\hlnum{1}\hlstd{,} \hlcom{#suggested value 20}
+\hlkwc{max.mass.limit}\hlstd{=}\hlopt{-}\hlnum{1}\hlstd{)}\hlcom{#suggested value  900)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
@@ -313,15 +319,9 @@ Compounds can be depicted with the function 'PlotMolecules'. It returns a list o
 \hlstd{plot_molecules} \hlkwb{<-} \hlkwd{PlotMolecules}\hlstd{(}\hlstr{"standardised.sdf"}\hlstd{,}
     \hlkwc{IDs} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{1}\hlstd{,} \hlnum{2}\hlstd{,} \hlnum{3}\hlstd{,} \hlnum{4}\hlstd{),} \hlkwc{pdf.file} \hlstd{=} \hlstr{"test_comp_visualization.pdf"}\hlstd{,}
     \hlkwc{useNameAsTitle} \hlstd{=} \hlnum{TRUE}\hlstd{,} \hlkwc{PDFMain} \hlstd{=} \hlkwa{NULL}\hlstd{)}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: unused argument (useNameAsTitle = TRUE)}}\begin{alltt}
 \hlstd{plot_molecules[[}\hlnum{1}\hlstd{]]}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'plot\_molecules' not found}}\end{kframe}
+\end{kframe}
 \end{knitrout}
 
 
@@ -534,8 +534,8 @@ Firstly, a SVM will be trained. We define an exponential grid (base 2) to optimi
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{method} \hlkwb{<-} \hlstr{"svmRadial"}
-\hlstd{exp_grid} \hlkwb{<-} \hlkwd{expGrid}\hlstd{(}\hlkwc{ini} \hlstd{=} \hlopt{-}\hlnum{8}\hlstd{,} \hlkwc{end} \hlstd{=} \hlopt{-}\hlnum{6}\hlstd{,} \hlkwc{stride} \hlstd{=} \hlnum{2}\hlstd{,}
-    \hlkwc{base} \hlstd{=} \hlnum{2}\hlstd{)}
+\hlstd{exp_grid} \hlkwb{<-} \hlkwd{expGrid}\hlstd{(}\hlkwc{power.from} \hlstd{=} \hlopt{-}\hlnum{8}\hlstd{,} \hlkwc{power.to} \hlstd{=} \hlopt{-}\hlnum{6}\hlstd{,}
+    \hlkwc{power.by} \hlstd{=} \hlnum{2}\hlstd{,} \hlkwc{base} \hlstd{=} \hlnum{2}\hlstd{)}
 \hlstd{tune.grid} \hlkwb{<-} \hlkwd{expand.grid}\hlstd{(}\hlkwc{.sigma} \hlstd{= exp_grid)}
 \end{alltt}
 \end{kframe}
@@ -681,21 +681,25 @@ The metrics for the external validatin are given by:
 ## $Q2
 ## [1] 0.5998
 ## 
-## $RMSEP
+## $RMSE
 ## [1] 0.7675
 ## 
 ## $Slope
 ## [1] 0.9906
+## 
+## $MAE
+## [1] 0.5851
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
 
 
-To have a look at the correlation between predicted and observed values, we can use the 'ObsPred' function:
+To have a look at the correlation between predicted and observed values, we can use the 'CorrelationPlot' function:
+
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{ObsPred}\hlstd{(}\hlkwc{pred} \hlstd{= holdout.predictions,} \hlkwc{obs} \hlstd{= dataset}\hlopt{$}\hlstd{y.holdout,}
+\hlkwd{CorrelationPlot}\hlstd{(}\hlkwc{pred} \hlstd{= holdout.predictions,} \hlkwc{obs} \hlstd{= dataset}\hlopt{$}\hlstd{y.holdout,}
     \hlkwc{PointSize} \hlstd{=} \hlnum{3}\hlstd{,} \hlkwc{ColMargin} \hlstd{=} \hlstr{"blue"}\hlstd{,} \hlkwc{TitleSize} \hlstd{=} \hlnum{26}\hlstd{,}
     \hlkwc{XAxisSize} \hlstd{=} \hlnum{20}\hlstd{,} \hlkwc{YAxisSize} \hlstd{=} \hlnum{20}\hlstd{,} \hlkwc{TitleAxesSize} \hlstd{=} \hlnum{24}\hlstd{,}
     \hlkwc{margin} \hlstd{=} \hlnum{2}\hlstd{,} \hlkwc{PointColor} \hlstd{=} \hlstr{"black"}\hlstd{,} \hlkwc{PointShape} \hlstd{=} \hlnum{16}\hlstd{,}
@@ -704,11 +708,11 @@ To have a look at the correlation between predicted and observed values, we can 
 \end{kframe}\begin{figure}[]
 
 
-{\centering \includegraphics[width=12cm]{figure/unnamed-chunk-38} 
+{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-38} 
 
 }
 
-\caption[Predicted vs Observed]{Predicted vs Observed. The blue line corresponds to a margin of 2 pIC50 units.\label{fig:unnamed-chunk-38}}
+\caption[Predicted vs Observed]{Predicted vs Observed\label{fig:unnamed-chunk-38}}
 \end{figure}
 
 

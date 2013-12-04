@@ -64,12 +64,12 @@ standardised.file="standardised.sdf",
 removed.file="removed.sdf",
 output="standardisation_COX_info.csv",
 remove.inorganic=TRUE,
-fluorine.limit=10,
-chlorine.limit=10,
-bromine.limit=10,
-iodine.limit=10,
-min.mass.limit=20,
-max.mass.limit=2500)#900)
+fluorine.limit=-1,
+chlorine.limit=-1,
+bromine.limit=-1,
+iodine.limit=-1,
+min.mass.limit=-1, #suggested value 20
+max.mass.limit=-1)#suggested value  900)
 @
 The properties of all molecules and the index (in the column 'kept') indicating which molecules were deleted are written to a file called standardisation\_COX\_info.csv.
 
@@ -80,13 +80,14 @@ head(standardised_info)
 
 In this case, the criteria we chose to remove compounds (the arguments of the StandardiseMolecules function) were not really stringent, so all molecules were kept. This can be seen in the kept field, given that for all compounds (rows) we have a 1.\\
 Similarly, the properties of a .sdf file can be accessed witn the function:
-<<echo=TRUE,results='hide',warning=FALSE,message=FALSE,eval=FALSE>>=
+<<echo=TRUE,results='hide',warning=FALSE,message=FALSE,eval=TRUE>>=
 ShowPropertiesSDF("standardised.sdf",type=1)
 @
 A given property can be accessed, or all of them. In the latter case, a data.frame with all properties is returned:
-<<echo=TRUE,results='hide',warning=FALSE,message=FALSE,eval=FALSE>>=
+<<echo=TRUE,results='hide',warning=FALSE,message=FALSE,eval=TRUE>>=
 logS <- GetPropertySDF("standardised.sdf",property="logS",number_processed=10,type=1)
 all_properties <- GetPropertiesSDF("standardised.sdf",number_processed=10,type=1)
+head(all_properties)
 @
 
 \subsection{PaDEL Descriptors}
@@ -173,7 +174,7 @@ bioactivity <- -log(bioactivity,base=10)
 
 \section{Data-set Visualization}
 Compounds can be depicted with the function 'PlotMolecules'. It returns a list of four plots, and plots can also be written into a .pdf file.
-<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,fig.align='center',fig.cap="Example of compoud depiction.",out.width='12cm'>>=
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,fig.align='center',fig.cap="Example of compoud depiction.",out.width='12cm',eval=TRUE>>=
 plot_molecules <- PlotMolecules("standardised.sdf",IDs=c(1,2,3,4),pdf.file="test_comp_visualization.pdf",useNameAsTitle=TRUE,PDFMain=NULL) 
 plot_molecules[[1]]
 @
@@ -273,7 +274,7 @@ Firstly, a SVM will be trained. We define an exponential grid (base 2) to optimi
 
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
 method <- "svmRadial"
-exp_grid <- expGrid(ini=-8,end=-6,stride=2,base=2)
+exp_grid <- expGrid(power.from=-8,power.to=-6,power.by=2,base=2)
 tune.grid <- expand.grid(.sigma = exp_grid)
 @
 
@@ -369,9 +370,11 @@ MetricsRf <- Validation(holdout.predictions,dataset$y.holdout)
 MetricsRf
 @
 
-To have a look at the correlation between predicted and observed values, we can use the 'ObsPred' function:
-<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,fig.align='center',fig.cap="Predicted vs Observed. The blue line corresponds to a margin of 2 pIC50 units.",out.width='12cm'>>=
-ObsPred(pred=holdout.predictions,obs=dataset$y.holdout,PointSize=3,ColMargin='blue',TitleSize=26,XAxisSize=20,YAxisSize=20,TitleAxesSize=24,margin=2,PointColor="black",PointShape=16,MarginWidth=1.5)
+To have a look at the correlation between predicted and observed values, we can use the 'CorrelationPlot' function:
+
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,fig.align='center',fig.cap="Predicted vs Observed">>=
+
+CorrelationPlot(pred=holdout.predictions,obs=dataset$y.holdout,PointSize=3,ColMargin='blue',TitleSize=26,XAxisSize=20,YAxisSize=20,TitleAxesSize=24,margin=2,PointColor="black",PointShape=16,MarginWidth=1.5)
 @
 
 %\section{Bibliography}
