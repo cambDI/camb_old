@@ -62,29 +62,6 @@ extern "C" {
         indigoFree(fileIter);
     }
     
-    void R_drawMoleculeInSDFbyID(char **structures_file, char **structureIDIn, char **filename, int *useNameAsTitleInt) {
-        printf("hello");
-        int structure, fileIter;
-        bool useNameAsTitle = (*useNameAsTitleInt!=0);
-        fileIter = indigoIterateSDFile(*structures_file);
-        int i = 0;
-        while ((structure = indigoNext(fileIter))) {
-            i++;
-            char str[256];
-            sprintf(str, "%s", *structureIDIn);
-            if(strcmp(str,indigoName(structure)) == 0) {
-                indigoFoldHydrogens(structure);
-                if(useNameAsTitle) {
-                    renderMolecule(structure, *filename);
-                }
-                else {
-                    renderMolecule(structure, "", *filename, -1, "");
-                }
-                indigoFree(structure);
-            }
-            indigoFree(fileIter);
-        }
-    }
 
     
 
