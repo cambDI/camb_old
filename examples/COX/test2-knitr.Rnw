@@ -67,8 +67,8 @@ fluorine.limit=-1,
 chlorine.limit=-1,
 bromine.limit=-1,
 iodine.limit=-1,
-min.mass.limit=20, #suggested value 20
-max.mass.limit=900)#suggested value  900)
+min.mass.limit=-1, #suggested value 20
+max.mass.limit=-1)#suggested value  900)
 @
 The properties of all molecules and the index (in the column 'kept') indicating which molecules were deleted are written to a file called standardisation\_COX\_info.csv.
 
@@ -83,7 +83,7 @@ Similarly, the properties of a .sdf file can be accessed witn the function:
 ShowPropertiesSDF("standardised.sdf",type=1)
 @
 A given property can be accessed, or all of them. In the latter case, a data.frame with all properties is returned:
-<<echo=TRUE,results='hide',warning=FALSE,message=FALSE,eval=TRUE>>=
+<<echo=TRUE,results='hide',warning=FALSE,message=FALSE,eval=FALSE>>=
 logS <- GetPropertySDF("standardised.sdf",property="logS",number_processed=10,type=1)
 all_properties <- GetPropertiesSDF("standardised.sdf",number_processed=10,type=1)
 head(all_properties)
