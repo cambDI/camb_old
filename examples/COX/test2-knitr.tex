@@ -122,8 +122,8 @@ Given that some smiles contain smarts patterns where the hash symbol is present,
 \hlkwc{chlorine.limit}\hlstd{=}\hlopt{-}\hlnum{1}\hlstd{,}
 \hlkwc{bromine.limit}\hlstd{=}\hlopt{-}\hlnum{1}\hlstd{,}
 \hlkwc{iodine.limit}\hlstd{=}\hlopt{-}\hlnum{1}\hlstd{,}
-\hlkwc{min.mass.limit}\hlstd{=}\hlnum{20}\hlstd{,} \hlcom{#suggested value 20}
-\hlkwc{max.mass.limit}\hlstd{=}\hlnum{900}\hlstd{)}\hlcom{#suggested value  900)}
+\hlkwc{min.mass.limit}\hlstd{=}\hlopt{-}\hlnum{1}\hlstd{,} \hlcom{#suggested value 20}
+\hlkwc{max.mass.limit}\hlstd{=}\hlopt{-}\hlnum{1}\hlstd{)}\hlcom{#suggested value  900)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
@@ -157,21 +157,11 @@ A given property can be accessed, or all of them. In the latter case, a data.fra
 \begin{alltt}
 \hlstd{logS} \hlkwb{<-} \hlkwd{GetPropertySDF}\hlstd{(}\hlstr{"standardised.sdf"}\hlstd{,} \hlkwc{property} \hlstd{=} \hlstr{"logS"}\hlstd{,}
     \hlkwc{number_processed} \hlstd{=} \hlnum{10}\hlstd{,} \hlkwc{type} \hlstd{=} \hlnum{1}\hlstd{)}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: line 2 did not have 11 elements}}\begin{alltt}
 \hlstd{all_properties} \hlkwb{<-} \hlkwd{GetPropertiesSDF}\hlstd{(}\hlstr{"standardised.sdf"}\hlstd{,} \hlkwc{number_processed} \hlstd{=} \hlnum{10}\hlstd{,}
     \hlkwc{type} \hlstd{=} \hlnum{1}\hlstd{)}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: no lines available in input}}\begin{alltt}
 \hlkwd{head}\hlstd{(all_properties)}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: error in evaluating the argument 'x' in selecting a method for function 'head': Error: object 'all\_properties' not found}}\end{kframe}
+\end{kframe}
 \end{knitrout}
 
 
@@ -282,19 +272,17 @@ The available types of descriptor are:\cite{protr}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{Seq_descriptors_P00374} \hlkwb{<-} \hlkwd{SeqDescs}\hlstd{(}\hlstr{"P00374"}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning: cannot open: HTTP status was '407 Proxy Authentication Required'}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: cannot open the connection}}\begin{alltt}
 \hlstd{Seq_descriptors_P00374}
 \end{alltt}
-\begin{verbatim}
-##              A       R       N       D        C       E
-## P00374 0.02674 0.04278 0.05348 0.04813 0.005348 0.08556
-##              Q       G       H       I      L       K
-## P00374 0.03743 0.06952 0.01604 0.04813 0.1016 0.09091
-##              M       F       P       S       T       W
-## P00374 0.03743 0.04813 0.06417 0.06417 0.03743 0.01604
-##              Y       V
-## P00374 0.03209 0.07487
-\end{verbatim}
-\end{kframe}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'Seq\_descriptors\_P00374' not found}}\end{kframe}
 \end{knitrout}
 
 
