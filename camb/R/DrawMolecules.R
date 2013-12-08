@@ -1,6 +1,3 @@
-##DrawMoleculeInSDFbyID <- function(structures.file, structure.ID, file.name, useNameAsTitle) {
-##  .C("R_drawMoleculeInSDFbyID", structures.file, as.character(structure.ID), file.name, useNameAsTitle)
-##}
 
 DrawMoleculeInSDF <- function(structures.file, structure.number, file.name, useNameAsTitle) {
   if (file.info(structures.file)$size  == 0) {stop("Input file is empty")}
