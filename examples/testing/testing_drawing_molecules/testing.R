@@ -14,7 +14,7 @@ PlotMolecules <- function(sdf.file, IDs) {
   ggplot() + annotation + ylim(0,1) + xlim(0,1)
   temp.png <- tempfile("temp", fileext=".png")
   for(id in IDs) {
-    DrawMoleculeInSDFbyID(structures.file=sdf.file, structure.ID=id, temp.png, TRUE)
+    DrawMoleculeInSDFbyID(structures.file=sdf.file, structure.ID=id, temp.png, FALSE)
     img <- readPNG(temp.png)
     plot(1:2, type='n')
     rasterImage(img, xleft=1, xright=2, ybottom=1, ytop=2)
