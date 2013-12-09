@@ -87,6 +87,7 @@ if (!file.exists(structures.file)) {stop("File does not exist")}
 if (file.info(structures.file)$size  == 0) {stop("Input file is empty")}
 output <- tempfile("props_temp",fileext=".csv")
 .C("R_ShowPropertiesSDF",structures.file,output,as.integer(type))
+if (file.info(output)$size  == 0) {stop("The molecules in the file provided do not contain any property")}
 props <- read.csv(output)
 return(props)
 }
@@ -99,6 +100,7 @@ sink(file="getPropertySDF.log", append=FALSE, split=FALSE)
 output <- tempfile("prop_temp",fileext=".csv")
 .C("R_GetPropertySDF",structures.file,property,as.integer(number_processed),as.integer(type),output)
 sink()
+if (file.info(output)$size  == 0) {stop("The molecules in the file provided do not contain the specified property")}
 prop <- read.table(output)
 names(prop) <- property
 return(prop)
