@@ -73,7 +73,7 @@ max.mass.limit=-1)#suggested value  900)
 The properties of all molecules and the index (in the column 'kept') indicating which molecules were deleted are written to a file called standardisation\_COX\_info.csv.
 
 <<echo=TRUE,results='hide',warning=FALSE,message=FALSE,eval=FALSE>>=
-standardised_info <- read.table("standardisation_COX_info.csv",header=TRUE,sep=",")
+standardised_info <- read.table("standardisation_COX_info.csv",header=TRUE,sep="\t")
 head(standardised_info)
 @
 
@@ -84,7 +84,7 @@ ShowPropertiesSDF("standardised.sdf",type=1)
 @
 A given property can be accessed, or all of them. In the latter case, a data.frame with all properties is returned:
 <<echo=TRUE,results='hide',warning=FALSE,message=FALSE,eval=FALSE>>=
-logS <- GetPropertySDF("standardised.sdf",property="logS",number_processed=10,type=1)
+GetPropertySDF("standardised.sdf",property="property_name",number_processed=10,type=1)
 all_properties <- GetPropertiesSDF("standardised.sdf",number_processed=10,type=1)
 head(all_properties)
 @
@@ -93,8 +93,8 @@ head(all_properties)
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
 descriptors_COX <- GeneratePadelDescriptors(standardised.file="smiles_COX.smi",threads = 1)
 descriptors <- RemoveStandardisedPrefix(descriptors)
-saveRDS(descriptors, file="descriptors.rds")
-descriptors <- readRDS("descriptors.rds")
+saveRDS(descriptors, file="Padel_COX.rds")
+descriptors <- readRDS("Padel_COX.rds")
 @
 
 Sometimes, some descriptors are not calcualted for all molecules, thus giving a 'NA' or 'Inf' as descriptor values. Instead of removing that descriptor for all molecules, the missing descriptor values can be {\it imputed} from the corresponding descriptor values of the rest of molecules. To do that, 'Inf' values are converted to 'NA', and then imputed:
@@ -118,18 +118,18 @@ fps_COX_512 <- readRDS("fps_COX_512.rds")
 \subsection{Read and Preprocessing}
 We read the read the amino acids from a .csv file:
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),eval=FALSE,tidy=TRUE>>=
-amino_accompound_compound_IDs <- read.table("AAs_COX.csv",sep=",",header=TRUE,colClasses=c("character"),row.names=1)
-amino_accompound_IDs <- amino_accompound_IDs[,2:ncol(amino_accompound_IDs)]
+amino_compound_IDs <- read.table("AAs_COX.csv",sep=",",header=TRUE,colClasses=c("character"),row.names=1)
+amino_compound_IDs <- amino_compound_IDs[,2:ncol(amino_compound_IDs)]
 @
 
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),eval=FALSE,tidy=TRUE>>=
-amino_accompound_IDs_zscales <- AA_descs(Data=amino_accompound_IDs,type="Z3")
+amino_compound_IDs_zscales <- AA_descs(Data=amino_compound_IDs,type="Z5")
 @
 
 Ensuingly, we save the descriptors in a .rds file.
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE>>=
-#saveRDS(amino_accompound_IDs_zscales,file="Z3_COX.rds")
-amino_accompound_IDs_zscales <-readRDS("Z3_COX.rds")
+saveRDS(amino_compound_IDs_zscales,file="Z5_COX.rds")
+amino_compound_IDs_zscales <-readRDS("Z5_COX.rds")
 @
 
 In the case that we needed whole sequence descriptors, they can be calculated with the function 'SeqDescs'. The functin takes as argument either a UniProt identifier, or a \{matrix, dataframe\} with the protein sequences. If a UniProt identifier is provided, the function gets firstly the sequence and then calculates the descriptors on the sequence.
@@ -150,11 +150,6 @@ The available types of descriptor are:\cite{protr}
 - Quasi-sequence Order Descriptors ("QSO")\\
 - Pseudo Amino Acid Composition ("PACC")\\
 - Amphiphilic Pseudo Amino Acid Composition ("APAAC")\\
-
-<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE>>=
-Seq_descriptors_P00374 <- SeqDescs("P00374")
-Seq_descriptors_P00374
-@
 
 \subsection{Reading the Data-set Information}
 Now, we are going to read the file with the information about the dataset, namely: target names, bioctivities, etc..
@@ -180,14 +175,16 @@ plot_molecules[[1]]
 
 We can have a look at the response variable:
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,fig.align='center',fig.cap="Bioactivity Distribution",out.width='12cm'>>=
-dens_resp <- DensityResponse(bioactivity,xlab="pIC50",main="",ylab="Densitiy",TitleSize=26,XAxisSize=20,YAxisSize=20,TitleAxesSize=24,AngleLab=0,lmar=0,rmar=0,bmar=0,tmar=0)
+dens_resp <- DensityResponse(bioactivity,xlab="pIC50",main="",ylab="Densitiy",TitleSize=30,XAxisSize=22,YAxisSize=22,TitleAxesSize=24,AngleLab=0,lmar=0,rmar=0,bmar=0,tmar=0,binwidth=0.3)
 @
 
 Plotting a PCA analysis of the target descriptors gives:
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,fig.align='center',fig.cap="PCA Analysis on the\nAmino Acid Descriptors">>=
-target_PCA <- PCAProt(amino_accompound_IDs_zscales,SeqsName=dataset$accession)
-plot_PCA_Cox <- PCAProtPlot(target_PCA,PointSize=8,main="",TitleSize=26,XAxisSize=20,YAxisSize=20,TitleAxesSize=24,LegendPosition="bottom",RowLegend=2,ColLegend=6,LegendTitleSize=10,LegendTextSize=10)
+target_PCA <- PCAProt(amino_compound_IDs_zscales,SeqsName=dataset$accession)
+plot_PCA_Cox <- PCAProtPlot(target_PCA,PointSize=10,main="",TitleSize=30,XAxisSize=20,YAxisSize=20,TitleAxesSize=28,LegendPosition="bottom",RowLegend=3,ColLegend=5,LegendTitleSize=15,LegendTextSize=15)
+pdf("PCA_seqs.pdf")
 plot_PCA_Cox
+dev.off()
 @
 
 Similarly, we can analyze the chemical space by calculating pairwise compound similarities based upon the compound descriptors. In this case, we use the Jaccard metric to calculate the distance between compounds.
@@ -195,7 +192,9 @@ Similarly, we can analyze the chemical space by calculating pairwise compound si
 #pw_dist_comp_fps <- PairwiseDist(fps_COX_512,method="jaccard")
 #saveRDS(pw_dist_comp_fps,file="pairwise_dist_COX.rds")
 pw_dist_comp_fps <- readRDS("pairwise_dist_COX.rds")
-plot_pwd <- PairwiseDistPlot(pw_dist_comp_fps,xlab="Jaccard Similarity",ylab="Density",TitleSize=26,XAxisSize=20,YAxisSize=20,TitleAxesSize=24,lmar=0,rmar=0,bmar=0,tmar=0)
+plot_pwd <- PairwiseDistPlot(pw_dist_comp_fps,xlab="Jaccard Similarity",ylab="Density",TitleSize=26,XAxisSize=20,YAxisSize=20,TitleAxesSize=24,lmar=0,rmar=0,bmar=0,tmar=0,AngleLab=0)
+pdf("Pairwise_distance.pdf")
+plot_pwd
 @
 
 <<highlight=TRUE,tidy=TRUE,fig.align='center',fig.cap="Density of the response variable (left). Pairwise Compound Jaccard Similarity (right)",fig.width='10cm',fig.height='25cm'>>=
@@ -372,8 +371,9 @@ MetricsRf
 To have a look at the correlation between predicted and observed values, we can use the 'CorrelationPlot' function:
 
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,fig.align='center',fig.cap="Predicted vs Observed">>=
-
-CorrelationPlot(pred=holdout.predictions,obs=dataset$y.holdout,PointSize=3,ColMargin='blue',TitleSize=26,XAxisSize=20,YAxisSize=20,TitleAxesSize=24,margin=2,PointColor="black",PointShape=16,MarginWidth=1.5)
+pdf("ObsPred.pdf")
+CorrelationPlot(pred=holdout.predictions,obs=dataset$y.holdout,PointSize=3,ColMargin='blue',TitleSize=26,XAxisSize=20,YAxisSize=20,TitleAxesSize=24,margin=2,PointColor="black",PointShape=16,MarginWidth=1,AngleLab=0,xlab="Observed",ylab="Predicted")
+dev.off()
 @
 
 %\section{Bibliography}
