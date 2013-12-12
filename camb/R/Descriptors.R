@@ -7,7 +7,6 @@
 StandardiseMolecules <- function(structures.file, 
                                  standardised.file,
                                  removed.file = "",
-##                                 target.field.name = "",
                                  output="standardisation_info.csv",
                                  remove.inorganic = FALSE, 
                                  fluorine.limit = -1,
@@ -21,6 +20,7 @@ StandardiseMolecules <- function(structures.file,
   if (!file.exists(structures.file)) {
     stop("File does not exist")
   }
+  if (file.info(structures.file)$size  == 0) {stop("Input file is empty")}
   
   # deal with sdf or smi difference
   split <- strsplit(structures.file, "\\.")[[1]]
@@ -33,7 +33,6 @@ StandardiseMolecules <- function(structures.file,
        standardised.file, 
        removed.file,
        output,
-  ##     target.field.name,
        as.integer(1), # process SDF
        as.integer(remove.inorganic), 
        as.integer(fluorine.limit),
@@ -53,7 +52,6 @@ StandardiseMolecules <- function(structures.file,
        standardised.file, 
        removed.file,
        output,
-    ##   target.field.name,
        as.integer(0), # process SMILES
        as.integer(remove.inorganic), 
        as.integer(fluorine.limit),
@@ -70,14 +68,15 @@ StandardiseMolecules <- function(structures.file,
   }
 }
 
-GetPropertiesSDF <- function(structures.file,number_processed=-1, type=1 ){ ## 1 refers to not smiles
+GetPropertiesSDF <- function(structures.file,number_processed=-1, type=1){ ## 1 refers to not smiles
 ##print("Get properties from SDF")
 if (!file.exists(structures.file)) {stop("File does not exist")}
+if (file.info(structures.file)$size  == 0) {stop("Input file is empty")}
 sink(file="getPropertiesSDF.log", append=FALSE, split=FALSE)
 output <- tempfile("props_temp",fileext=".csv")
 .C("R_GetPropertiesSDF",structures.file,as.integer(number_processed),as.integer(type),output)
 print("Reading..")
-properties <- read.table(output,sep=",",header=TRUE)
+properties <- read.table(output,sep="\t",header=TRUE)
 properties <- properties[, !apply(is.na(properties), 2, all)]
 sink()
 return(properties)
@@ -85,8 +84,10 @@ return(properties)
 
 ShowPropertiesSDF <- function(structures.file,type=1 ){ ## 1 refers to not smiles
 if (!file.exists(structures.file)) {stop("File does not exist")}
+if (file.info(structures.file)$size  == 0) {stop("Input file is empty")}
 output <- tempfile("props_temp",fileext=".csv")
 .C("R_ShowPropertiesSDF",structures.file,output,as.integer(type))
+if (file.info(output)$size  == 0) {stop("The molecules in the file provided do not contain any property")}
 props <- read.csv(output)
 return(props)
 }
@@ -94,10 +95,12 @@ return(props)
 GetPropertySDF <- function(structures.file, property="", number_processed=-1, type=1 ){ ## 1 refers to not smiles
 ##print("Get properties from SDF")
 if (!file.exists(structures.file)) {stop("File does not exist")}
+if (file.info(structures.file)$size  == 0) {stop("Input file is empty")}
 sink(file="getPropertySDF.log", append=FALSE, split=FALSE)
 output <- tempfile("prop_temp",fileext=".csv")
 .C("R_GetPropertySDF",structures.file,property,as.integer(number_processed),as.integer(type),output)
 sink()
+if (file.info(output)$size  == 0) {stop("The molecules in the file provided do not contain the specified property")}
 prop <- read.table(output)
 names(prop) <- property
 return(prop)
@@ -110,12 +113,14 @@ RemoveStandardisedPrefix <- function(descriptors) {
 }
 
 GeneratePadelDescriptors <- function(standardised.file, types = c("2D"), threads = -1, limit = -1) {
+  if (file.info(standardised.file)$size  == 0) {stop("Input file is empty")}
   descriptors.file <- tempfile("descriptors", fileext=".csv")
   GeneratePadelDescriptors.internal(standardised.file, descriptors.file, types, threads)
   read.csv(descriptors.file)
 }
 
 GeneratePadelDescriptorsFile <- function(standardised.file, descriptors.file, types = c("2D"), threads = -1, limit = -1) {
+  if (file.info(standardised.file)$size  == 0) {stop("Input file is empty")}
   GeneratePadelDescriptors.internal(standardised.file, descriptors.file, types, threads)
 }
 
