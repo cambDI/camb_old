@@ -1,31 +1,32 @@
 #########################################
 # Error estimation
 #########################################
-model <- readRDS("svmRadial.rds")
+dataset <- readRDS("dataset.rds")
+model <- readRDS("rf.rds")
 library(errorestimatoR)
+library(kernlab)
+estimator4 = BuildCaretErrorEstimator(dataset$x.train, model, Nmax=20, cores=1)
 
-estimator = BuildCaretErrorEstimator(dataset$x.train, model, Nmax=20, cores=1)
+sigpred4 <- PredictSigmas(x=dataset$x.holdout, estimator4)
 
-sigpred <- PredictSigmas(x=ss$x.holdout, estimator)
+preds <- predict(model, newdata = dataset$x.holdout)
+errors <- preds - dataset$y.holdout
 
-preds <- predict(model, newdata = ss$x.holdout)
-errors <- preds - ss$y.holdout
-
-model
-
-k <- rbfdot(sigma=0.00391)
-
-k(x=0, y=10)
-
-k(3)
-k(1,2)
-
-plot(errors, sigpred$sigmas)
+plot(errors, sigpred4$sigmas)
 plot(errors, sigpred$sigma.matrix[,2])
 x <- ss$x.test
-CEC(sigpred$sigmas, abs(errors))
+CEC(sigpred4$sigmas, abs(errors))
 
-CEC(sigpred$sigma.matrix[,2], abs(errors))
+CEC(sigpred4$sigma.matrix[,2], abs(errors))
+
+plot(density(apply(sigpred4$sigma.matrix, 2, CEC, abs(errors)), bw=0.01))
+
+plot(apply(sigpred4$sigma.matrix, 2, CEC, abs(errors)))
+
+k <- rbfdot(sigma = 0.2)
+k
+
+?train
 
 trainsig <- PredictSigmas(x=ss$x.train, estimator)
 trainpreds <- predict(model, newdata = ss$x.train)
