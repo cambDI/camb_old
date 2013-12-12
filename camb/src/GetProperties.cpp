@@ -6,6 +6,8 @@
 #include <iostream>
 #include <fstream>
 
+#include <boost/algorithm/string.hpp>
+
 #include "indigo.h"
 #include "indigo-renderer.h"
 #include "indigo-inchi.h"
@@ -79,7 +81,12 @@ extern "C" {
                         propsFirst = indigoIterateProperties(structure);
                         while (propFirst = indigoNext(propsFirst)) {
                             string prop_val_first = indigoName(propFirst);
-                            target_stream << prop_val_first << ",";
+                            while ( prop_val_first.find ("\n") != string::npos )
+                            {
+                                boost::replace_all(prop_val_first, "\n", ";");
+                            }
+                            
+                            target_stream << prop_val_first << "\t";
                             indigoFree(propFirst);
                         }
                         target_stream << "\n";
@@ -91,7 +98,11 @@ extern "C" {
                     
                     while (prop = indigoNext(props)) {
                         string prop_value = indigoGetProperty(structure, indigoName(prop));
-                        target_stream << prop_value << ",";
+                        while ( prop_value.find ("\n") != string::npos )
+                        {
+                            boost::replace_all(prop_value, "\n", ";");
+                        }
+                        target_stream << prop_value << "\t";
                         indigoFree(prop);
                     }
                     target_stream << "\n";
@@ -166,10 +177,18 @@ extern "C" {
                     if(indigoHasProperty(structure, *target_field_name)) {
                         if(namesprop == 0){
                             string prop_val_first = indigoGetProperty(structure, *target_field_name);
+                            while ( prop_val_first.find ("\n") != string::npos )
+                            {
+                                boost::replace_all(prop_val_first, "\n", ";");
+                            }
                             target_stream << prop_val_first << "\n";
                             namesprop=1;
                         }
                         string prop_value = indigoGetProperty(structure, *target_field_name);
+                        while ( prop_value.find ("\n") != string::npos )
+                        {
+                            boost::replace_all(prop_value, "\n", ";");
+                        }
                         target_stream << prop_value << endl;
                     }
                     else {
@@ -233,6 +252,10 @@ extern "C" {
                     propsFirst = indigoIterateProperties(structure);
                     while (propFirst = indigoNext(propsFirst)) {
                         string prop_val_first = indigoName(propFirst);
+                        while ( prop_val_first.find ("\n") != string::npos )
+                        {
+                            boost::replace_all(prop_val_first, "\n", ";");
+                        }
                         target_stream << prop_val_first << endl;
                         indigoFree(propFirst);
                     }

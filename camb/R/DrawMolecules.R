@@ -1,14 +1,13 @@
-DrawMoleculeInSDFbyID <- function(structures.file, structure.ID, file.name, useNameAsTitle) {
-  .C("R_drawMoleculeInSDFbyID", structures.file, as.character(structure.ID), file.name, useNameAsTitle)
-}
 
 DrawMoleculeInSDF <- function(structures.file, structure.number, file.name, useNameAsTitle) {
+  if (file.info(structures.file)$size  == 0) {stop("Input file is empty")}
   print(structure.number)
   .C("R_drawMoleculeInSDF", structures.file, as.integer(structure.number), file.name, useNameAsTitle)
 }
 
 PlotMolecules <- function(sdf.file, IDs,pdf.file=NULL,PDFMain=NULL,useNameAsTitle=TRUE) {
   if (length(IDs) !=4) {stop("Only four compounds per plot supported at the moment..")}
+  if (file.info(sdf.file)$size  == 0) {stop("Input file is empty")}
   temp.png <- tempfile("temp", fileext=".png")
   base <- theme(axis.line = element_blank(), 
                 axis.text.x = element_blank(), 
@@ -21,7 +20,7 @@ PlotMolecules <- function(sdf.file, IDs,pdf.file=NULL,PDFMain=NULL,useNameAsTitl
                 plot.margin=unit(c(0,0,0,0), "cm"))
   i <- 1
   for(id in IDs) {
-    DrawMoleculeInSDF(structures.file=sdf.file, structure.number=id, temp.png,useNameAsTitle=TRUE)
+    DrawMoleculeInSDF(structures.file=sdf.file, structure.number=as.integer(id), temp.png,useNameAsTitle=TRUE)
     img <- readPNG(temp.png)
     g <- rasterGrob(img, interpolate=TRUE)
     p <- qplot(1, 1, geom="blank") + theme_bw() 

@@ -4,6 +4,13 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <sstream>
+
+
+
+#include <boost/algorithm/string.hpp>
+#include <boost/lexical_cast.hpp>
+
 
 #include "indigo.h"
 #include "indigo-renderer.h"
@@ -55,36 +62,12 @@ extern "C" {
         indigoFree(fileIter);
     }
     
-    void R_drawMoleculeInSDFbyID(char **structures_file, char **structureIDIn, char **filename, int *useNameAsTitleInt) {
-        printf("hello");
-        int structure, fileIter;
-        bool useNameAsTitle = (*useNameAsTitleInt!=0);
-        fileIter = indigoIterateSDFile(*structures_file);
-        int i = 0;
-        while ((structure = indigoNext(fileIter))) {
-            i++;
-            char str[256];
-            sprintf(str, "%s", *structureIDIn);
-            if(strcmp(str,indigoName(structure)) == 0) {
-                indigoFoldHydrogens(structure);
-                if(useNameAsTitle) {
-                    renderMolecule(structure, *filename);
-                }
-                else {
-                    renderMolecule(structure, "", *filename, -1, "");
-                }
-                indigoFree(structure);
-            }
-            indigoFree(fileIter);
-        }
-    }
 
     
 
         void R_standardiseMolecules(char **structures_file,
                                     char **standardised_file,
                                     char **removed_file,
-                                    // char **target_field_name,
                                     char **output,
                                     int *isSDFInt,
                                     int *removeInorganicInt,
@@ -99,7 +82,6 @@ extern "C" {
             indigoSetOption("dearomatize-verification", "false"); // enable the dearomatization to work properly
             
             bool isSDF = (*isSDFInt!=0);
-            //bool write_targets = !(*target_field_name && *target_field_name[0] == '\0');
             bool removeInorganic = (*removeInorganicInt!=0);
             int numberProcessed = *numberProcessedInt;
             int fluorineLimit = *fluorineLimitInt;
@@ -116,9 +98,18 @@ extern "C" {
             int removedWriter = indigoWriteFile(*removed_file);
             
             ofstream property_stream;
+            
             property_stream.open(*output, ios::out | ios::trunc); // delete the current file
             property_stream.close();
             property_stream.open(*output, ios::out | ios::ate | ios::app | ios::binary);
+            
+            
+            ofstream property_stream2;
+            
+            property_stream2.open("props.csv", ios::out | ios::trunc); // delete the current file
+            property_stream2.close();
+            property_stream2.open("props.csv", ios::out | ios::ate | ios::app | ios::binary);
+
             
             if(isSDF) {
                 Rprintf("Reading SDF (C)\n");
@@ -128,6 +119,8 @@ extern "C" {
                 Rprintf("Reading SMILES (C)\n");
                 structureIter = indigoIterateSmilesFile(*structures_file);
             }
+            
+            
             
             int readCount = 0;
             int writeCount = 0;
@@ -139,15 +132,55 @@ extern "C" {
             int highBromineCount = 0;
             int highIodineCount = 0;
             
-            bool headerAdded = false;
+            int props,prop,propFirst,propsFirst;
+            int propss = 0;
+            int namesprop = TRUE;
+            
             while (structure = indigoNext(structureIter)) {
                 readCount++;
                 if(numberProcessed != -1 && readCount > numberProcessed) break;
                 if (indigoCountAtoms(structure) != -1) {
                     int structureIndex = indigoIndex(structure);
-                    // if(write_targets) {
+                    double target_value = 0;
                     
-                    //printf("Structure Index: %d, readCount: %d\n", structureIndex+1, readCount);
+                    if(namesprop){
+                        property_stream << "NAME" << "\t";
+                        property_stream2 << "NAME" << "\t";
+                        propsFirst = indigoIterateProperties(structure);
+                        while (propFirst = indigoNext(propsFirst)) {
+                            string prop_val_first = indigoName(propFirst);
+                            property_stream << prop_val_first << "\t";
+                            indigoFree(propFirst);
+                        }
+                        property_stream << "Kept" << "\n";
+                        property_stream2 << "Kept" << "\n";
+                        namesprop=FALSE;
+                    }
+                    
+                    
+                    props = indigoIterateProperties(structure);
+                    string comp_name = indigoName(structure);
+                    if (comp_name.size() == 0){ //comp_name.length()
+                        std::ostringstream ss;
+                        ss << readCount;
+                        comp_name = ss.str();
+                    }
+                    
+                    property_stream << comp_name << "\t";
+                    property_stream2 << comp_name << "\t";
+                    while (prop = indigoNext(props)) {
+                        string target_value = indigoGetProperty(structure, indigoName(prop));
+                        while ( target_value.find ("\n") != string::npos )
+                        {
+                            boost::replace_all(target_value, "\n", ";");
+                        }
+                        
+                        property_stream << target_value << "\t";
+                        
+                        indigoFree(prop);
+                    }
+                    
+
                     string structureName = indigoName(structure);
                     int structureClone = indigoClone(structure);
                     
@@ -156,12 +189,14 @@ extern "C" {
                     indigoFoldHydrogens(structure);
                     
                     if((structureIndex+1)%50 == 0) printf(".");
-                    if((structureIndex+1)%5000 == 0) printf("\n");
+                    if((structureIndex+1)%5000 == 0) printf("5000+\n");
                     
                     if (debug) Rprintf("checking bad valence and ambiguousH\n");
                     // skip over if indigo determines bad valence
                     if( indigoCheckBadValence(structure)==NULL ) {
                         Rprintf("%s (#%d) skipped over: INDIGO_BAD_VALANCE\n", structureName.c_str(), structureIndex+1);
+                        property_stream << "0" << endl;
+                        property_stream2 << "0" << endl;
                         indigoFree(structureClone);
                         indigoFree(structure);
                         continue;
@@ -169,34 +204,26 @@ extern "C" {
                     // skip over if indigo determines ambiguous H
                     if( indigoCheckAmbiguousH(structure)==NULL ) {
                         Rprintf("%s (#%d) skipped over: INDIGO_AMBIGUOUSH\n", structureName.c_str(), structureIndex+1);
+                        property_stream << "0" << endl;
+                        property_stream2 << "0" << endl;
                         indigoFree(structureClone);
                         indigoFree(structure);
                         continue;
                     }
                     
-                    // write the property names
-                    int prop;
-                    if(!headerAdded) {
-                        property_stream << "Name" << ",";
-                        int propIter = indigoIterateProperties(structure);
-                        while (prop = indigoNext(propIter)) {
-                            string propName = indigoName(prop);
-                            property_stream << propName << ",";
-                            indigoFree(prop);
+                    if (debug) Rprintf("checking if organic\n");
+                    // skip over if not organic
+                    if(!isOrganic(structure)) {
+                        inorganicCount++;
+                        if(removeInorganic) {
+                            Rprintf("%s (#%d) skipped over: NOT_ORGANIC\n", structureName.c_str(), structureIndex+1);
+                            property_stream << "0" << endl;
+                            property_stream2 << "0" << endl;
+                            indigoFree(structureClone);
+                            indigoFree(structure);
+                            continue;
                         }
-                        indigoFree(propIter);
-                        property_stream << "Kept" << "\n"; // add a column to say whether the molecule is kept or not
-                        headerAdded = true;
                     }
-                    // write the property values for each property
-                    property_stream << indigoName(structure) << ",";
-                    int propIter = indigoIterateProperties(structure);
-                    while (prop = indigoNext(propIter)) { 
-                        string propValue = indigoGetProperty(structure, indigoName(prop));
-                        property_stream << propValue << ",";
-                        indigoFree(prop);
-                    }
-                    indigoFree(propIter);
                     
                     bool wasAromatic = isAromatic(structure);
                     // check if the structure can be dearomatized
@@ -212,17 +239,21 @@ extern "C" {
                         int temp = indigoInchiLoadMolecule(trimmedInchi.c_str());
                         if(strcmp(indigoInchiGetWarning(), "") != 0) {
                             Rprintf("%s (#%d) warning: while converting to Inchi: %s\n", structureName.c_str(), structureIndex+1, indigoInchiGetWarning());
+
                         }
+
                         else {
-                            indigoFree(structure);
-                            structure = temp;
+                           indigoFree(structure);
+                           structure = temp;
                         }
                     }
                     else {
                         if(wasAromatic) {
                             Rprintf("%s (#%d) warning: failed dearomatize, didn't go through inchi\n", structureName.c_str(), structureIndex+1);
+
                         }
                     }
+                    
                     
                     // reset the isotopes of all the atoms in the molecule
                     if (debug) Rprintf("resetting isotopes\n");
@@ -230,11 +261,6 @@ extern "C" {
                     
                     // print warnings on molecular mass variations
                     if (debug) Rprintf("various conditions\n");
-                    bool inorganic = !isOrganic(structure);
-                    if(inorganic) {
-                        inorganicCount++;
-                        Rprintf("%s (#%d) warning: molecule contains one or more inorganic atoms\n", structureName.c_str(), structureIndex+1, chlorineLimit);
-                    }
                     float molecularMass = indigoMolecularWeight(structure);
                     if(minMassLimit != -1 && molecularMass < minMassLimit) {
                         tooLightCount++;
@@ -266,17 +292,36 @@ extern "C" {
                     }
                     
                     // remove 'bad' molecules (normally used during training)
-                    if(inorganic || molecularMass < minMassLimit || molecularMass > maxMassLimit || highFlourine || highChlorine || highBromine || highIodine) {
-                        indigoSdfAppend(removedWriter, structure);
-                        indigoFree(structureClone);
-                        indigoFree(structure);
-                        property_stream << "0" << endl;
-                        continue;
+                    if(maxMassLimit != -1){
+                        if(molecularMass < minMassLimit || molecularMass > maxMassLimit || highFlourine || highChlorine || highBromine || highIodine) {
+                            indigoSdfAppend(removedWriter, structure);
+                            indigoFree(structureClone);
+                            indigoFree(structure);
+                            property_stream << "0" << endl;
+                            property_stream2 << "0" << endl;
+                            continue;
+                        } else {
+                            
+                            property_stream << "1" << endl;
+                            property_stream2 << "1" << endl;
+                            
+                        }
                     } else {
                         
-                        property_stream << "1" << endl;
-                        
+                        if(molecularMass < minMassLimit || highFlourine || highChlorine || highBromine || highIodine) {
+                            indigoSdfAppend(removedWriter, structure);
+                            indigoFree(structureClone);
+                            indigoFree(structure);
+                            property_stream << "0" << endl;
+                            property_stream2 << "0" << endl;
+                            continue;
+                        } else {
+                            
+                            property_stream << "1" << endl;
+                            property_stream2 << "1" << endl;
+                        }
                     }
+                    
                     
                     // use the largest substructure
                     if (debug) Rprintf("selecting the largest substructure\n");
@@ -286,19 +331,22 @@ extern "C" {
                     
                     writeCount++;
                     std::string addition = "Standardised_";
-                    std::string name = indigoName(structureClone);
-                    indigoSetName(structure, (addition + name).c_str());
-                    //indigoSetProperty(structure, (addition + name).c_str(), (addition + name).c_str());
+                    std::string Mname = indigoName(structureClone);
+                    if (Mname.size() == 0){
+                        std::ostringstream ss;
+                        ss << readCount;
+                        Mname = ss.str();
+                    }
+                    
+                    indigoSetName(structure, (addition + Mname).c_str());
                     indigoSdfAppend(sdfWriter, structure);
-                    
-                    
                     indigoFree(structureClone);
                     indigoFree(structure);
                 }
                 else {
                     Rprintf("%s, Readcount: %d\n", indigoGetLastError(), readCount);
                 }
-            }  
+            }
             printf("\n");
             indigoFree(structureIter);
             indigoClose(sdfWriter);
@@ -317,6 +365,9 @@ extern "C" {
             printf("readCount: %d\n", readCount);
             printf("writeCount: %d\n", writeCount);
         }
+    
+    
+    
         
     } // extern "C"
     

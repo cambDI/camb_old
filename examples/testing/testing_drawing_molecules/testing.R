@@ -14,7 +14,7 @@ PlotMolecules <- function(sdf.file, IDs) {
   ggplot() + annotation + ylim(0,1) + xlim(0,1)
   temp.png <- tempfile("temp", fileext=".png")
   for(id in IDs) {
-    DrawMoleculeInSDFbyID(structures.file=sdf.file, structure.ID=id, temp.png, TRUE)
+    DrawMoleculeInSDFbyID(structures.file=sdf.file, structure.ID=id, temp.png, FALSE)
     img <- readPNG(temp.png)
     plot(1:2, type='n')
     rasterImage(img, xleft=1, xright=2, ybottom=1, ytop=2)
@@ -35,14 +35,15 @@ img <- readPNG("temp.png")
 g <- rasterGrob(img, interpolate=TRUE)
 annotation <- annotation_custom(g, xmin=0, xmax=1, ymin=0, ymax=1)
 base <- qplot(0:1, 0:1, geom = "blank")  +
-        theme_bw() + theme(axis.line = element_blank(), 
+base <- theme(axis.line = element_blank(), 
                        axis.text.x = element_blank(), 
                        axis.text.y = element_blank(),
                        axis.ticks = element_blank(), 
                        axis.title.x = element_blank(), 
                        axis.title.y = element_blank(),
                        panel.grid.major = element_blank(), 
-                       panel.grid.minor = element_blank())
+                       panel.grid.minor = element_blank(),
+                       plot.margin=unit(c(0,0,0,0), "cm"))
 base + annotation
 
 library(gridExtra)
@@ -53,10 +54,14 @@ arrangeGrob(molX + theme(legend.position="none"),molX2 + theme(legend.position="
 img <- readPNG("temp.png")
 g <- rasterGrob(img, interpolate=TRUE)
 
-qplot(1:10, 1:10, geom="blank") +
-  annotation_custom(g, xmin=-Inf, xmax=Inf, ymin=-Inf, ymax=Inf) +
-  geom_point()
+ttt= list(g,g)
 
+qplot(1, 1, geom="blank") +annotation_custom(g, xmin=-Inf, xmax=Inf, ymin=-Inf, ymax=Inf) + theme_bw()
+
+p <- qplot(1, 1, geom="blank") + theme_bw() 
+tt = p +annotation_custom(g, xmin=-Inf, xmax=Inf, ymin=-Inf, ymax=Inf) + base
+tr = p +annotation_custom(g, xmin=-Inf, xmax=Inf, ymin=-Inf, ymax=Inf) + base
+grid.arrange(tt,tr,tt,tr,nrow=2,main="kkk")
 
 library(png)
 library(grid)
