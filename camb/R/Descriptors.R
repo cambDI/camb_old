@@ -88,7 +88,7 @@ if (file.info(structures.file)$size  == 0) {stop("Input file is empty")}
 output <- tempfile("props_temp",fileext=".csv")
 .C("R_ShowPropertiesSDF",structures.file,output,as.integer(type))
 if (file.info(output)$size  == 0) {stop("The molecules in the file provided do not contain any property")}
-props <- read.csv(output)
+props <- as.vector(read.table(output,header=FALSE)$V1)
 return(props)
 }
 
@@ -266,7 +266,7 @@ AA_descs <- function(Data, type="Z5",..){
     if  (is.vector(Data)){
 	  descs_path <- system.file("extdata", "aa_descs.rds", package="camb")
 	  descs <- readRDS(descs_path)
-      types <- c("ProtFP8","TScales","Tscales","VHSE","STScales","BLOSUM","FASGAI","MSWHIM","Z5","Z3")
+      types <- c("ProtFP8","TScales","VHSE","STScales","BLOSUM","FASGAI","MSWHIM","Z5","Z3")
       type <- match.arg(type,types,several.ok=TRUE)
       root <- strsplit(names(descs)[3:ncol(descs)],"_")
       root <- unlist(root)[seq(1,length(unlist(root)),2)]
