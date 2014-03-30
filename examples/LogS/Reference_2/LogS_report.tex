@@ -121,8 +121,8 @@ We can have a look at the response variable:
 \hlstd{properties} \hlkwb{<-} \hlkwd{read.csv}\hlstd{(}\hlstr{"properties.csv"}\hlstd{)}
 \hlstd{properties} \hlkwb{<-} \hlstd{properties[properties}\hlopt{$}\hlstd{Kept} \hlopt{==} \hlnum{1}\hlstd{, ]}
 \hlstd{targets} \hlkwb{<-} \hlkwd{data.frame}\hlstd{(}\hlkwc{Name} \hlstd{= properties}\hlopt{$}\hlstd{Name,} \hlkwc{target} \hlstd{= properties}\hlopt{$}\hlstd{EXPT)}
-\hlstd{p} \hlkwb{<-} \hlkwd{DensityResponse}\hlstd{(targets}\hlopt{$}\hlstd{target)}
-\hlstd{p} \hlopt{+} \hlkwd{labs}\hlstd{(}\hlkwc{title} \hlstd{=} \hlstr{"LogS target value distribution"}\hlstd{)}
+\hlstd{p} \hlkwb{<-} \hlkwd{DensityResponse}\hlstd{(targets}\hlopt{$}\hlstd{target)} \hlopt{+} \hlkwd{xlab}\hlstd{(}\hlstr{"LogS"}\hlstd{)}
+\hlstd{p}
 \end{alltt}
 \end{kframe}\begin{figure}[]
 
@@ -131,7 +131,7 @@ We can have a look at the response variable:
 
 }
 
-\caption[Bioactivity Distribution]{Bioactivity Distribution\label{fig:unnamed-chunk-6}}
+\caption[LogS Distribution]{LogS Distribution\label{fig:unnamed-chunk-6}}
 \end{figure}
 
 
@@ -214,6 +214,9 @@ Given that cross-validation (CV) will be used to optimize the hyperparameters of
     \hlkwc{tuneGrid} \hlstd{= tune.grid,} \hlkwc{trControl} \hlstd{= dataset}\hlopt{$}\hlstd{trControl)}
 \hlkwd{saveRDS}\hlstd{(model,} \hlkwc{file} \hlstd{=} \hlkwd{paste}\hlstd{(method,} \hlstr{".rds"}\hlstd{,} \hlkwc{sep} \hlstd{=} \hlstr{""}\hlstd{))}
 
+\hlstd{model} \hlkwb{<-} \hlkwd{readRDS}\hlstd{(}\hlstr{"svmRadial.rds"}\hlstd{)}
+\hlkwd{plot}\hlstd{(model,} \hlkwc{metric} \hlstd{=} \hlstr{"RMSE"}\hlstd{)}
+
 \hlcom{# train and save a random forest model}
 \hlstd{method} \hlkwb{<-} \hlstr{"rf"}
 \hlstd{tune.grid} \hlkwb{<-} \hlkwd{expand.grid}\hlstd{(}\hlkwc{.mtry} \hlstd{=} \hlkwd{seq}\hlstd{(}\hlnum{5}\hlstd{,} \hlnum{100}\hlstd{,} \hlnum{5}\hlstd{))}
@@ -221,7 +224,8 @@ Given that cross-validation (CV) will be used to optimize the hyperparameters of
     \hlkwc{tuneGrid} \hlstd{= tune.grid,} \hlkwc{trControl} \hlstd{= dataset}\hlopt{$}\hlstd{trControl)}
 \hlkwd{saveRDS}\hlstd{(model,} \hlkwc{file} \hlstd{=} \hlkwd{paste}\hlstd{(method,} \hlstr{".rds"}\hlstd{,} \hlkwc{sep} \hlstd{=} \hlstr{""}\hlstd{))}
 
-\hlcom{# train and save a gradient boosted machines model}
+\hlcom{# train and save a generalised boosted regression}
+\hlcom{# model}
 \hlstd{method} \hlkwb{<-} \hlstr{"gbm"}
 \hlstd{tune.grid} \hlkwb{<-} \hlkwd{expand.grid}\hlstd{(}\hlkwc{.n.trees} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{500}\hlstd{,} \hlnum{1000}\hlstd{),} \hlkwc{.interaction.depth} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{25}\hlstd{),}
     \hlkwc{.shrinkage} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{0.04}\hlstd{,} \hlnum{0.08}\hlstd{,} \hlnum{0.16}\hlstd{))}
@@ -230,6 +234,28 @@ Given that cross-validation (CV) will be used to optimize the hyperparameters of
 \hlkwd{saveRDS}\hlstd{(model,} \hlkwc{file} \hlstd{=} \hlkwd{paste}\hlstd{(method,} \hlstr{".rds"}\hlstd{,} \hlkwc{sep} \hlstd{=} \hlstr{""}\hlstd{))}
 \end{alltt}
 \end{kframe}
+\end{knitrout}
+
+
+Determine if your hyper-parameter search needs to be altered.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{model} \hlkwb{<-} \hlkwd{readRDS}\hlstd{(}\hlstr{"svmRadial.rds"}\hlstd{)}
+\hlkwd{plot}\hlstd{(model,} \hlkwc{metric} \hlstd{=} \hlstr{"RMSE"}\hlstd{)}
+\end{alltt}
+\end{kframe}\begin{figure}[]
+
+
+{\centering \includegraphics[width=12cm]{figure/unnamed-chunk-12} 
+
+}
+
+\caption[CV RMSE over the hyperparameters]{CV RMSE over the hyperparameters\label{fig:unnamed-chunk-12}}
+\end{figure}
+
+
 \end{knitrout}
 
 
@@ -267,7 +293,7 @@ On the basis of the soundness of the obtained models, we predict the values for 
 \hlkwd{CorrelationPlot}\hlstd{(}\hlkwc{pred} \hlstd{= holdout.predictions,} \hlkwc{obs} \hlstd{= dataset}\hlopt{$}\hlstd{y.holdout)}
 \end{alltt}
 \end{kframe}
-\includegraphics[width=\maxwidth]{figure/unnamed-chunk-13} 
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-14} 
 
 \end{knitrout}
 
@@ -320,7 +346,7 @@ To be considered as predictive, a model must satisfy the following criteria:\cit
 \item $0.85 \leq k \leq 1.15$
 \end{enumerate}
 
-The metrics for the external validatin are given by:
+The metrics for the external validation are given by:
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
