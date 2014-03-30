@@ -9,7 +9,7 @@ DensityResponse <- function(Data,xlab="",ylab="",main="",alpha=0.2,
                             densityFill="#FF6666",TitleSize=15,TextSize=15,
                             XAxisSize=15,YAxisSize=15,AngleLab=30,LegendPosition="right",
                             TitleAxesSize=15,tmar=1,bmar=1,rmar=1,lmar=1){
-  if (!is.vector(Data)) stop("Input data must be a numeric matrix or data.frame")
+  if (!is.vector(Data)) stop("Input data must be a numeric vector")
   Data <- data.frame(Values=Data)
   if (is.null(binwidth)) binwidth <- abs(range(Data)[1] - range(Data)[2]) / 20
   p <- ggplot(Data, aes(x=Values)) + theme_bw() + 
