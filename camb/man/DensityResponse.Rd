@@ -32,52 +32,52 @@ DensityResponse(Data, xlab = "", ylab = "", main = "", alpha = 0.2, binwidth = N
 %%     ~~Describe \code{main} here~~
 }
   \item{alpha}{
-	  Alpha for the fill color of the distribution.
+	  Alpha for the fill color of the distribution. Default value 0.2.
 %%     ~~Describe \code{alpha} here~~
 }
   \item{binwidth}{
-	  Width of the histogram bins.
+	  Width of the histogram bins. Default value NULL.
 %%     ~~Describe \code{binwidth} here~~
 }
   \item{histFill}{
-	  Fill color of the histogram bars.
+	  Fill color of the histogram bars. Default value 'white'.
 %%     ~~Describe \code{histFill} here~~
 }
   \item{histCol}{
-	  Color of the histogram lines.
+	  Color of the histogram lines. Default value 'black'.
 %%     ~~Describe \code{histCol} here~~
 }
   \item{densityFill}{
-	  Fill color of the distribution.
+	  Fill color of the distribution. Default value "#FF6666".
 %%     ~~Describe \code{densityFill} here~~
 }
   \item{TitleSize}{
-	  Title font size.
+	  Title font size. Default value 15.
 %%     ~~Describe \code{TitleSize} here~~
 }
   \item{TextSize}{
-	  Text size.
+	  Text size. Default value 15.
 %%     ~~Describe \code{TextSize} here~~
 }
   \item{XAxisSize}{
-	  Size of the text on the X axis.
+	  Size of the text on the X axis. Default value 15.
 %%     ~~Describe \code{XAxisSize} here~~
 }
   \item{YAxisSize}{
-	  Size of the text on the Y axis.
+	  Size of the text on the Y axis. Default value 15.
 %%     ~~Describe \code{YAxisSize} here~~
 }
   \item{AngleLab}{
-	  Angle of the labels in the X axis.
+	  Angle of the labels in the X axis. Default value 30. 
 %%     ~~Describe \code{AngleLab} here~~
 }
 
   \item{LegendPosition}{
-	  Position of the legend.
+	  Position of the legend. Default value 'right'.
 %%     ~~Describe \code{LegendPosition} here~~
 }
   \item{TitleAxesSize}{
-	  Font size of the axes lables.
+	  Font size of the axes lables. Default value 15.
 %%     ~~Describe \code{TitleAxesSize} here~~
 }
 
@@ -127,35 +127,6 @@ DensityResponse(Data, xlab = "", ylab = "", main = "", alpha = 0.2, binwidth = N
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
-
-## The function is currently defined as
-function (Data, xlab = "", ylab = "", main = "", alpha = 0.2, 
-    binwidth = NULL, histFill = "white", histCol = "black", densityFill = "#FF6666", 
-    TitleSize = 15, TextSize = 15, XAxisSize = 15, YAxisSize = 15, 
-    AngleLab = 30, LegendPosition = "right", TitleAxesSize = 15, 
-    tmar = 1, bmar = 1, rmar = 1, lmar = 1) 
-{
-    if (!is.vector(Data)) 
-        stop("Input data must be a numeric matrix or data.frame")
-    Data <- data.frame(Values = Data)
-    if (is.null(binwidth)) 
-        binwidth <- abs(range(Data)[1] - range(Data)[2])/20
-    p <- ggplot(Data, aes(x = Values)) + theme_bw() + geom_histogram(aes(y = ..density..), 
-        binwidth = binwidth, colour = histCol, fill = histFill) + 
-        geom_density(alpha = alpha, fill = densityFill) + ylab(ylab) + 
-        xlab(xlab) + ggtitle(main) + theme(text = element_text(size = TextSize), 
-        axis.text.x = element_text(size = XAxisSize, angle = AngleLab, 
-            hjust = 1), axis.title.x = element_text(size = TitleAxesSize), 
-        axis.title.y = element_text(size = TitleAxesSize), axis.text.y = element_text(size = YAxisSize), 
-        legend.position = LegendPosition, plot.title = element_text(size = TitleSize), 
-        legend.key = element_blank(), plot.margin = unit(c(tmar, 
-            rmar, bmar, lmar), "cm"))
-    return(p)
-  }
-}
 
 ## Example:
 
@@ -164,7 +135,5 @@ DensityResponse(rnorm(100),xlab = "Random values", ylab = "Frequency", main = "E
 	TitleSize = 15, TextSize = 15, XAxisSize = 15, YAxisSize = 15, 
 	AngleLab = 30, LegendPosition = "right", TitleAxesSize = 15, 
 	tmar = 1, bmar = 1, rmar = 1, lmar = 1
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+}
+\keyword{ ~DensityResponse }
