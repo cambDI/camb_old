@@ -5,9 +5,9 @@
 ##############
 ## The following functions assume that you already have features calculated and that
 ## the features are seperate from the target values
-ViewTargets <- function(y, bw) {
-  plot(density(y, bw = bw), main="Targets")
-}
+#ViewTargets <- function(y, bw) {
+#  plot(density(y, bw = bw), main="Targets")
+#}
 
 # TBD write function to view a feature by name in the same way as the targets above
 ##############
@@ -21,9 +21,9 @@ RemoveColumnsWithMoreThanHalfNA <- function(d) {
 }
                          
 ##############
-ImputeFeatures <- function(d) {
-  library(impute)
-  as.data.frame(impute.knn(as.matrix(d), k = 10)$data)
+ImputeFeatures <- function(d, k=10) {
+  library(impute) || stop("Package impute is required. Install from CRAN or Bioconductor -depending on the R version you are using-.")
+  as.data.frame(impute.knn(as.matrix(d), k = k)$data)
 }
 
 ##############
