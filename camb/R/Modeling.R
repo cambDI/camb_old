@@ -17,7 +17,12 @@ ReplaceInfinitesWithNA <- function(d) {
 
 RemoveColumnsWithMoreThanHalfNA <- function(d) {
   indexes <- which(apply(d, 2, function(x) {length(which(is.na(x)))>(0.5*length(x))}))
-  d[,-indexes]
+  if(length(indexes)==0) {
+    return(d)
+  } 
+  else {
+    return(d[,-indexes])
+  }
 }
                          
 ##############
