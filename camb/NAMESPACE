@@ -39,6 +39,21 @@ export(SplitSet)
 export(StandardiseMolecules)
 export(Validation)
 
+
+# Caret ensemble
+export(caretEnsemble)
+export(caretStack)
+export(checkModels_extractTypes)
+export(checkPreds)
+export(extractBestPreds)
+export(greedOptAUC)
+export(greedOptRMSE)
+export(makePredObsMatrix)
+export(multiPredict)
+export(predict.caretEnsemble)
+export(predict.caretStack)
+
+
 # To export all functions:
 #exportPattern("^[[:alpha:]]+")
 
