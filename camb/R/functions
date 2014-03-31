@@ -14,7 +14,7 @@ ImputeFeatures
 loadMorganFPs
 	MaxPerf
 	mergeData 
-MorganFPs
+	MorganFPs
 	PairwiseDist 
 	PairwiseDistPlot
 PCAProt 
