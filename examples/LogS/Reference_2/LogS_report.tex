@@ -121,20 +121,20 @@ We can have a look at the response variable:
 \hlstd{properties} \hlkwb{<-} \hlkwd{read.csv}\hlstd{(}\hlstr{"properties.csv"}\hlstd{)}
 \hlstd{properties} \hlkwb{<-} \hlstd{properties[properties}\hlopt{$}\hlstd{Kept} \hlopt{==} \hlnum{1}\hlstd{, ]}
 \hlstd{targets} \hlkwb{<-} \hlkwd{data.frame}\hlstd{(}\hlkwc{Name} \hlstd{= properties}\hlopt{$}\hlstd{Name,} \hlkwc{target} \hlstd{= properties}\hlopt{$}\hlstd{EXPT)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: arguments imply differing number of rows: 2979, 0}}\begin{alltt}
 \hlstd{p} \hlkwb{<-} \hlkwd{DensityResponse}\hlstd{(targets}\hlopt{$}\hlstd{target)} \hlopt{+} \hlkwd{xlab}\hlstd{(}\hlstr{"LogS"}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'targets' not found}}\begin{alltt}
 \hlstd{p}
 \end{alltt}
-\end{kframe}\begin{figure}[]
 
 
-{\centering \includegraphics[width=12cm]{figure/unnamed-chunk-6} 
-
-}
-
-\caption[LogS Distribution]{LogS Distribution\label{fig:unnamed-chunk-6}}
-\end{figure}
-
-
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'p' not found}}\end{kframe}
 \end{knitrout}
 
 

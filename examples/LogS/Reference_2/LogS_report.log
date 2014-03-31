@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  28 NOV 2013 08:38
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  31 MAR 2014 22:37
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -676,23 +676,12 @@ andardised.file[] []=[] []"standardised.sdf"[][],[][]
 
 {/usr/local/texlive/2011/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 Package color Info: Redefining color shadecolor on input line 119.
-
-
-LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 127.
-
-<figure/unnamed-chunk-6.pdf, id=45, 505.89pt x 505.89pt>
-File: figure/unnamed-chunk-6.pdf Graphic file (type pdf)
-
-<use figure/unnamed-chunk-6.pdf>
-Package pdftex.def Info: figure/unnamed-chunk-6.pdf used on input line 130.
-(pdftex.def)             Requested size: 341.43306pt x 341.43785pt.
 Package color Info: Redefining color shadecolor on input line 144.
- [2 <./figure/unnamed-chunk-6.pdf>]
 Package color Info: Redefining color shadecolor on input line 161.
+
+[2]
 Package color Info: Redefining color shadecolor on input line 182.
 Package color Info: Redefining color shadecolor on input line 192.
- [3]
 Package color Info: Redefining color shadecolor on input line 204.
 
 Overfull \hbox (17.67036pt too wide) in paragraph at lines 230--230
@@ -701,20 +690,21 @@ Overfull \hbox (17.67036pt too wide) in paragraph at lines 230--230
 25[][]),[][] 
  []
 
+[3]
 Package color Info: Redefining color shadecolor on input line 243.
-[4]
+
 
 LaTeX Warning: No positions in optional float specifier.
                Default added (so using `tbp') on input line 248.
 
-<figure/unnamed-chunk-12.pdf, id=68, 505.89pt x 505.89pt>
+<figure/unnamed-chunk-12.pdf, id=54, 505.89pt x 505.89pt>
 File: figure/unnamed-chunk-12.pdf Graphic file (type pdf)
 
 <use figure/unnamed-chunk-12.pdf>
 Package pdftex.def Info: figure/unnamed-chunk-12.pdf used on input line 251.
 (pdftex.def)             Requested size: 341.43306pt x 341.43785pt.
 Package color Info: Redefining color shadecolor on input line 267.
- [5 <./figure/unnamed-chunk-12.pdf>]
+ [4] [5 <./figure/unnamed-chunk-12.pdf>]
 Package color Info: Redefining color shadecolor on input line 290.
 
 Overfull \hbox (17.67036pt too wide) in paragraph at lines 292--292
@@ -722,7 +712,7 @@ Overfull \hbox (17.67036pt too wide) in paragraph at lines 292--292
 [](model,[] []newdata[] []= dataset[][]$[][]x.holdout))[][] 
  []
 
-<figure/unnamed-chunk-14.pdf, id=79, 505.89pt x 505.89pt>
+<figure/unnamed-chunk-14.pdf, id=69, 505.89pt x 505.89pt>
 File: figure/unnamed-chunk-14.pdf Graphic file (type pdf)
 
 <use figure/unnamed-chunk-14.pdf>
@@ -738,12 +728,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 301--302
 
  []
 
-
+[6 <./figure/unnamed-chunk-14.pdf>]
 Underfull \hbox (badness 10000) in paragraph at lines 303--305
 
  []
 
-[6 <./figure/unnamed-chunk-14.pdf>]
+
 Underfull \hbox (badness 10000) in paragraph at lines 314--319
 
  []
@@ -792,10 +782,10 @@ Package logreq Info: Writing requests to 'LogS_report.run.xml'.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 382.
  ) 
 Here is how much of TeX's memory you used:
- 11210 strings out of 493633
- 175121 string characters out of 3143378
+ 11203 strings out of 493633
+ 174950 string characters out of 3143378
  362377 words of memory out of 3000000
- 14349 multiletter control sequences out of 15000+200000
+ 14344 multiletter control sequences out of 15000+200000
  12545 words of font info for 45 fonts, out of 3000000 for 9000
  831 hyphenation exceptions out of 8191
  33i,8n,28p,937b,811s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -816,10 +806,10 @@ e/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/
 11/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/texlive/201
 1/texmf-dist/fonts/type1/public/amsfonts/cm/cmti8.pfb></usr/local/texlive/2011/
 texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on LogS_report.pdf (8 pages, 229798 bytes).
+Output written on LogS_report.pdf (8 pages, 220500 bytes).
 PDF statistics:
- 179 PDF objects out of 1000 (max. 8388607)
- 144 compressed objects within 2 object streams
- 28 named destinations out of 1000 (max. 500000)
- 72 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 169 PDF objects out of 1000 (max. 8388607)
+ 136 compressed objects within 2 object streams
+ 27 named destinations out of 1000 (max. 500000)
+ 67 words of extra memory for PDF output out of 10000 (max. 10000000)
 
