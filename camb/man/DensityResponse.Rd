@@ -56,7 +56,7 @@ DensityResponse(Data, xlab = "", ylab = "", main = "", alpha = 0.2, binwidth = N
 %%     ~~Describe \code{TitleSize} here~~
 }
   \item{TextSize}{
-	  Text size. Default value 15.
+	  Text font size. Default value 15.
 %%     ~~Describe \code{TextSize} here~~
 }
   \item{XAxisSize}{
