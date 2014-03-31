@@ -103,3 +103,14 @@ expGrid <- function(power.from, power.to, power.by, base){
   return(grid)
 }
 
+##############
+YScrambling <- function(y,percent){
+if (percent < 0 || percent > 1){stop("The percent value needs to be between 0 and 1")}
+inds_to_resamp <- sample.int(length(y), length(y)*percent)
+resamp_vals <- y[inds_to_resamp]
+resamp_vals2 <- sample(resamp_vals,length(resamp_vals),replace = FALSE, prob = NULL)
+y[inds_to_resamp] <- resamp_vals2
+return(y)
+}
+
+
