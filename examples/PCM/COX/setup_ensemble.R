@@ -11,7 +11,7 @@ dataa$x.test <- x.test
 dataa$y.test <- y.test
 
 set.seed(1)
-folds=3
+folds=5
 repeats=1
 trControl <- trainControl(method='cv', number=folds, repeats=repeats, returnResamp='none',
                           returnData=FALSE, savePredictions=TRUE,
@@ -19,4 +19,4 @@ trControl <- trainControl(method='cv', number=folds, repeats=repeats, returnResa
                           index=createMultiFolds(y.train, k=folds, times=repeats))
 
 dataa$trControl <- trControl
-saveRDS(dataa, file="dataa.rds")
+saveRDS(dataa, file="data_ensemble.rds")
