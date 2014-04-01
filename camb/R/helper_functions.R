@@ -6,7 +6,7 @@
 #' @param list_of_models a list of caret models to check
 #' @export
 checkModels_extractTypes <- function(list_of_models){
-  require('caret')
+  require('caret') || stop("Pacakge 'caret' is required")
   
   #TODO: Add helpful error messages
   
@@ -127,8 +127,8 @@ multiPredict <- function(list_of_models, type, newdata=NULL, ...){
   
   #TODO: Add progressbar argument
   
-  require('caret')
-  require('pbapply')
+  require('caret')|| stop("Pacakge 'caret' is required")
+  require('pbapply')|| stop("Pacakge 'pbapply' is required")
   
   preds <- pbsapply(list_of_models, function(x){
     if (type=='Classification' & x$control$classProbs){

@@ -37,6 +37,8 @@ ErrorBarplot <- function(X, Y, err, fill = X,
 
 ##############
 plotGrid <- function(plots,NRows,NCols,HeightBlocks,MyLegend=NULL,LegendRight=NULL,filename=NULL,PDFheight=10,PDFwidth=10){ 
+	isnot.vector <- function(x) ! is.vector(x) 
+	isnot.null <- function(x) ! is.null(x)
   if(is.null(MyLegend) && length(HeightBlocks) != NRows){stop("The length of each column is given in HeightBlocks. Thus, the length of HeightBlocks should be equal to the number of columns")}
   if(isnot.null(MyLegend) && length(HeightBlocks) != 2 && is.null(LegendRight)){stop("HeightBlocks defines the height of the plots and the legend. Therefore, its length has to be equal to 2")}
   if(isnot.null(MyLegend) && isnot.null(LegendRight) && length(HeightBlocks) != NRows){stop("The length of each column is given in HeightBlocks. Thus, the length of HeightBlocks should be equal to the number of columns")}
@@ -111,6 +113,8 @@ CorrelationPlot <- function (pred,obs,margin=NULL,main="",ylab="Predicted",xlab=
                    PointColor="black",PointAlpha=1,
                    PointShape=16,MarginWidth=1) 
 { 
+	isnot.vector <- function(x) ! is.vector(x) 
+	isnot.null <- function(x) ! is.null(x)
   if (isnot.vector(obs) || isnot.vector(pred)){
     stop("The input data must be two vectors")
   } else if ( length(obs) != length(pred) ){
