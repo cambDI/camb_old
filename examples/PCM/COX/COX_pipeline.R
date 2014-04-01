@@ -157,5 +157,3 @@ MetricsRf <- Validation(holdout.predictions,dataset$y.holdout)
 # Correlation between observed and predicted
 ObsPred(pred=holdout.predictions,obs=dataset$y.holdout,PointSize=3,ColMargin='green',
         margin=1,PointColor="black",PointShape=16,MarginWidth=2)
-
-
