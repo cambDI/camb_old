@@ -14,13 +14,13 @@
 
 \title{Proteochemometrics (PCM) with 'camb'\\
 {\bf C}hemistry {\bf A}ware {\bf M}odel {\bf B}uilder\\
-Cambridge. November 2013}
+}
 
 \author[1,3]{\rm Isidro Cortes-Ciriano\thanks{isidrolauscher@gmail.com}} 
 \author[2,3]{\rm Daniel Murrell\thanks{dsmurrell@gmail.com}}
 \affil[1]{Unite de Bioinformatique Structurale, Institut Pasteur and CNRS UMR 3825, Structural Biology and Chemistry Department, 25-28, rue Dr. Roux, 75 724 Paris, France.}
 \affil[2]{Unilever Centre for Molecular Science Informatics, Department of Chemistry, University of Cambridge, Cambridge, United Kingdom.}
-\affil[*]{Equal contributors}
+\affil[3]{Equal contributors}
 
 \setlength{\parindent}{0pt}
 
@@ -39,16 +39,21 @@ Sys.setenv(TEXINPUTS=getwd(),
 
 <<echo=FALSE>>=
 options(width=60)
-library(png)
-library(ggplot2)
+library(png,quietly=TRUE)
+library(ggplot2,quietly=TRUE)
 @
 \maketitle
 
 Firstly, we load the package and set the working directory:
+<<echo=FALSE,results='hide',warning=FALSE,message=FALSE>>=
+library(camb)
+setwd('/Users/icortes/Desktop/camb_final/camb/examples/PCM/COX')
+@
 <<echo=TRUE,results='hide',warning=FALSE,message=FALSE>>=
 library(camb)
-setwd('/Users/icortes/Desktop/camb_final/camb/examples/COX')
+#setwd('path_to_working_directory/camb/examples/COX')
 @
+
 \section{Compounds}
 
 \subsection{Reading and Preprocessing}
@@ -77,7 +82,8 @@ standardised_info <- read.table("standardisation_COX_info.csv",header=TRUE,sep="
 head(standardised_info)
 @
 
-In this case, the criteria we chose to remove compounds (the arguments of the StandardiseMolecules function) were not really stringent, so all molecules were kept. This can be seen in the kept field, given that for all compounds (rows) we have a 1.\\
+In this case, the criteria we chose to remove compounds (the arguments of the StandardiseMolecules function) were not really stringent, so all molecules were kept.
+This can be seen in the kept field, given that for all compounds (rows) we have a value equal to 1.\\
 Similarly, the properties of a .sdf file can be accessed witn the function:
 <<echo=TRUE,results='hide',warning=FALSE,message=FALSE,eval=FALSE>>=
 ShowPropertiesSDF("standardised.sdf",type=1)
@@ -97,7 +103,10 @@ saveRDS(descriptors, file="Padel_COX.rds")
 descriptors <- readRDS("Padel_COX.rds")
 @
 
-Sometimes, some descriptors are not calcualted for all molecules, thus giving a 'NA' or 'Inf' as descriptor values. Instead of removing that descriptor for all molecules, the missing descriptor values can be {\it imputed} from the corresponding descriptor values of the rest of molecules. To do that, 'Inf' values are converted to 'NA', and then imputed:
+Sometimes, some descriptors are not calcualted for all molecules, thus giving a 'NA' or 'Inf' as descriptor values.
+Instead of removing that descriptor for all molecules, the missing descriptor values can be {\it imputed} from the corresponding descriptor values of the rest of molecules.
+To do that, 'Inf' values are converted to 'NA', and then imputed. 
+The R package impute is required. Depending on the R version, it can be accessed from either CRAN or Bioconductor.
 
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),eval=FALSE>>=
 descriptors <- ReplaceInfinitesWithNA(descriptors)
@@ -105,10 +114,17 @@ descriptors <- ImputeFeatures(descriptors)
 @
 
 \subsection{Circular Morgan Fingerprints}
+The python library RDkit is required since the function 'MorganFPs' uses a python script for the calculation.
+When using integrated development environments (IDE) such as RStudio,
+the environment variables might not be seen.
+We can redefine them with the R function 'Sys.setenv'.
+In any case, the function 'MorganFPs' requires this information in the arguments 'PythonPath' and 'RDkitPath'.
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),eval=FALSE>>=
 Sys.setenv(RDBASE="/usr/local/share/RDKit")
 Sys.setenv(PYTHONPATH="/usr/local/lib/python2.7/site-packages")
-fps_COX_512 <- MorganFPs(bits=512,radius=2,type='smi',mols='smiles_COX.smi', output='COX',keep='hashed_counts')
+fps_COX_512 <- MorganFPs(bits=512,radius=2,type='smi',mols='smiles_COX.smi', output='COX',keep='hashed_counts',
+                         RDkitPath="/usr/local/share/RDKit", PythonPath="/usr/local/lib/python2.7/site-packages",
+                         verbose=TRUE)
 saveRDS(fps_COX_512,file="fps_COX_512.rds")
 fps_COX_512 <- readRDS("fps_COX_512.rds")
 @
@@ -121,23 +137,25 @@ We read the read the amino acids from a .csv file:
 amino_compound_IDs <- read.table("AAs_COX.csv",sep=",",header=TRUE,colClasses=c("character"),row.names=1)
 amino_compound_IDs <- amino_compound_IDs[,2:ncol(amino_compound_IDs)]
 @
-
+Now, 5 Z-scales are calculates, which will serve to describe the target space in the machine learning models.
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),eval=FALSE,tidy=TRUE>>=
 amino_compound_IDs_zscales <- AA_descs(Data=amino_compound_IDs,type="Z5")
 @
 
 Ensuingly, we save the descriptors in a .rds file.
-<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE>>=
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
 saveRDS(amino_compound_IDs_zscales,file="Z5_COX.rds")
 amino_compound_IDs_zscales <-readRDS("Z5_COX.rds")
 @
 
-In the case that we needed whole sequence descriptors, they can be calculated with the function 'SeqDescs'. The functin takes as argument either a UniProt identifier, or a \{matrix, dataframe\} with the protein sequences. If a UniProt identifier is provided, the function gets firstly the sequence and then calculates the descriptors on the sequence.
+In the case that we needed whole sequence descriptors, they can be calculated with the function 'SeqDescs'. 
+The functin takes as argument either a UniProt identifier, or either a matrix or dataframe with the protein sequences.
+If a UniProt identifier is provided, the function gets firstly the sequence and then calculates the descriptors on the sequence.
 
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
 Seq_descriptors_P00374 <- SeqDescs("P00374",UniProtID=TRUE,type=c("AAC","DC"))
 @
-The available types of descriptor are:\cite{protr}
+The available types of whole sequence descriptors are:\cite{protr}
 - Amino Acid Composition ("AAC")\\
 - Dipeptide Composition ("DC")\\
 - Tripeptide Composition ("TC")\\
@@ -153,10 +171,10 @@ The available types of descriptor are:\cite{protr}
 
 \subsection{Reading the Data-set Information}
 Now, we are going to read the file with the information about the dataset, namely: target names, bioctivities, etc..
-Be careful: when reading smiles from a .csv file into an R dataframe, the smils are clipped after a hash ('\#') symbol.
+Be careful: when reading smiles from a .csv file into an R dataframe, the smiles are clipped after a hash ('\#') symbol.
 Good practice: also keep the smiles alone in a \{.smi,.smiles\} file.
 
-<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE>>=
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=TRUE>>=
 dataset <- readRDS("COX_dataset_info.rds")
 bioactivity <- dataset$standard_value
 @
@@ -174,12 +192,12 @@ plot_molecules[[1]]
 @
 
 We can have a look at the response variable:
-<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,fig.align='center',fig.cap="Bioactivity Distribution",out.width='12cm'>>=
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,fig.align='center',fig.cap="Bioactivity Distribution",out.width='12cm',eval=TRUE>>=
 dens_resp <- DensityResponse(bioactivity,xlab="pIC50",main="",ylab="Densitiy",TitleSize=30,XAxisSize=22,YAxisSize=22,TitleAxesSize=24,AngleLab=0,lmar=0,rmar=0,bmar=0,tmar=0,binwidth=0.3)
 @
 
 Plotting a PCA analysis of the target descriptors gives:
-<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,fig.align='center',fig.cap="PCA Analysis on the\nAmino Acid Descriptors">>=
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,fig.align='center',fig.cap="PCA Analysis on the\nAmino Acid Descriptors",eval=TRUE>>=
 target_PCA <- PCAProt(amino_compound_IDs_zscales,SeqsName=dataset$accession)
 plot_PCA_Cox <- PCAProtPlot(target_PCA,PointSize=10,main="",TitleSize=30,XAxisSize=20,YAxisSize=20,TitleAxesSize=28,LegendPosition="bottom",RowLegend=3,ColLegend=5,LegendTitleSize=15,LegendTextSize=15)
 pdf("PCA_seqs.pdf")
@@ -188,17 +206,17 @@ dev.off()
 @
 
 Similarly, we can analyze the chemical space by calculating pairwise compound similarities based upon the compound descriptors. In this case, we use the Jaccard metric to calculate the distance between compounds.
-<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE>>=
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=TRUE>>=
 #pw_dist_comp_fps <- PairwiseDist(fps_COX_512,method="jaccard")
 #saveRDS(pw_dist_comp_fps,file="pairwise_dist_COX.rds")
 pw_dist_comp_fps <- readRDS("pairwise_dist_COX.rds")
 plot_pwd <- PairwiseDistPlot(pw_dist_comp_fps,xlab="Jaccard Similarity",ylab="Density",TitleSize=26,XAxisSize=20,YAxisSize=20,TitleAxesSize=24,lmar=0,rmar=0,bmar=0,tmar=0,AngleLab=0)
 pdf("Pairwise_distance.pdf")
 plot_pwd
+dev.off()
 @
 
 <<highlight=TRUE,tidy=TRUE,fig.align='center',fig.cap="Density of the response variable (left). Pairwise Compound Jaccard Similarity (right)",fig.width='10cm',fig.height='25cm'>>=
-library(ggplot2)
 grid.arrange(dens_resp,plot_pwd,nrow=2)
 @
 
