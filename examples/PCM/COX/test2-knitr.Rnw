@@ -21,8 +21,8 @@
 \affil[1]{Unite de Bioinformatique Structurale, Institut Pasteur and CNRS UMR 3825, Structural Biology and Chemistry Department, 25-28, rue Dr. Roux, 75 724 Paris, France.}
 \affil[2]{Unilever Centre for Molecular Science Informatics, Department of Chemistry, University of Cambridge, Cambridge, United Kingdom.}
 \affil[3]{Equal contributors}
-
 \setlength{\parindent}{0pt}
+
 
 \begin{document}
 
@@ -37,13 +37,17 @@ Sys.setenv(TEXINPUTS=getwd(),
            BSTINPUTS=getwd())
 @
 
-<<echo=FALSE>>=
+<<echo=FALSE,results='hide'>>=
 options(width=60)
-library(png,quietly=TRUE)
+suppressWarnings(library(png,quietly=TRUE,warn.conflicts=FALSE))
+suppressWarnings(library(caret,quietly=TRUE,warn.conflicts=FALSE))
+suppressWarnings(library(doMC,quietly=TRUE,warn.conflicts=FALSE))
 library(ggplot2,quietly=TRUE)
 @
 \maketitle
 
+In the following sections, we present a pipeline to generate a whole Proteochemometric (PCM) pipeline. For futher details about PCM, the interested reader is referred to ref
+\cite{review_pcm} and \cite{cortesReview}.
 Firstly, we load the package and set the working directory:
 <<echo=FALSE,results='hide',warning=FALSE,message=FALSE>>=
 library(camb)
@@ -73,7 +77,7 @@ chlorine.limit=-1,
 bromine.limit=-1,
 iodine.limit=-1,
 min.mass.limit=-1, #suggested value 20
-max.mass.limit=-1)#suggested value  900)
+max.mass.limit=-1) #suggested value  900)
 @
 The properties of all molecules and the index (in the column 'kept') indicating which molecules were deleted are written to a file called standardisation\_COX\_info.csv.
 
@@ -97,7 +101,8 @@ head(all_properties)
 
 \subsection{PaDEL Descriptors}
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
-descriptors_COX <- GeneratePadelDescriptors(standardised.file="smiles_COX.smi",threads = 1)
+descriptors_COX <- GeneratePadelDescriptors( +
+  standardised.file="smiles_COX.smi",threads = 1)
 descriptors <- RemoveStandardisedPrefix(descriptors)
 saveRDS(descriptors, file="Padel_COX.rds")
 descriptors <- readRDS("Padel_COX.rds")
@@ -122,8 +127,10 @@ In any case, the function 'MorganFPs' requires this information in the arguments
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),eval=FALSE>>=
 Sys.setenv(RDBASE="/usr/local/share/RDKit")
 Sys.setenv(PYTHONPATH="/usr/local/lib/python2.7/site-packages")
-fps_COX_512 <- MorganFPs(bits=512,radius=2,type='smi',mols='smiles_COX.smi', output='COX',keep='hashed_counts',
-                         RDkitPath="/usr/local/share/RDKit", PythonPath="/usr/local/lib/python2.7/site-packages",
+fps_COX_512 <- MorganFPs(bits=512,radius=2,type='smi',mols='smiles_COX.smi', 
+                         output='COX',keep='hashed_counts',
+                         RDkitPath='/usr/local/share/RDKit', 
+                         PythonPath='/usr/local/lib/python2.7/site-packages',
                          verbose=TRUE)
 saveRDS(fps_COX_512,file="fps_COX_512.rds")
 fps_COX_512 <- readRDS("fps_COX_512.rds")
@@ -134,17 +141,19 @@ fps_COX_512 <- readRDS("fps_COX_512.rds")
 \subsection{Read and Preprocessing}
 We read the read the amino acids from a .csv file:
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),eval=FALSE,tidy=TRUE>>=
-amino_compound_IDs <- read.table("AAs_COX.csv",sep=",",header=TRUE,colClasses=c("character"),row.names=1)
+amino_compound_IDs <- read.table("AAs_COX.csv",sep=",",
+                                 header=TRUE,colClasses=c("character"),
+                                 row.names=1)
 amino_compound_IDs <- amino_compound_IDs[,2:ncol(amino_compound_IDs)]
 @
 Now, 5 Z-scales are calculates, which will serve to describe the target space in the machine learning models.
+Ensuingly, we save the descriptors in a .rds file.
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),eval=FALSE,tidy=TRUE>>=
 amino_compound_IDs_zscales <- AA_descs(Data=amino_compound_IDs,type="Z5")
+saveRDS(amino_compound_IDs_zscales,file="Z5_COX.rds")
 @
 
-Ensuingly, we save the descriptors in a .rds file.
-<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
-saveRDS(amino_compound_IDs_zscales,file="Z5_COX.rds")
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=TRUE>>=
 amino_compound_IDs_zscales <-readRDS("Z5_COX.rds")
 @
 
@@ -156,18 +165,20 @@ If a UniProt identifier is provided, the function gets firstly the sequence and 
 Seq_descriptors_P00374 <- SeqDescs("P00374",UniProtID=TRUE,type=c("AAC","DC"))
 @
 The available types of whole sequence descriptors are:\cite{protr}
-- Amino Acid Composition ("AAC")\\
-- Dipeptide Composition ("DC")\\
-- Tripeptide Composition ("TC")\\
-- Normalized Moreau-Broto Autocorrelation ("MoreauBroto")\\
-- Moran Autocorrelation ("Moran")\\
-- Geary Autocorrelation ("Geary")\\
-- CTD (Composition/Transition/Distribution) ("CTD")\\
-- Conjoint Traid ("CTriad")\\
-- Sequence Order Coupling Number ("SOCN")\\
-- Quasi-sequence Order Descriptors ("QSO")\\
-- Pseudo Amino Acid Composition ("PACC")\\
-- Amphiphilic Pseudo Amino Acid Composition ("APAAC")\\
+\begin{itemize}
+\item Amino Acid Composition ("AAC")\\
+\item Dipeptide Composition ("DC")\\
+\item Tripeptide Composition ("TC")\\
+\item Normalized Moreau-Broto Autocorrelation ("MoreauBroto")\\
+\item Moran Autocorrelation ("Moran")\\
+\item Geary Autocorrelation ("Geary")\\
+\item  CTD (Composition/Transition/Distribution) ("CTD")\\
+\item Conjoint Traid ("CTriad")\\
+\item Sequence Order Coupling Number ("SOCN")\\
+\item Quasi-sequence Order Descriptors ("QSO")\\
+\item Pseudo Amino Acid Composition ("PACC")\\
+\item Amphiphilic Pseudo Amino Acid Composition ("APAAC")\\
+\end{itemize}
 
 \subsection{Reading the Data-set Information}
 Now, we are going to read the file with the information about the dataset, namely: target names, bioctivities, etc..
@@ -186,37 +197,41 @@ bioactivity <- -log(bioactivity,base=10)
 
 \section{Data-set Visualization}
 Compounds can be depicted with the function 'PlotMolecules'. It returns a list of four plots, and plots can also be written into a .pdf file.
-<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,fig.align='center',fig.cap="Example of compoud depiction.",out.width='12cm',eval=TRUE>>=
-plot_molecules <- PlotMolecules("standardised.sdf",IDs=c(1,2,3,4),pdf.file="test_comp_visualization.pdf",useNameAsTitle=TRUE,PDFMain=NULL) 
-plot_molecules[[1]]
+
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=TRUE,results='hide',echo=FALSE>>=
+# we redefine the function isnot
+is.intalled <- function(mypkg) is.element(mypkg, installed.packages()[,1])
+@
+
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,fig.align='center',fig.cap="Example of compoud depiction.",out.width='12cm',eval=TRUE,echo=FALSE,message=FALSE>>=
+plot_molecules <- PlotMolecules("standardised.sdf",IDs=c(1,2,3,4),pdf.file=NULL,useNameAsTitle=TRUE,PDFMain=NULL) 
+print(plot_molecules[[1]])
 @
 
 We can have a look at the response variable:
-<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,fig.align='center',fig.cap="Bioactivity Distribution",out.width='12cm',eval=TRUE>>=
+<<highlight=TRUE,results='hide',tidy.opts=list(width.cutoff=50),tidy=TRUE,fig.align='center',fig.cap="Bioactivity Distribution",out.width='12cm',eval=TRUE>>=
 dens_resp <- DensityResponse(bioactivity,xlab="pIC50",main="",ylab="Densitiy",TitleSize=30,XAxisSize=22,YAxisSize=22,TitleAxesSize=24,AngleLab=0,lmar=0,rmar=0,bmar=0,tmar=0,binwidth=0.3)
 @
 
 Plotting a PCA analysis of the target descriptors gives:
-<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,fig.align='center',fig.cap="PCA Analysis on the\nAmino Acid Descriptors",eval=TRUE>>=
-target_PCA <- PCAProt(amino_compound_IDs_zscales,SeqsName=dataset$accession)
+<<highlight=TRUE,results='hide',tidy.opts=list(width.cutoff=50),tidy=TRUE,fig.align='center',fig.cap="PCA Analysis on the\nAmino Acid Descriptors",eval=TRUE>>=
+target_PCA <- PCAProt(amino_compound_IDs_zscales,
+                      SeqsName=dataset$accession)
 plot_PCA_Cox <- PCAProtPlot(target_PCA,PointSize=10,main="",TitleSize=30,XAxisSize=20,YAxisSize=20,TitleAxesSize=28,LegendPosition="bottom",RowLegend=3,ColLegend=5,LegendTitleSize=15,LegendTextSize=15)
-pdf("PCA_seqs.pdf")
-plot_PCA_Cox
-dev.off()
 @
 
 Similarly, we can analyze the chemical space by calculating pairwise compound similarities based upon the compound descriptors. In this case, we use the Jaccard metric to calculate the distance between compounds.
-<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=TRUE>>=
-#pw_dist_comp_fps <- PairwiseDist(fps_COX_512,method="jaccard")
-#saveRDS(pw_dist_comp_fps,file="pairwise_dist_COX.rds")
-pw_dist_comp_fps <- readRDS("pairwise_dist_COX.rds")
-plot_pwd <- PairwiseDistPlot(pw_dist_comp_fps,xlab="Jaccard Similarity",ylab="Density",TitleSize=26,XAxisSize=20,YAxisSize=20,TitleAxesSize=24,lmar=0,rmar=0,bmar=0,tmar=0,AngleLab=0)
-pdf("Pairwise_distance.pdf")
-plot_pwd
-dev.off()
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
+pw_dist_comp_fps <- PairwiseDist(fps_COX_512,method="jaccard")
+saveRDS(pw_dist_comp_fps,file="pairwise_dist_COX.rds")
 @
 
-<<highlight=TRUE,tidy=TRUE,fig.align='center',fig.cap="Density of the response variable (left). Pairwise Compound Jaccard Similarity (right)",fig.width='10cm',fig.height='25cm'>>=
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=TRUE>>=
+pw_dist_comp_fps <- readRDS("pairwise_dist_COX.rds")
+plot_pwd <- PairwiseDistPlot(pw_dist_comp_fps,xlab="Jaccard Similarity",ylab="Density",TitleSize=26,XAxisSize=20,YAxisSize=20,TitleAxesSize=24,lmar=0,rmar=0,bmar=0,tmar=0,AngleLab=0)
+@
+
+<<highlight=TRUE,tidy=TRUE,fig.align='center',fig.cap="Density of the response variable (upper panel). Pairwise Compound Jaccard Similarity (bottom pannel)",fig.width='10cm',fig.height='25cm'>>=
 grid.arrange(dens_resp,plot_pwd,nrow=2)
 @
 
@@ -248,8 +263,7 @@ source("remove_duplicates.R")
 Now, we load the dataset without repetitions generated in the previous step. In addition, we remove those columns not containing descriptors (e.g. compound name):
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
 dataset <- readRDS("Whole_dataset_NO_REP.rds")
-killset <- expression(c(tid,pref_name,accession,organism,chembl_id,standard_value,standard_units,
-                        standard_type,chembl_id.1,Name,Name.1,Name.2,rows))
+killset <- expression(c(tid,pref_name,accession,organism,chembl_id,standard_value,standard_units, standard_type,chembl_id.1,Name,Name.1,Name.2,rows))
 bioactivity <- dataset$standard_value
 compound_IDs <- dataset$chembl_id.1
 dataset <- subset(dataset,select=-eval(killset))
@@ -272,21 +286,27 @@ dataset <- PreProcess(dataset)
 
 Given that cross-validation (CV) will be used to optimize the hyperparameters of the models, we divide the training setin 5 folds:
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
-dataset <- GetCVTrainControl(dataset)
+dataset <- GetCVTrainControl(dataset,seed=1)
 saveRDS(dataset, file="dataset_COX_preprocessed.rda")
 @
+All models are trained with the same CV options to allow ensemble modeling (see below).
+These options are:
+method='cv', number=folds, repeats=repeats, returnResamp='none',
+returnData=FALSE, savePredictions=TRUE,
+verboseIter=TRUE, allowParallel=TRUE and
+index=createMultiFolds(y.train, k=folds, times=repeats)).
 
 \section{Model Training}
 
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE>>=
 dataset <- readRDS("dataset_COX_preprocessed.rda")
-# Set the number of cores for parallelization of the training
-library(doMC)
-registerDoMC(cores=4) #from the package 'doMC'
+# Number of cores to be used during model training
+cores <- 3
+registerDoMC(cores) 
 @
 
 \subsection{Support Vector Machines (SVM)}
-Firstly, a SVM will be trained. We define an exponential grid (base 2) to optimize the hyperparameters:
+Firstly, a SVM will be trained\cite{svmreview}. We define an exponential grid (base 2) to optimize the hyperparameters:
 
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
 method <- "svmRadial"
@@ -296,40 +316,54 @@ tune.grid <- expand.grid(.sigma = exp_grid)
 
 Training:
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
-#modelCoxSVMrad <- train(dataset$x.train, dataset$y.train, method, tuneGrid=tune.grid, trControl=dataset$trControl)
-#saveRDS(modelCoxSVMrad, file="svm_model_COX.rds")
-modelCoxSVMrad <- readRDS("COXsvm.rds")
+modelCoxSVMrad <- train(dataset$x.train, dataset$y.train, method, tuneGrid=tune.grid, trControl=dataset$trControl)
+saveRDS(modelCoxSVMrad, file="model_SVM.rds")
 @
 
 \subsection{Random Forest}
-We proceed similarly in the case of a random forest model.
+We proceed similarly in the case of a random forest (RF) model\cite{rf}.
 
-<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE>>=
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
 method <- "rf"
 tune.grid <- expand.grid(.mtry = seq(5,100,5))
 
-#modelCoxRF<- train(dataset$x.train, dataset$y.train, method, tuneGrid=tune.grid, trControl=dataset$trControl)
-#saveRDS(modelCoxRF, file="rf_model_COX.rds")
-modelCoxRF<- readRDS("COXrf.rds")
+modelCoxRF<- train(dataset$x.train, dataset$y.train, method, tuneGrid=tune.grid, trControl=dataset$trControl)
+saveRDS(modelCoxRF, file="model_RF.rds")
 @
+Loading the RF model.
+<<highlight=FALSE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=TRUE>>=
+modelCoxRF<- readRDS("model_RF.rds")
+@
+
+\subsection{Gradient Boosting Machine}
+We proceed similarly in the case of a gradient boosting machine (GBM) model\cite{gbm}.
+
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
+method <- "gbm"
+tune.grid <- expand.grid(.shrinkage=c(0.04, 0.08, 0.12, 0.16), 
+                         .n.trees=c(500), .interaction.depth=c(25))   
+modelCoxGBM<- train(dataset$x.train, dataset$y.train, method, tuneGrid=tune.grid, trControl=dataset$trControl)
+saveRDS(modelCoxGBM, file="model_GBM.rds")
+@
+
 
 \section{Model Evaluation}
 
 Once the models are trained, the cross validated metrics can be calculated:
+We assume the metric used for the choice of the best combination of hyperparameters is 'RMSE'.
+In the following we focus on the RF model, though the same can be applied to the GBM and SVM models.
 
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE>>=
-# Cross Validation Metrics.
-# We assume the metric used for the choice of the best combination of hyperparameters is 'RMSE'.
-# This can be checked by: 'my_model'$metric
-RMSE_CV = signif(min(as.vector(na.omit(modelCoxRF$results$RMSE))), digits=3)
-Rsquared_CV = modelCoxRF$results$Rsquared[which(modelCoxRF$results$RMSE %in% min(modelCoxRF$results$RMSE, na.rm=TRUE))]
-print(RMSE_CV)
-print(Rsquared_CV)
+RMSE_CV_rf = signif(min(as.vector(na.omit(modelCoxRF$results$RMSE))), 
+                    digits=3)
+Rsquared_CV_rf = modelCoxRF$results$Rsquared[which(modelCoxRF$results$RMSE %in% min(modelCoxRF$results$RMSE, na.rm=TRUE))]
+print(RMSE_CV_rf)
+print(Rsquared_CV_rf)
 @
 
-On the basis of the soundness of the obtained models, we predict the values for the hod-out set:
-<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,warning=FALSE,message=FALSE>>=
-holdout.predictions <- as.vector(predict(modelCoxRF, newdata = dataset$x.holdout))
+On the basis of the soundness of the obtained models, we predict the values for the external (hold-out) set:
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,warning=FALSE,message=FALSE,eval=FALSE>>=
+holdout.predictions <- as.vector(predict(modelCoxRF$finalModel, newdata = dataset$x.holdout))
 @
 
 We evaluate the predictive ability of our models by calculation the following statistical metrics:\\
@@ -380,20 +414,123 @@ To be considered as predictive, a model must satisfy the following criteria:\cit
 \item $0.85 \leq k \leq 1.15$
 \end{enumerate}
 
-The metrics for the external validatin are given by:
-<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE>>=
+The metrics for the external validation are given by:
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
 MetricsRf <- Validation(holdout.predictions,dataset$y.holdout)
-MetricsRf
 @
 
 To have a look at the correlation between predicted and observed values, we can use the 'CorrelationPlot' function:
-
-<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,fig.align='center',fig.cap="Predicted vs Observed">>=
-pdf("ObsPred.pdf")
-CorrelationPlot(pred=holdout.predictions,obs=dataset$y.holdout,PointSize=3,ColMargin='blue',TitleSize=26,XAxisSize=20,YAxisSize=20,TitleAxesSize=24,margin=2,PointColor="black",PointShape=16,MarginWidth=1,AngleLab=0,xlab="Observed",ylab="Predicted")
-dev.off()
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=TRUE,results='hide',echo=FALSE>>=
+# loading the z.test values...
+holdout.predictions <- readRDS("/Users/icortes/Desktop/COX/ztest_doc.rds") 
+dataset$y.holdout <- readRDS("/Users/icortes/Desktop/COX/ytest_doc.rds")
 @
 
+
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,fig.align='center',fig.cap="Observed vs Predicted">>=
+CorrelationPlot(pred=holdout.predictions,obs=dataset$y.holdout,PointSize=3,ColMargin='blue',TitleSize=26,XAxisSize=20,YAxisSize=20,TitleAxesSize=24,margin=2,PointColor="black",PointShape=16,MarginWidth=1,AngleLab=0,xlab="Observed",ylab="Predicted")
+@
+
+\section{Ensemble Modeling}
+In the following section, we applied two ensemble modeling techniques, namely greedy optimization and model stacking, to create ensembles of models.
+Further information can be found in ref \cite{cortesCOX} and \cite{caretEnsemble}.
+<<highlight=FALSE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=TRUE,echo=FALSE,message=FALSE,results='hide'>>=
+suppressWarnings(require(devtools,quietly=T,warn.conflicts=FALSE)) || stop("package devtools need to be installed")
+suppressWarnings(require(pbapply,quietly=TRUE,warn.conflicts=FALSE)) || stop("package pbapply need to be installed")
+@
+
+To get (i) the training, (ii) the external set, (iii)the transformation applied to center and scale the descriptors before model training, and (iv) the model training options, we run the following lines:
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
+data <- list()
+attach(dataset)
+data$transformation <- transformation
+data$x.train <- x.train
+data$y.train <- y.train
+data$x.test <- x.holdout # external set
+data$y.test <- y.holdout # external set
+data$trControl <- trControl
+saveRDS(data, file="data_ensemble.rds")
+detach(dataset)
+@
+Subsequently, we load the models previously trained.
+The list of models is in the file modelsEnsemble.
+Once all models have been loaded, we create the following ensembled:
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
+greedy <- caretEnsemble(all.models, iter=1000L)
+sort(greedy$weights, decreasing=TRUE)
+@
+
+Subsequently, we load the models previously trained.
+The list of models is in the file modelsEnsemble.
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
+  all.models <- list()
+models <- as.vector(read.table("modelsEnsemble")$V1)
+
+for (i in 1:length(models)){
+  model_load = paste("readRDS('",models[i],"')",sep="")
+  assign(paste("model_",i,sep=""), eval(parse(text=model_load)))
+  all.models[[length(all.models)+1]] <- eval(parse(text=paste("model_",i,sep="")))
+}
+
+names(all.models) <- sapply(all.models, function(x) x$method)
+sort(sapply(all.models, function(x) min(as.vector(na.omit(x$results$RMSE)))))
+@
+
+Once all models have been loaded, we create the following ensembled:
+  %\begin{enumerate}
+%\item Greedy (now it can only optimize the hold-out RMSE)
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
+  greedy <- caretEnsemble(all.models, iter=1000L)
+sort(greedy$weights, decreasing=TRUE)
+@
+
+%\item Model Stacking
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
+  # make a linear regression ensemble
+  linear <- caretStack(all.models, method='glm')
+summary(linear$ens_model$finalModel)
+
+# make Elastic Net ensemble
+enet_ens <- caretStack(all.models, method='enet')
+coefs_enet_ens <- enet_ens$ens_model$finalModel$beta.pure +
+[ncol(enet_ens$ens_model$finalModel$beta.pure)+1,]
+
+# make SVM linear ensemble
+trControl <- trainControl(method = "cv",  number=5)
+tune.grid <- expand.grid(.C=expGrid(power.from=-14,
+                                    power.to=10,power.by=1,base=2))
+linear_svm <- caretStack(all.models, method='svmLinear',
+                         trControl=trControl,tuneGrid=tune.grid)
+
+# make SVM radial ensemble
+trControl <- trainControl(method = "cv",  number=5)
+tune.grid <- expand.grid(.sigma=expGrid(power.from=-14,
+                                        power.to=10,power.by=1,base=2),
+                         .C=expGrid(power.from=-14,power.to=10,
+                                    power.by=2,base=2))
+radial_svm <- caretStack(all.models, method='svmRadial',
+                         trControl=trControl,tuneGrid=tune.grid)
+@
+%\end{enumerate}
+We proceed to predict the bioactivities for the external (hold-out) set,
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
+preds <- data.frame(sapply(all.models, predict, newdata=dataa$x.test))
+preds$ENS_greedy <- predict(greedy, newdata=dataa$x.test)
+preds$ENS_linear <- predict(linear, newdata=dataa$x.test)
+preds$ENS_enet <- predict(enet_ens, newdata=x.test)
+preds$ENS_SVMrad <- predict(radial_svm, newdata=x.test)c
+preds$ENS_SVMlin <- predict(linear_svm, newdata=x.test)
+@
+
+and we calculate the metrics:
+  
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
+# Calculate metrics (We could also have applied Validation instead.)
+Q2s <- apply(preds,2, function(x) Qsquared(x,dataa$y.test))
+R2s <- apply(preds,2, function(x) Rsquared(x,dataa$y.test))
+R20s <- apply(preds,2, function(x) Rsquared0(x,dataa$y.test))
+RMSEs <- apply(preds,2, function(x) RMSE(x,dataa$y.test))
+@
 %\section{Bibliography}
 \newpage
 \printbibliography
