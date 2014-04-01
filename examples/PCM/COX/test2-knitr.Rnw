@@ -203,7 +203,7 @@ Compounds can be depicted with the function 'PlotMolecules'. It returns a list o
 is.intalled <- function(mypkg) is.element(mypkg, installed.packages()[,1])
 @
 
-<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,fig.align='center',fig.cap="Example of compoud depiction.",out.width='12cm',eval=TRUE,echo=FALSE,message=FALSE>>=
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,fig.align='center',fig.cap="Example of compoud depiction.",out.width='12cm',eval=TRUE,echo=TRUE,message=FALSE>>=
 plot_molecules <- PlotMolecules("standardised.sdf",IDs=c(1,2,3,4),pdf.file=NULL,useNameAsTitle=TRUE,PDFMain=NULL) 
 print(plot_molecules[[1]])
 @
