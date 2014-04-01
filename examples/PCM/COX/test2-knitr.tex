@@ -320,12 +320,20 @@ Compounds can be depicted with the function 'PlotMolecules'. It returns a list o
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{plot_molecules} \hlkwb{<-} \hlkwd{PlotMolecules}\hlstd{(}\hlstr{"standardised.sdf"}\hlstd{,}
+    \hlkwc{IDs} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{1}\hlstd{,} \hlnum{2}\hlstd{,} \hlnum{3}\hlstd{,} \hlnum{4}\hlstd{),} \hlkwc{pdf.file} \hlstd{=} \hlkwa{NULL}\hlstd{,} \hlkwc{useNameAsTitle} \hlstd{=} \hlnum{TRUE}\hlstd{,}
+    \hlkwc{PDFMain} \hlstd{=} \hlkwa{NULL}\hlstd{)}
+\end{alltt}
 \begin{verbatim}
 ## [1] 1
 ## [1] 2
 ## [1] 3
 ## [1] 4
 \end{verbatim}
+\begin{alltt}
+\hlkwd{print}\hlstd{(plot_molecules[[}\hlnum{1}\hlstd{]])}
+\end{alltt}
 \end{kframe}\begin{figure}[]
 
 
