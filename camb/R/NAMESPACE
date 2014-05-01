@@ -28,6 +28,7 @@ import(
   grid,
   gridExtra,
   protr,
+  devtools,
   vegan
 )
 

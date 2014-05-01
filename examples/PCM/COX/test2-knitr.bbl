@@ -16,16 +16,119 @@
   {}
 \endgroup
 
-\entry{protr}{manual}{}
-  \name{author}{4}{}{%
+\entry{review_pcm}{article}{}
+  \name{author}{5}{}{%
     {{}%
-     {Nan}{N.}%
-     {Xiao}{X.}%
+     {Westen}{W.}%
+     {Gerard J.~P.}{G.~J.~P.}%
+     {van}{v.}%
+     {}{}}%
+    {{}%
+     {Wegner}{W.}%
+     {Jorg~K.}{J.~K.}%
      {}{}%
      {}{}}%
     {{}%
-     {Cao}{C.}%
-     {Dongsheng}{D.}%
+     {IJzerman}{I.}%
+     {Adriaan~P.}{A.~P.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Vlijmen}{V.}%
+     {Herman W.~T.}{H.~W.~T.}%
+     {van}{v.}%
+     {}{}}%
+    {{}%
+     {Bender}{B.}%
+     {A.}{A.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{publisher}{1}{%
+    {The Royal Society of Chemistry}%
+  }
+  \strng{namehash}{WGJPvWJKIAP+1}
+  \strng{fullhash}{WGJPvWJKIAPVHWTvBA1}
+  \field{issue}{1}
+  \field{pages}{16\bibrangedash 30}
+  \field{title}{Proteochemometric modeling as a tool to design selective
+  compounds and for extrapolating to novel targets}
+  \field{volume}{2}
+  \field{journaltitle}{Med. Chem. Commun.}
+  \field{year}{2011}
+\endentry
+
+\entry{cortesReview}{article}{}
+  \name{author}{11}{}{%
+    {{}%
+     {Cortes~Ciriano}{C.~C.}%
+     {Isidro}{I.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Ain}{A.}%
+     {Qurrat~U}{Q.~U.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Subramanian}{S.}%
+     {Vigneshwari}{V.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Lenselink}{L.}%
+     {Eelke~B}{E.~B.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Mendez~Lucio}{M.~L.}%
+     {Oscar}{O.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {IJzerman}{I.}%
+     {Adriaan~P}{A.~P.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Wohlfahrt}{W.}%
+     {Gerd}{G.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Prusis}{P.}%
+     {Peteris}{P.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Malli~avin}{M.~a.}%
+     {Th\'er\`ese}{T.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Westen}{W.}%
+     {Gerard~JP}{G.~J.}%
+     {van}{v.}%
+     {}{}}%
+    {{}%
+     {Bender}{B.}%
+     {Andreas}{A.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{CCIAQUSV+1}
+  \strng{fullhash}{CCIAQUSVLEBMLOIAPWGPPMaTWGJvBA1}
+  \field{title}{Polypharmacology Modelling Using Proteochemometrics: Recent
+  Developments and Future Prospects}
+  \field{journaltitle}{Med. Chem. Comm}
+  \field{year}{2014}
+\endentry
+
+\entry{protr}{manual}{}
+  \name{author}{2}{}{%
+    {{}%
+     {Xiao}{X.}%
+     {Nan}{N.}%
      {}{}%
      {}{}}%
     {{}%
@@ -33,17 +136,104 @@
      {Qingsong}{Q.}%
      {}{}%
      {}{}}%
+  }
+  \strng{namehash}{XNXQ1}
+  \strng{fullhash}{XNXQ1}
+  \field{note}{R package version 0.2-1}
+  \field{title}{protr: Protein Sequence Descriptor Calculation and Similarity
+  Computation with R}
+  \field{year}{2014}
+\endentry
+
+\entry{svmreview}{article}{}
+  \name{author}{5}{}{%
     {{}%
-     {Liang}{L.}%
-     {Yizeng}{Y.}%
+     {Ben-Hur}{B.-H.}%
+     {Asa}{A.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Ong}{O.}%
+     {Cheng~Soon}{C.~S.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Sonnenburg}{S.}%
+     {Sören}{S.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Schölkopf}{S.}%
+     {Bernhard}{B.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Rätsch}{R.}%
+     {Gunnar}{G.}%
      {}{}%
      {}{}}%
   }
-  \strng{namehash}{NX+1}
-  \strng{fullhash}{NXCDXQLY1}
-  \field{note}{R package version 0.1-0}
-  \field{title}{protr: Protein Sequence Feature Extraction with R}
-  \field{year}{2012}
+  \name{editor}{1}{}{%
+    {{}%
+     {Lewitter}{L.}%
+     {Fran}{F.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{BHAOCSSS+1}
+  \strng{fullhash}{BHAOCSSSSBRG1}
+  \field{issn}{1553-7358}
+  \field{number}{10}
+  \field{pages}{e1000173}
+  \field{title}{{Support Vector Machines and Kernels for Computational
+  Biology}}
+  \field{volume}{4}
+  \field{journaltitle}{{PLoS} Computational Biology}
+  \field{month}{10}
+  \field{year}{2008}
+\endentry
+
+\entry{rf}{article}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Breiman}{B.}%
+     {Leo}{L.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{language}{1}{%
+    {en}%
+  }
+  \strng{namehash}{BL1}
+  \strng{fullhash}{BL1}
+  \field{issn}{0885-6125, 1573-0565}
+  \field{number}{1}
+  \field{pages}{5\bibrangedash 32}
+  \field{title}{Random Forests}
+  \field{volume}{45}
+  \field{journaltitle}{Machine Learning}
+  \field{month}{10}
+  \field{year}{2001}
+\endentry
+
+\entry{gbm}{article}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Friedman}{F.}%
+     {Jerome~H.}{J.~H.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{FJH1}
+  \strng{fullhash}{FJH1}
+  \field{issn}{0090-5364, 2168-8966}
+  \field{note}{Mathematical Reviews number ({MathSciNet)} {MR1873328},
+  Zentralblatt {MATH} identifier01829052}
+  \field{number}{5}
+  \field{pages}{1189\bibrangedash 1232}
+  \field{title}{Greedy function approximation: A gradient boosting machine.}
+  \field{volume}{29}
+  \field{journaltitle}{The Annals of Statistics}
 \endentry
 
 \entry{consonni}{article}{}
@@ -67,43 +257,16 @@
   \list{language}{1}{%
     {en}%
   }
-  \keyw{external test set, Validation}
   \strng{namehash}{CVBDTR1}
   \strng{fullhash}{CVBDTR1}
-  \field{abstract}{%
-  This paper deals with the problem of evaluating the predictive ability of
-  regression models. In some cases, model validation by internal
-  cross-validation technique is not enough and validation by an external test
-  set has been suggested as an effective way of evaluating the model predictive
-  ability. Different functions for calculating the predictive squared
-  correlation coefficient Q2 from an external set were proposed, which lead to
-  occasionally different estimates of the model predictive ability and
-  therefore to contrasting decisions about model adequacy. In this paper,
-  advantages and drawbacks of these functions in estimating model predictive
-  ability from some simulated datasets are discussed by comparison. Copyright
-  © 2010 John Wiley \& Sons, Ltd.%
-  }
-  \verb{doi}
-  \verb 10.1002/cem.1290
-  \endverb
   \field{issn}{1099-{128X}}
   \field{number}{3-4}
-  \field{pages}{194–201}
+  \field{pages}{194\bibrangedash 201}
   \field{title}{{Evaluation of model predictive ability by external validation
   techniques}}
-  \verb{url}
-  \verb http://onlinelibrary.wiley.com/doi/10.1002/cem.1290/abstract
-  \endverb
   \field{volume}{24}
-  \verb{file}
-  \verb Snapshot:/Bis/home/icortes/.zotero/zotero/46f1slvv.default/zotero/stora
-  \verb ge/SUGT7MAR/abstract.html:text/html
-  \endverb
-  \field{journaltitle}{Journal of Chemometrics}
+  \field{journaltitle}{J. Chemometrics}
   \field{year}{2010}
-  \field{urlday}{04}
-  \field{urlmonth}{04}
-  \field{urlyear}{2013}
 \endentry
 
 \entry{beware}{article}{}
@@ -122,40 +285,15 @@
   \list{language}{1}{%
     {eng}%
   }
-  \keyw{Databases, Factual, Data Interpretation, Statistical, Ecdysteroids,
-  Ligands, Mathematical Computing, Models, Molecular, Quantitative
-  Structure-Activity Relationship, Receptors, Histamine H1, Steroids,
-  Transcortin}
   \strng{namehash}{GATA1}
   \strng{fullhash}{GATA1}
-  \field{abstract}{%
-  Validation is a crucial aspect of any quantitative structure-activity
-  relationship ({QSAR)} modeling. This paper examines one of the most popular
-  validation criteria, leave-one-out cross-validated R2 ({LOO} q2). Often, a
-  high value of this statistical characteristic (q2 {\textgreater} 0.5) is
-  considered as a proof of the high predictive ability of the model. In this
-  paper, we show that this assumption is generally incorrect. In the case of
-  {3D} {QSAR}, the lack of the correlation between the high {LOO} q2 and the
-  high predictive ability of a {QSAR} model has been established earlier
-  [Pharm. Acta Helv. 70 (1995) 149; J. Chemomet. 10(1996)95; J. Med. Chem. 41
-  (1998) 2553]. In this paper, we use two-dimensional ({2D)} molecular
-  descriptors and k nearest neighbors ({kNN)} {QSAR} method for the analysis of
-  several datasets. No correlation between the values of q2 for the training
-  set and predictive ability for the test set was found for any of the
-  datasets. Thus, the high value of {LOO} q2 appears to be the necessary but
-  not the sufficient condition for the model to have a high predictive power.
-  We argue that this is the general property of {QSAR} models developed using
-  {LOO} cross-validation. We emphasize that the external validation is the only
-  way to establish a reliable {QSAR} model. We formulate a set of criteria for
-  evaluation of predictive ability of {QSAR} models.%
-  }
   \field{issn}{1093-3263}
   \field{note}{{PMID:} 11858635}
   \field{number}{4}
   \field{pages}{269\bibrangedash 276}
   \field{title}{{Beware of q2!}}
   \field{volume}{20}
-  \field{journaltitle}{Journal of molecular graphics \& modelling}
+  \field{journaltitle}{J. Mol. Graph. Model.}
   \field{month}{01}
   \field{year}{2002}
 \endentry
@@ -181,49 +319,66 @@
   \list{language}{1}{%
     {en}%
   }
-  \keyw{applicability domain, model validation, {QSAR}, Structure-property
-  relationship modeling}
   \strng{namehash}{TAGPGVK1}
   \strng{fullhash}{TAGPGVK1}
-  \field{abstract}{%
-  This paper emphasizes the importance of rigorous validation as a crucial,
-  integral component of Quantitative Structure Property Relationship ({QSPR)}
-  model development. We consider some examples of published {QSPR} models,
-  which in spite of their high fitted accuracy for the training sets and
-  apparent mechanistic appeal, fail rigorous validation tests, and, thus, may
-  lack practical utility as reliable screening tools. We present a set of
-  simple guidelines for developing validated and predictive {QSPR} models. To
-  this end, we discuss several validation strategies including (1)
-  randomization of the modelled property, also called Y-scrambling, (2)
-  multiple leave-many-out cross-validations, and (3) external validation using
-  rational division of a dataset into training and test sets. We also highlight
-  the need to establish the domain of model applicability in the chemical space
-  to flag molecules for which predictions may be unreliable, and discuss some
-  algorithms that can be used for this purpose. We advocate the broad use of
-  these guidelines in the development of predictive {QSPR} models.%
-  }
-  \verb{doi}
-  \verb 10.1002/qsar.200390007
-  \endverb
   \field{issn}{1611-0218}
   \field{number}{1}
-  \field{pages}{69–77}
-  \field{shorttitle}{{The Importance of Being Earnest}}
+  \field{pages}{69\bibrangedash 77}
   \field{title}{{The Importance of Being Earnest: Validation is the Absolute
   Essential for Successful Application and Interpretation of {{QSPR}} Models}}
-  \verb{url}
-  \verb http://onlinelibrary.wiley.com/doi/10.1002/qsar.200390007/abstract
-  \endverb
   \field{volume}{22}
-  \verb{file}
-  \verb Snapshot:/Bis/home/icortes/.zotero/zotero/46f1slvv.default/zotero/stora
-  \verb ge/DWBX5BS6/abstract.html:text/html
-  \endverb
-  \field{journaltitle}{{QSAR} \& Combinatorial Science}
+  \field{journaltitle}{{QSAR} Comb. Sci.}
   \field{year}{2003}
-  \field{urlday}{04}
-  \field{urlmonth}{04}
-  \field{urlyear}{2013}
+\endentry
+
+\entry{cortesCOX}{article}{}
+  \name{author}{5}{}{%
+    {{}%
+     {Cortes-Ciriano}{C.-C.}%
+     {Isidro}{I.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Murrell}{M.}%
+     {Daniel~S}{D.~S.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Westen}{W.}%
+     {Gerard~JP}{G.~J.}%
+     {van}{v.}%
+     {}{}}%
+    {{}%
+     {Bender}{B.}%
+     {Andreas}{A.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Malliavin}{M.}%
+     {Th\'er\`ese}{T.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{CCIMDSWGJv+1}
+  \strng{fullhash}{CCIMDSWGJvBAMT1}
+  \field{title}{Ensemble Modeling of Cyclooxygenase Inhibitors}
+  \field{journaltitle}{Manuscript in Preparation}
+  \field{year}{2014}
+\endentry
+
+\entry{caretEnsemble}{article}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Mayer}{M.}%
+     {Zach}{Z.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{MZ1}
+  \strng{fullhash}{MZ1}
+  \field{title}{caret{E}nsemble: Framework for combining caret models into
+  ensembles. [R package version 1.0]}
+  \field{year}{2013}
 \endentry
 
 \lossort
