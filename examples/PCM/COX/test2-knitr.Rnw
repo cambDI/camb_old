@@ -239,8 +239,8 @@ grid.arrange(dens_resp,plot_pwd,nrow=2)
 Before any modeling attempt, it is interesting to know which is the maximum performance achievable {\it on the basis} of the available data.\\ 
 By that, we consider the experimental uncertainty and the size of our data-set. 
 In this case, a Gaussian Process (GP) model was trained in Matlab (data not shown) where the experimental uncertainty was optimized as a hyperparameter. The obtained value was 0.60.\\
-This value is in accordance with recently prublished value of 0.68 for public IC50 data.
-With the function 'MaxPerf', we can calculate the manximum achievable performance:
+This value is in accordance with recently published value of 0.68 for public IC50 data.
+With the function 'MaxPerf', we can calculate the maximum achievable performance:
 
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
 max_performance <- MaxPerf(meanNoise=0,sdNoise=0.6,meanResp=mean(bioactivity),sdResp=sd(bioactivity),lenPred=800)
@@ -269,12 +269,12 @@ compound_IDs <- dataset$chembl_id.1
 dataset <- subset(dataset,select=-eval(killset))
 @
 
-Subsequently, we split the dataset into a training (70\%) and a hold-out (external; 30\%) set that will be used to assess the predictive ability of the models. Furthermore, we remove the following descriptors: (i) those with a variance close to zero (near-zero variance), and (ii) those highly correlated:
+Subsequently, we split the dataset into training (70\%) and hold-out (external; 30\%) sets that will be used to assess the predictive ability of the models. Furthermore, we remove the following descriptors: (i) those with a variance close to zero (near-zero variance), and (ii) those highly correlated:
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
-# split the dataset into a training and holdout set
+# Split the dataset into a training and holdout set
 dataset <- SplitSet(compound_IDs, dataset, bioactivity, percentage=30)
 
-# remove the descriptors that are highly correlated or have low variance
+# Remove the descriptors that are highly correlated or have low variance
 dataset <- RemoveNearZeroVarianceFeatures(dataset,frequencyCutoff=30/1)
 dataset <- RemoveHighlyCorrelatedFeatures(dataset)
 @
@@ -284,17 +284,17 @@ We convert the descriptors to z-scores by centering them to zero mean and scalin
 dataset <- PreProcess(dataset)
 @
 
-Given that cross-validation (CV) will be used to optimize the hyperparameters of the models, we divide the training setin 5 folds:
+Given that cross-validation (CV) will be used to optimize the hyperparameters of the models, we divide the training set in 5 folds:
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
-dataset <- GetCVTrainControl(dataset,seed=1)
+dataset <- GetCVTrainControl(dataset,seed=1,folds=5,repeats=1,
+                             returnResamp='none',returnData=FALSE,
+                             savePredictions=TRUE,verboseIter=TRUE, 
+                             allowParallel=TRUE,
+                             index=createMultiFolds(y.train, k=folds, times=repeats))
 saveRDS(dataset, file="dataset_COX_preprocessed.rda")
 @
-All models are trained with the same CV options to allow ensemble modeling (see below).
-These options are:
-method='cv', number=folds, repeats=repeats, returnResamp='none',
-returnData=FALSE, savePredictions=TRUE,
-verboseIter=TRUE, allowParallel=TRUE and
-index=createMultiFolds(y.train, k=folds, times=repeats)).
+All models are trained with the same CV options, {\it i.e.} hte arguments of the function 'GetCVTrainControl' to allow ensemble modeling (see below).
+
 
 \section{Model Training}
 
@@ -401,8 +401,7 @@ R_{ext}^{2} = \frac {{\sum_{i=1}^{N} (y_{i} - \bar{y}_{ext})}  (\widetilde{y}_{i
 R_{0\:ext}^2 = 1 - \frac {\sum_{j=1}^{N} (y_{j} - \widetilde{y}_{j}^{ r0})^{2}} {\sum_{j=1}^{N} (y_{j} - \bar{y}_{ext})^{2}} 
 \end{equation}
 
-where $N$, $y_j$, $\widetilde{y}_j$, $\bar{y}_{ext}$ and $\breve{y}_j$ represent the size of the training set, the observed, the predicted, the averaged values and the fitted
-values of the response variable for those datapoints comprising the external set. The {\it j}th position within the external set is defined by {\it j}. $R_{0\:ext}^2$ is the square of the coefficient of determination through the origin, being $\widetilde{y}_{j}^{ r0} = k \widetilde{y}_j$ the regression through the origin (observed versus predicted) and $k$ its slope.\\
+where $N$, $y_j$, $\widetilde{y}_j$, $\bar{y}_{ext}$ and $\breve{y}_j$ represent the size of the training set, the observed, the predicted, and the averaged values of the response variable for those datapoints comprising the external set. The {\it j}th position within the external set is defined by {\it j}. $R_{0\:ext}^2$ is the square of the coefficient of determination through the origin, being $\widetilde{y}_{j}^{ r0} = k \widetilde{y}_j$ the regression through the origin (observed versus predicted) and $k$ its slope.\\
 For a detailed discussion of both the evaluation of the predictive ability through the external set and different formulations for $q^{2}$, see ref.\cite{consonni}. 
 To be considered as predictive, a model must satisfy the following criteria:\cite{beware,earnest}
 \\
@@ -432,13 +431,13 @@ CorrelationPlot(pred=holdout.predictions,obs=dataset$y.holdout,PointSize=3,ColMa
 
 \section{Ensemble Modeling}
 In the following section, we applied two ensemble modeling techniques, namely greedy optimization and model stacking, to create ensembles of models.
-Further information can be found in ref \cite{cortesCOX} and \cite{caretEnsemble}.
+Further information can be found in ref \cite{caretEnsemble} and \cite{caruana}.
 <<highlight=FALSE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=TRUE,echo=FALSE,message=FALSE,results='hide'>>=
 suppressWarnings(require(devtools,quietly=T,warn.conflicts=FALSE)) || stop("package devtools need to be installed")
 suppressWarnings(require(pbapply,quietly=TRUE,warn.conflicts=FALSE)) || stop("package pbapply need to be installed")
 @
 
-To get (i) the training, (ii) the external set, (iii)the transformation applied to center and scale the descriptors before model training, and (iv) the model training options, we run the following lines:
+To get (i) the training set, (ii) the external set, (iii) the transformation applied to center and scale the descriptors before model training, and (iv) the model training options, we run the following lines:
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
 data <- list()
 attach(dataset)
@@ -453,16 +452,12 @@ detach(dataset)
 @
 Subsequently, we load the models previously trained.
 The list of models is in the file modelsEnsemble.
-Once all models have been loaded, we create the following ensembled:
+Once all models have been loaded, we create the following ensemble:
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
 greedy <- caretEnsemble(all.models, iter=1000L)
 sort(greedy$weights, decreasing=TRUE)
-@
 
-Subsequently, we load the models previously trained.
-The list of models is in the file modelsEnsemble.
-<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
-  all.models <- list()
+all.models <- list()
 models <- as.vector(read.table("modelsEnsemble")$V1)
 
 for (i in 1:length(models)){
