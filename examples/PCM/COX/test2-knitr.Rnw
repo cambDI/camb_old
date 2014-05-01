@@ -64,7 +64,7 @@ library(camb)
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
 smiles <- read.table("smiles_COX.smi", header=FALSE,comment.char=c(""))
 @
-Given that some smiles contain smarts patterns where the hash symbol is present, we need to avoid switch of the argumment comment.char in order not to clip the smiles:
+Given that some smiles contain smarts patterns where the hash symbol is present, we need to avoid switch of the argument comment.char in order not to clip the smiles:
 
 <<echo=TRUE,results='hide',warning=FALSE,message=FALSE,eval=FALSE>>=
 StandardiseMolecules(structures.file="smiles_COX.smi",
@@ -87,7 +87,7 @@ head(standardised_info)
 @
 
 In this case, the criteria we chose to remove compounds (the arguments of the StandardiseMolecules function) were not really stringent, so all molecules were kept.
-This can be seen in the kept field, given that for all compounds (rows) we have a value equal to 1.\\
+This can be seen in the kept field, given that for all compounds (rows) we have a value equal to -1.\\
 Similarly, the properties of a .sdf file can be accessed witn the function:
 <<echo=TRUE,results='hide',warning=FALSE,message=FALSE,eval=FALSE>>=
 ShowPropertiesSDF("standardised.sdf",type=1)
@@ -108,10 +108,10 @@ saveRDS(descriptors, file="Padel_COX.rds")
 descriptors <- readRDS("Padel_COX.rds")
 @
 
-Sometimes, some descriptors are not calcualted for all molecules, thus giving a 'NA' or 'Inf' as descriptor values.
-Instead of removing that descriptor for all molecules, the missing descriptor values can be {\it imputed} from the corresponding descriptor values of the rest of molecules.
-To do that, 'Inf' values are converted to 'NA', and then imputed. 
-The R package impute is required. Depending on the R version, it can be accessed from either CRAN or Bioconductor.
+Sometimes, some descriptors are not calculated for all molecules, thus giving a 'NA' or 'Inf' as descriptor values.
+Instead of removing that descriptor for all molecules, the missing descriptor values can be imputed from the corresponding descriptor values of the rest of molecules.
+Descriptor values equalt to 'Inf' are converted to 'NA'.
+The R package {\it impute} is required. Depending on the R version, it can be accessed from either CRAN or Bioconductor.
 
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),eval=FALSE>>=
 descriptors <- ReplaceInfinitesWithNA(descriptors)
@@ -139,15 +139,15 @@ fps_COX_512 <- readRDS("fps_COX_512.rds")
 \section{Targets}
 
 \subsection{Read and Preprocessing}
-We read the read the amino acids from a .csv file:
+We read the amino acids from a .csv file:
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),eval=FALSE,tidy=TRUE>>=
 amino_compound_IDs <- read.table("AAs_COX.csv",sep=",",
                                  header=TRUE,colClasses=c("character"),
                                  row.names=1)
 amino_compound_IDs <- amino_compound_IDs[,2:ncol(amino_compound_IDs)]
 @
-Now, 5 Z-scales are calculates, which will serve to describe the target space in the machine learning models.
-Ensuingly, we save the descriptors in a .rds file.
+Now, 5 Z-scales are calculated, which will serve to describe the target space in the machine learning models.
+Subsequently, we save the descriptors to a .rds file.
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),eval=FALSE,tidy=TRUE>>=
 amino_compound_IDs_zscales <- AA_descs(Data=amino_compound_IDs,type="Z5")
 saveRDS(amino_compound_IDs_zscales,file="Z5_COX.rds")
@@ -158,7 +158,7 @@ amino_compound_IDs_zscales <-readRDS("Z5_COX.rds")
 @
 
 In the case that we needed whole sequence descriptors, they can be calculated with the function 'SeqDescs'. 
-The functin takes as argument either a UniProt identifier, or either a matrix or dataframe with the protein sequences.
+The function takes as argument either a UniProt identifier, or either a matrix or dataframe with the protein sequences.
 If a UniProt identifier is provided, the function gets firstly the sequence and then calculates the descriptors on the sequence.
 
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
@@ -182,8 +182,8 @@ The available types of whole sequence descriptors are:\cite{protr}
 
 \subsection{Reading the Data-set Information}
 Now, we are going to read the file with the information about the dataset, namely: target names, bioctivities, etc..
-Be careful: when reading smiles from a .csv file into an R dataframe, the smiles are clipped after a hash ('\#') symbol.
-Good practice: also keep the smiles alone in a \{.smi,.smiles\} file.
+Note that when reading smiles from a .csv file into an R dataframe, the smiles are clipped after a hash ('\#') symbol.
+A good practice is thus to also keep the smiles alone in a \{.smi,.smiles\} file.
 
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=TRUE>>=
 dataset <- readRDS("COX_dataset_info.rds")
@@ -325,9 +325,8 @@ We proceed similarly in the case of a random forest (RF) model\cite{rf}.
 
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
 method <- "rf"
-tune.grid <- expand.grid(.mtry = seq(5,100,5))
 
-modelCoxRF<- train(dataset$x.train, dataset$y.train, method, tuneGrid=tune.grid, trControl=dataset$trControl)
+modelCoxRF<- train(dataset$x.train, dataset$y.train, method, trControl=dataset$trControl)
 saveRDS(modelCoxRF, file="model_RF.rds")
 @
 Loading the RF model.
