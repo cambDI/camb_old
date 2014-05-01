@@ -24,8 +24,8 @@ caretEnsemble <- function(all.models, optFUN=NULL, ...){
   #TODO: Add progressbar argument and move optFUN to an all.models control argument
   
   #Libraries
-  require('caret')
-  require('pbapply')
+  require('caret') || stop("Pacakge 'caret' is required")
+  require('pbapply') || stop("Pacakge 'pbapply' is required")
 
   #Check the models, and make a matrix of obs and preds
   predobs <- makePredObsMatrix(all.models)

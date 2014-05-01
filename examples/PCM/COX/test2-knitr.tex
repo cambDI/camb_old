@@ -63,16 +63,16 @@
 
 \title{Proteochemometrics (PCM) with 'camb'\\
 {\bf C}hemistry {\bf A}ware {\bf M}odel {\bf B}uilder\\
-Cambridge. November 2013}
+}
 
 \author[1,3]{\rm Isidro Cortes-Ciriano\thanks{isidrolauscher@gmail.com}} 
 \author[2,3]{\rm Daniel Murrell\thanks{dsmurrell@gmail.com}}
 \affil[1]{Unite de Bioinformatique Structurale, Institut Pasteur and CNRS UMR 3825, Structural Biology and Chemistry Department, 25-28, rue Dr. Roux, 75 724 Paris, France.}
 \affil[2]{Unilever Centre for Molecular Science Informatics, Department of Chemistry, University of Cambridge, Cambridge, United Kingdom.}
-\affil[*]{Equal contributors}
-
+\affil[3]{Equal contributors}
 \setlength{\parindent}{0pt}
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+
 
 \begin{document}
 
@@ -86,15 +86,20 @@ Cambridge. November 2013}
 
 \maketitle
 
+In the following sections, we present a pipeline to generate a whole Proteochemometric (PCM) pipeline. For futher details about PCM, the interested reader is referred to ref
+\cite{review_pcm} and \cite{cortesReview}.
 Firstly, we load the package and set the working directory:
+
+
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlkwd{library}\hlstd{(camb)}
-\hlkwd{setwd}\hlstd{(}\hlstr{"/Users/icortes/Desktop/camb_final/camb/examples/COX"}\hlstd{)}
+\hlcom{# setwd('path_to_working_directory/camb/examples/COX')}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
+
 
 \section{Compounds}
 
@@ -123,7 +128,7 @@ Given that some smiles contain smarts patterns where the hash symbol is present,
 \hlkwc{bromine.limit}\hlstd{=}\hlopt{-}\hlnum{1}\hlstd{,}
 \hlkwc{iodine.limit}\hlstd{=}\hlopt{-}\hlnum{1}\hlstd{,}
 \hlkwc{min.mass.limit}\hlstd{=}\hlopt{-}\hlnum{1}\hlstd{,} \hlcom{#suggested value 20}
-\hlkwc{max.mass.limit}\hlstd{=}\hlopt{-}\hlnum{1}\hlstd{)}\hlcom{#suggested value  900)}
+\hlkwc{max.mass.limit}\hlstd{=}\hlopt{-}\hlnum{1}\hlstd{)} \hlcom{#suggested value  900)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
@@ -134,14 +139,15 @@ The properties of all molecules and the index (in the column 'kept') indicating 
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{standardised_info} \hlkwb{<-} \hlkwd{read.table}\hlstd{(}\hlstr{"standardisation_COX_info.csv"}\hlstd{,}
-    \hlkwc{header} \hlstd{=} \hlnum{TRUE}\hlstd{,} \hlkwc{sep} \hlstd{=} \hlstr{","}\hlstd{)}
+    \hlkwc{header} \hlstd{=} \hlnum{TRUE}\hlstd{,} \hlkwc{sep} \hlstd{=} \hlstr{"\textbackslash{}t"}\hlstd{)}
 \hlkwd{head}\hlstd{(standardised_info)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
 
 
-In this case, the criteria we chose to remove compounds (the arguments of the StandardiseMolecules function) were not really stringent, so all molecules were kept. This can be seen in the kept field, given that for all compounds (rows) we have a 1.\\
+In this case, the criteria we chose to remove compounds (the arguments of the StandardiseMolecules function) were not really stringent, so all molecules were kept.
+This can be seen in the kept field, given that for all compounds (rows) we have a value equal to 1.\\
 Similarly, the properties of a .sdf file can be accessed witn the function:
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -155,7 +161,7 @@ A given property can be accessed, or all of them. In the latter case, a data.fra
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{logS} \hlkwb{<-} \hlkwd{GetPropertySDF}\hlstd{(}\hlstr{"standardised.sdf"}\hlstd{,} \hlkwc{property} \hlstd{=} \hlstr{"logS"}\hlstd{,}
+\hlkwd{GetPropertySDF}\hlstd{(}\hlstr{"standardised.sdf"}\hlstd{,} \hlkwc{property} \hlstd{=} \hlstr{"property_name"}\hlstd{,}
     \hlkwc{number_processed} \hlstd{=} \hlnum{10}\hlstd{,} \hlkwc{type} \hlstd{=} \hlnum{1}\hlstd{)}
 \hlstd{all_properties} \hlkwb{<-} \hlkwd{GetPropertiesSDF}\hlstd{(}\hlstr{"standardised.sdf"}\hlstd{,} \hlkwc{number_processed} \hlstd{=} \hlnum{10}\hlstd{,}
     \hlkwc{type} \hlstd{=} \hlnum{1}\hlstd{)}
@@ -169,17 +175,20 @@ A given property can be accessed, or all of them. In the latter case, a data.fra
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{descriptors_COX} \hlkwb{<-} \hlkwd{GeneratePadelDescriptors}\hlstd{(}\hlkwc{standardised.file} \hlstd{=} \hlstr{"smiles_COX.smi"}\hlstd{,}
-    \hlkwc{threads} \hlstd{=} \hlnum{1}\hlstd{)}
-\hlstd{descriptors} \hlkwb{<-} \hlkwd{RemoveStandardisedPrefix}\hlstd{(descriptors)}
-\hlkwd{saveRDS}\hlstd{(descriptors,} \hlkwc{file} \hlstd{=} \hlstr{"descriptors.rds"}\hlstd{)}
-\hlstd{descriptors} \hlkwb{<-} \hlkwd{readRDS}\hlstd{(}\hlstr{"descriptors.rds"}\hlstd{)}
+descriptors_COX <- \hlkwd{GeneratePadelDescriptors}( +
+  standardised.file=\hlstr{"smiles_COX.smi"},threads = 1)
+descriptors <- \hlkwd{RemoveStandardisedPrefix}(descriptors)
+\hlkwd{saveRDS}(descriptors, file=\hlstr{"Padel_COX.rds"})
+descriptors <- \hlkwd{readRDS}(\hlstr{"Padel_COX.rds"})
 \end{alltt}
 \end{kframe}
 \end{knitrout}
 
 
-Sometimes, some descriptors are not calcualted for all molecules, thus giving a 'NA' or 'Inf' as descriptor values. Instead of removing that descriptor for all molecules, the missing descriptor values can be {\it imputed} from the corresponding descriptor values of the rest of molecules. To do that, 'Inf' values are converted to 'NA', and then imputed:
+Sometimes, some descriptors are not calcualted for all molecules, thus giving a 'NA' or 'Inf' as descriptor values.
+Instead of removing that descriptor for all molecules, the missing descriptor values can be {\it imputed} from the corresponding descriptor values of the rest of molecules.
+To do that, 'Inf' values are converted to 'NA', and then imputed. 
+The R package impute is required. Depending on the R version, it can be accessed from either CRAN or Bioconductor.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -192,13 +201,20 @@ Sometimes, some descriptors are not calcualted for all molecules, thus giving a 
 
 
 \subsection{Circular Morgan Fingerprints}
+The python library RDkit is required since the function 'MorganFPs' uses a python script for the calculation.
+When using integrated development environments (IDE) such as RStudio,
+the environment variables might not be seen.
+We can redefine them with the R function 'Sys.setenv'.
+In any case, the function 'MorganFPs' requires this information in the arguments 'PythonPath' and 'RDkitPath'.
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlkwd{Sys.setenv}\hlstd{(}\hlkwc{RDBASE} \hlstd{=} \hlstr{"/usr/local/share/RDKit"}\hlstd{)}
 \hlkwd{Sys.setenv}\hlstd{(}\hlkwc{PYTHONPATH} \hlstd{=} \hlstr{"/usr/local/lib/python2.7/site-packages"}\hlstd{)}
 \hlstd{fps_COX_512} \hlkwb{<-} \hlkwd{MorganFPs}\hlstd{(}\hlkwc{bits} \hlstd{=} \hlnum{512}\hlstd{,} \hlkwc{radius} \hlstd{=} \hlnum{2}\hlstd{,} \hlkwc{type} \hlstd{=} \hlstr{"smi"}\hlstd{,}
-    \hlkwc{mols} \hlstd{=} \hlstr{"smiles_COX.smi"}\hlstd{,} \hlkwc{output} \hlstd{=} \hlstr{"COX"}\hlstd{,} \hlkwc{keep} \hlstd{=} \hlstr{"hashed_counts"}\hlstd{)}
+    \hlkwc{mols} \hlstd{=} \hlstr{"smiles_COX.smi"}\hlstd{,} \hlkwc{output} \hlstd{=} \hlstr{"COX"}\hlstd{,} \hlkwc{keep} \hlstd{=} \hlstr{"hashed_counts"}\hlstd{,}
+    \hlkwc{RDkitPath} \hlstd{=} \hlstr{"/usr/local/share/RDKit"}\hlstd{,} \hlkwc{PythonPath} \hlstd{=} \hlstr{"/usr/local/lib/python2.7/site-packages"}\hlstd{,}
+    \hlkwc{verbose} \hlstd{=} \hlnum{TRUE}\hlstd{)}
 \hlkwd{saveRDS}\hlstd{(fps_COX_512,} \hlkwc{file} \hlstd{=} \hlstr{"fps_COX_512.rds"}\hlstd{)}
 \hlstd{fps_COX_512} \hlkwb{<-} \hlkwd{readRDS}\hlstd{(}\hlstr{"fps_COX_512.rds"}\hlstd{)}
 \end{alltt}
@@ -213,37 +229,38 @@ We read the read the amino acids from a .csv file:
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{amino_accompound_compound_IDs} \hlkwb{<-} \hlkwd{read.table}\hlstd{(}\hlstr{"AAs_COX.csv"}\hlstd{,}
-    \hlkwc{sep} \hlstd{=} \hlstr{","}\hlstd{,} \hlkwc{header} \hlstd{=} \hlnum{TRUE}\hlstd{,} \hlkwc{colClasses} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{"character"}\hlstd{),}
-    \hlkwc{row.names} \hlstd{=} \hlnum{1}\hlstd{)}
-\hlstd{amino_accompound_IDs} \hlkwb{<-} \hlstd{amino_accompound_IDs[,} \hlnum{2}\hlopt{:}\hlkwd{ncol}\hlstd{(amino_accompound_IDs)]}
+\hlstd{amino_compound_IDs} \hlkwb{<-} \hlkwd{read.table}\hlstd{(}\hlstr{"AAs_COX.csv"}\hlstd{,} \hlkwc{sep} \hlstd{=} \hlstr{","}\hlstd{,}
+    \hlkwc{header} \hlstd{=} \hlnum{TRUE}\hlstd{,} \hlkwc{colClasses} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{"character"}\hlstd{),} \hlkwc{row.names} \hlstd{=} \hlnum{1}\hlstd{)}
+\hlstd{amino_compound_IDs} \hlkwb{<-} \hlstd{amino_compound_IDs[,} \hlnum{2}\hlopt{:}\hlkwd{ncol}\hlstd{(amino_compound_IDs)]}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
 
-
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hlstd{amino_accompound_IDs_zscales} \hlkwb{<-} \hlkwd{AA_descs}\hlstd{(}\hlkwc{Data} \hlstd{= amino_accompound_IDs,}
-    \hlkwc{type} \hlstd{=} \hlstr{"Z3"}\hlstd{)}
-\end{alltt}
-\end{kframe}
-\end{knitrout}
-
-
+Now, 5 Z-scales are calculates, which will serve to describe the target space in the machine learning models.
 Ensuingly, we save the descriptors in a .rds file.
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlcom{# saveRDS(amino_accompound_IDs_zscales,file='Z3_COX.rds')}
-\hlstd{amino_accompound_IDs_zscales} \hlkwb{<-} \hlkwd{readRDS}\hlstd{(}\hlstr{"Z3_COX.rds"}\hlstd{)}
+\hlstd{amino_compound_IDs_zscales} \hlkwb{<-} \hlkwd{AA_descs}\hlstd{(}\hlkwc{Data} \hlstd{= amino_compound_IDs,}
+    \hlkwc{type} \hlstd{=} \hlstr{"Z5"}\hlstd{)}
+\hlkwd{saveRDS}\hlstd{(amino_compound_IDs_zscales,} \hlkwc{file} \hlstd{=} \hlstr{"Z5_COX.rds"}\hlstd{)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
 
 
-In the case that we needed whole sequence descriptors, they can be calculated with the function 'SeqDescs'. The functin takes as argument either a UniProt identifier, or a \{matrix, dataframe\} with the protein sequences. If a UniProt identifier is provided, the function gets firstly the sequence and then calculates the descriptors on the sequence.
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{amino_compound_IDs_zscales} \hlkwb{<-} \hlkwd{readRDS}\hlstd{(}\hlstr{"Z5_COX.rds"}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+In the case that we needed whole sequence descriptors, they can be calculated with the function 'SeqDescs'. 
+The functin takes as argument either a UniProt identifier, or either a matrix or dataframe with the protein sequences.
+If a UniProt identifier is provided, the function gets firstly the sequence and then calculates the descriptors on the sequence.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -254,41 +271,25 @@ In the case that we needed whole sequence descriptors, they can be calculated wi
 \end{kframe}
 \end{knitrout}
 
-The available types of descriptor are:\cite{protr}
-- Amino Acid Composition ("AAC")\\
-- Dipeptide Composition ("DC")\\
-- Tripeptide Composition ("TC")\\
-- Normalized Moreau-Broto Autocorrelation ("MoreauBroto")\\
-- Moran Autocorrelation ("Moran")\\
-- Geary Autocorrelation ("Geary")\\
-- CTD (Composition/Transition/Distribution) ("CTD")\\
-- Conjoint Traid ("CTriad")\\
-- Sequence Order Coupling Number ("SOCN")\\
-- Quasi-sequence Order Descriptors ("QSO")\\
-- Pseudo Amino Acid Composition ("PACC")\\
-- Amphiphilic Pseudo Amino Acid Composition ("APAAC")\\
-
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hlstd{Seq_descriptors_P00374} \hlkwb{<-} \hlkwd{SeqDescs}\hlstd{(}\hlstr{"P00374"}\hlstd{)}
-\end{alltt}
-
-
-{\ttfamily\noindent\color{warningcolor}{\#\# Warning: cannot open: HTTP status was '407 Proxy Authentication Required'}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: cannot open the connection}}\begin{alltt}
-\hlstd{Seq_descriptors_P00374}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'Seq\_descriptors\_P00374' not found}}\end{kframe}
-\end{knitrout}
-
+The available types of whole sequence descriptors are:\cite{protr}
+\begin{itemize}
+\item Amino Acid Composition ("AAC")\\
+\item Dipeptide Composition ("DC")\\
+\item Tripeptide Composition ("TC")\\
+\item Normalized Moreau-Broto Autocorrelation ("MoreauBroto")\\
+\item Moran Autocorrelation ("Moran")\\
+\item Geary Autocorrelation ("Geary")\\
+\item  CTD (Composition/Transition/Distribution) ("CTD")\\
+\item Conjoint Traid ("CTriad")\\
+\item Sequence Order Coupling Number ("SOCN")\\
+\item Quasi-sequence Order Descriptors ("QSO")\\
+\item Pseudo Amino Acid Composition ("PACC")\\
+\item Amphiphilic Pseudo Amino Acid Composition ("APAAC")\\
+\end{itemize}
 
 \subsection{Reading the Data-set Information}
 Now, we are going to read the file with the information about the dataset, namely: target names, bioctivities, etc..
-Be careful: when reading smiles from a .csv file into an R dataframe, the smils are clipped after a hash ('\#') symbol.
+Be careful: when reading smiles from a .csv file into an R dataframe, the smiles are clipped after a hash ('\#') symbol.
 Good practice: also keep the smiles alone in a \{.smi,.smiles\} file.
 
 \begin{knitrout}
@@ -313,12 +314,16 @@ The bioactivity is in nM. We convert it to pIC50:
 
 \section{Data-set Visualization}
 Compounds can be depicted with the function 'PlotMolecules'. It returns a list of four plots, and plots can also be written into a .pdf file.
+
+
+
+
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{plot_molecules} \hlkwb{<-} \hlkwd{PlotMolecules}\hlstd{(}\hlstr{"standardised.sdf"}\hlstd{,}
-    \hlkwc{IDs} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{1}\hlstd{,} \hlnum{2}\hlstd{,} \hlnum{3}\hlstd{,} \hlnum{4}\hlstd{),} \hlkwc{pdf.file} \hlstd{=} \hlstr{"test_comp_visualization.pdf"}\hlstd{,}
-    \hlkwc{useNameAsTitle} \hlstd{=} \hlnum{TRUE}\hlstd{,} \hlkwc{PDFMain} \hlstd{=} \hlkwa{NULL}\hlstd{)}
+    \hlkwc{IDs} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{1}\hlstd{,} \hlnum{2}\hlstd{,} \hlnum{3}\hlstd{,} \hlnum{4}\hlstd{),} \hlkwc{pdf.file} \hlstd{=} \hlkwa{NULL}\hlstd{,} \hlkwc{useNameAsTitle} \hlstd{=} \hlnum{TRUE}\hlstd{,}
+    \hlkwc{PDFMain} \hlstd{=} \hlkwa{NULL}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
 ## [1] 1
@@ -327,16 +332,16 @@ Compounds can be depicted with the function 'PlotMolecules'. It returns a list o
 ## [1] 4
 \end{verbatim}
 \begin{alltt}
-\hlstd{plot_molecules[[}\hlnum{1}\hlstd{]]}
+\hlkwd{print}\hlstd{(plot_molecules[[}\hlnum{1}\hlstd{]])}
 \end{alltt}
 \end{kframe}\begin{figure}[]
 
 
-{\centering \includegraphics[width=12cm]{figure/unnamed-chunk-19} 
+{\centering \includegraphics[width=12cm]{figure/unnamed-chunk-20} 
 
 }
 
-\caption[Example of compoud depiction]{Example of compoud depiction.\label{fig:unnamed-chunk-19}}
+\caption[Example of compoud depiction]{Example of compoud depiction.\label{fig:unnamed-chunk-20}}
 \end{figure}
 
 
@@ -348,9 +353,9 @@ We can have a look at the response variable:
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{dens_resp} \hlkwb{<-} \hlkwd{DensityResponse}\hlstd{(bioactivity,} \hlkwc{xlab} \hlstd{=} \hlstr{"pIC50"}\hlstd{,}
-    \hlkwc{main} \hlstd{=} \hlstr{""}\hlstd{,} \hlkwc{ylab} \hlstd{=} \hlstr{"Densitiy"}\hlstd{,} \hlkwc{TitleSize} \hlstd{=} \hlnum{26}\hlstd{,} \hlkwc{XAxisSize} \hlstd{=} \hlnum{20}\hlstd{,}
-    \hlkwc{YAxisSize} \hlstd{=} \hlnum{20}\hlstd{,} \hlkwc{TitleAxesSize} \hlstd{=} \hlnum{24}\hlstd{,} \hlkwc{AngleLab} \hlstd{=} \hlnum{0}\hlstd{,}
-    \hlkwc{lmar} \hlstd{=} \hlnum{0}\hlstd{,} \hlkwc{rmar} \hlstd{=} \hlnum{0}\hlstd{,} \hlkwc{bmar} \hlstd{=} \hlnum{0}\hlstd{,} \hlkwc{tmar} \hlstd{=} \hlnum{0}\hlstd{)}
+    \hlkwc{main} \hlstd{=} \hlstr{""}\hlstd{,} \hlkwc{ylab} \hlstd{=} \hlstr{"Densitiy"}\hlstd{,} \hlkwc{TitleSize} \hlstd{=} \hlnum{30}\hlstd{,} \hlkwc{XAxisSize} \hlstd{=} \hlnum{22}\hlstd{,}
+    \hlkwc{YAxisSize} \hlstd{=} \hlnum{22}\hlstd{,} \hlkwc{TitleAxesSize} \hlstd{=} \hlnum{24}\hlstd{,} \hlkwc{AngleLab} \hlstd{=} \hlnum{0}\hlstd{,}
+    \hlkwc{lmar} \hlstd{=} \hlnum{0}\hlstd{,} \hlkwc{rmar} \hlstd{=} \hlnum{0}\hlstd{,} \hlkwc{bmar} \hlstd{=} \hlnum{0}\hlstd{,} \hlkwc{tmar} \hlstd{=} \hlnum{0}\hlstd{,} \hlkwc{binwidth} \hlstd{=} \hlnum{0.3}\hlstd{)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
@@ -360,33 +365,14 @@ Plotting a PCA analysis of the target descriptors gives:
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{target_PCA} \hlkwb{<-} \hlkwd{PCAProt}\hlstd{(amino_accompound_IDs_zscales,}
-    \hlkwc{SeqsName} \hlstd{= dataset}\hlopt{$}\hlstd{accession)}
-\hlstd{plot_PCA_Cox} \hlkwb{<-} \hlkwd{PCAProtPlot}\hlstd{(target_PCA,} \hlkwc{PointSize} \hlstd{=} \hlnum{8}\hlstd{,}
-    \hlkwc{main} \hlstd{=} \hlstr{""}\hlstd{,} \hlkwc{TitleSize} \hlstd{=} \hlnum{26}\hlstd{,} \hlkwc{XAxisSize} \hlstd{=} \hlnum{20}\hlstd{,} \hlkwc{YAxisSize} \hlstd{=} \hlnum{20}\hlstd{,}
-    \hlkwc{TitleAxesSize} \hlstd{=} \hlnum{24}\hlstd{,} \hlkwc{LegendPosition} \hlstd{=} \hlstr{"bottom"}\hlstd{,}
-    \hlkwc{RowLegend} \hlstd{=} \hlnum{2}\hlstd{,} \hlkwc{ColLegend} \hlstd{=} \hlnum{6}\hlstd{,} \hlkwc{LegendTitleSize} \hlstd{=} \hlnum{10}\hlstd{,}
-    \hlkwc{LegendTextSize} \hlstd{=} \hlnum{10}\hlstd{)}
+\hlstd{target_PCA} \hlkwb{<-} \hlkwd{PCAProt}\hlstd{(amino_compound_IDs_zscales,} \hlkwc{SeqsName} \hlstd{= dataset}\hlopt{$}\hlstd{accession)}
+\hlstd{plot_PCA_Cox} \hlkwb{<-} \hlkwd{PCAProtPlot}\hlstd{(target_PCA,} \hlkwc{PointSize} \hlstd{=} \hlnum{10}\hlstd{,}
+    \hlkwc{main} \hlstd{=} \hlstr{""}\hlstd{,} \hlkwc{TitleSize} \hlstd{=} \hlnum{30}\hlstd{,} \hlkwc{XAxisSize} \hlstd{=} \hlnum{20}\hlstd{,} \hlkwc{YAxisSize} \hlstd{=} \hlnum{20}\hlstd{,}
+    \hlkwc{TitleAxesSize} \hlstd{=} \hlnum{28}\hlstd{,} \hlkwc{LegendPosition} \hlstd{=} \hlstr{"bottom"}\hlstd{,}
+    \hlkwc{RowLegend} \hlstd{=} \hlnum{3}\hlstd{,} \hlkwc{ColLegend} \hlstd{=} \hlnum{5}\hlstd{,} \hlkwc{LegendTitleSize} \hlstd{=} \hlnum{15}\hlstd{,}
+    \hlkwc{LegendTextSize} \hlstd{=} \hlnum{15}\hlstd{)}
 \end{alltt}
-\begin{verbatim}
-## [1] "Sequence names provided in the third column of the data.frame"
-\end{verbatim}
-\begin{alltt}
-\hlstd{plot_PCA_Cox}
-\end{alltt}
-\end{kframe}\begin{figure}[]
-
-
-{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-21} 
-
-}
-
-\caption[PCA Analysis on the
-Amino Acid Descriptors]{PCA Analysis on the
-Amino Acid Descriptors\label{fig:unnamed-chunk-21}}
-\end{figure}
-
-
+\end{kframe}
 \end{knitrout}
 
 
@@ -394,14 +380,8 @@ Similarly, we can analyze the chemical space by calculating pairwise compound si
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlcom{# pw_dist_comp_fps <-}
-\hlcom{# PairwiseDist(fps_COX_512,method='jaccard')}
-\hlcom{# saveRDS(pw_dist_comp_fps,file='pairwise_dist_COX.rds')}
-\hlstd{pw_dist_comp_fps} \hlkwb{<-} \hlkwd{readRDS}\hlstd{(}\hlstr{"pairwise_dist_COX.rds"}\hlstd{)}
-\hlstd{plot_pwd} \hlkwb{<-} \hlkwd{PairwiseDistPlot}\hlstd{(pw_dist_comp_fps,} \hlkwc{xlab} \hlstd{=} \hlstr{"Jaccard Similarity"}\hlstd{,}
-    \hlkwc{ylab} \hlstd{=} \hlstr{"Density"}\hlstd{,} \hlkwc{TitleSize} \hlstd{=} \hlnum{26}\hlstd{,} \hlkwc{XAxisSize} \hlstd{=} \hlnum{20}\hlstd{,}
-    \hlkwc{YAxisSize} \hlstd{=} \hlnum{20}\hlstd{,} \hlkwc{TitleAxesSize} \hlstd{=} \hlnum{24}\hlstd{,} \hlkwc{lmar} \hlstd{=} \hlnum{0}\hlstd{,} \hlkwc{rmar} \hlstd{=} \hlnum{0}\hlstd{,}
-    \hlkwc{bmar} \hlstd{=} \hlnum{0}\hlstd{,} \hlkwc{tmar} \hlstd{=} \hlnum{0}\hlstd{)}
+\hlstd{pw_dist_comp_fps} \hlkwb{<-} \hlkwd{PairwiseDist}\hlstd{(fps_COX_512,} \hlkwc{method} \hlstd{=} \hlstr{"jaccard"}\hlstd{)}
+\hlkwd{saveRDS}\hlstd{(pw_dist_comp_fps,} \hlkwc{file} \hlstd{=} \hlstr{"pairwise_dist_COX.rds"}\hlstd{)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
@@ -410,17 +390,29 @@ Similarly, we can analyze the chemical space by calculating pairwise compound si
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{library}\hlstd{(ggplot2)}
+\hlstd{pw_dist_comp_fps} \hlkwb{<-} \hlkwd{readRDS}\hlstd{(}\hlstr{"pairwise_dist_COX.rds"}\hlstd{)}
+\hlstd{plot_pwd} \hlkwb{<-} \hlkwd{PairwiseDistPlot}\hlstd{(pw_dist_comp_fps,} \hlkwc{xlab} \hlstd{=} \hlstr{"Jaccard Similarity"}\hlstd{,}
+    \hlkwc{ylab} \hlstd{=} \hlstr{"Density"}\hlstd{,} \hlkwc{TitleSize} \hlstd{=} \hlnum{26}\hlstd{,} \hlkwc{XAxisSize} \hlstd{=} \hlnum{20}\hlstd{,}
+    \hlkwc{YAxisSize} \hlstd{=} \hlnum{20}\hlstd{,} \hlkwc{TitleAxesSize} \hlstd{=} \hlnum{24}\hlstd{,} \hlkwc{lmar} \hlstd{=} \hlnum{0}\hlstd{,} \hlkwc{rmar} \hlstd{=} \hlnum{0}\hlstd{,}
+    \hlkwc{bmar} \hlstd{=} \hlnum{0}\hlstd{,} \hlkwc{tmar} \hlstd{=} \hlnum{0}\hlstd{,} \hlkwc{AngleLab} \hlstd{=} \hlnum{0}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
 \hlkwd{grid.arrange}\hlstd{(dens_resp, plot_pwd,} \hlkwc{nrow} \hlstd{=} \hlnum{2}\hlstd{)}
 \end{alltt}
 \end{kframe}\begin{figure}[]
 
 
-{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-23} 
+{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-25} 
 
 }
 
-\caption[Density of the response variable (left)]{Density of the response variable (left). Pairwise Compound Jaccard Similarity (right)\label{fig:unnamed-chunk-23}}
+\caption[Density of the response variable (upper panel)]{Density of the response variable (upper panel). Pairwise Compound Jaccard Similarity (bottom pannel)\label{fig:unnamed-chunk-25}}
 \end{figure}
 
 
@@ -519,12 +511,18 @@ Given that cross-validation (CV) will be used to optimize the hyperparameters of
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{dataset} \hlkwb{<-} \hlkwd{GetCVTrainControl}\hlstd{(dataset)}
+\hlstd{dataset} \hlkwb{<-} \hlkwd{GetCVTrainControl}\hlstd{(dataset,} \hlkwc{seed} \hlstd{=} \hlnum{1}\hlstd{)}
 \hlkwd{saveRDS}\hlstd{(dataset,} \hlkwc{file} \hlstd{=} \hlstr{"dataset_COX_preprocessed.rda"}\hlstd{)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
 
+All models are trained with the same CV options to allow ensemble modeling (see below).
+These options are:
+method='cv', number=folds, repeats=repeats, returnResamp='none',
+returnData=FALSE, savePredictions=TRUE,
+verboseIter=TRUE, allowParallel=TRUE and
+index=createMultiFolds(y.train, k=folds, times=repeats)).
 
 \section{Model Training}
 
@@ -532,21 +530,16 @@ Given that cross-validation (CV) will be used to optimize the hyperparameters of
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{dataset} \hlkwb{<-} \hlkwd{readRDS}\hlstd{(}\hlstr{"dataset_COX_preprocessed.rda"}\hlstd{)}
-\hlcom{# Set the number of cores for parallelization of}
-\hlcom{# the training}
-\hlkwd{library}\hlstd{(doMC)}
-\end{alltt}
-
-
-{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Loading required package: iterators}}\begin{alltt}
-\hlkwd{registerDoMC}\hlstd{(}\hlkwc{cores} \hlstd{=} \hlnum{4}\hlstd{)}  \hlcom{#from the package 'doMC'}
+\hlcom{# Number of cores to be used during model training}
+\hlstd{cores} \hlkwb{<-} \hlnum{3}
+\hlkwd{registerDoMC}\hlstd{(cores)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
 
 
 \subsection{Support Vector Machines (SVM)}
-Firstly, a SVM will be trained. We define an exponential grid (base 2) to optimize the hyperparameters:
+Firstly, a SVM will be trained\cite{svmreview}. We define an exponential grid (base 2) to optimize the hyperparameters:
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -564,70 +557,90 @@ Training:
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlcom{# modelCoxSVMrad <- train(dataset$x.train,}
-\hlcom{# dataset$y.train, method, tuneGrid=tune.grid,}
-\hlcom{# trControl=dataset$trControl)}
-\hlcom{# saveRDS(modelCoxSVMrad, file='svm_model_COX.rds')}
-\hlstd{modelCoxSVMrad} \hlkwb{<-} \hlkwd{readRDS}\hlstd{(}\hlstr{"COXsvm.rds"}\hlstd{)}
+\hlstd{modelCoxSVMrad} \hlkwb{<-} \hlkwd{train}\hlstd{(dataset}\hlopt{$}\hlstd{x.train, dataset}\hlopt{$}\hlstd{y.train,}
+    \hlstd{method,} \hlkwc{tuneGrid} \hlstd{= tune.grid,} \hlkwc{trControl} \hlstd{= dataset}\hlopt{$}\hlstd{trControl)}
+\hlkwd{saveRDS}\hlstd{(modelCoxSVMrad,} \hlkwc{file} \hlstd{=} \hlstr{"model_SVM.rds"}\hlstd{)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
 
 
 \subsection{Random Forest}
-We proceed similarly in the case of a random forest model.
+We proceed similarly in the case of a random forest (RF) model\cite{rf}.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{method} \hlkwb{<-} \hlstr{"rf"}
-\hlstd{tune.grid} \hlkwb{<-} \hlkwd{expand.grid}\hlstd{(}\hlkwc{.mtry} \hlstd{=} \hlkwd{seq}\hlstd{(}\hlnum{5}\hlstd{,} \hlnum{100}\hlstd{,} \hlnum{5}\hlstd{))}
 
-\hlcom{# modelCoxRF<- train(dataset$x.train,}
-\hlcom{# dataset$y.train, method, tuneGrid=tune.grid,}
-\hlcom{# trControl=dataset$trControl) saveRDS(modelCoxRF,}
-\hlcom{# file='rf_model_COX.rds')}
-\hlstd{modelCoxRF} \hlkwb{<-} \hlkwd{readRDS}\hlstd{(}\hlstr{"COXrf.rds"}\hlstd{)}
+\hlstd{modelCoxRF} \hlkwb{<-} \hlkwd{train}\hlstd{(dataset}\hlopt{$}\hlstd{x.train, dataset}\hlopt{$}\hlstd{y.train,}
+    \hlstd{method,} \hlkwc{trControl} \hlstd{= dataset}\hlopt{$}\hlstd{trControl)}
+\hlkwd{saveRDS}\hlstd{(modelCoxRF,} \hlkwc{file} \hlstd{=} \hlstr{"model_RF.rds"}\hlstd{)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
+
+Loading the RF model.
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{verbatim}
+modelCoxRF <- readRDS("model_RF.rds")
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+\subsection{Gradient Boosting Machine}
+We proceed similarly in the case of a gradient boosting machine (GBM) model\cite{gbm}.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{method} \hlkwb{<-} \hlstr{"gbm"}
+\hlstd{tune.grid} \hlkwb{<-} \hlkwd{expand.grid}\hlstd{(}\hlkwc{.shrinkage} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{0.04}\hlstd{,} \hlnum{0.08}\hlstd{,}
+    \hlnum{0.12}\hlstd{,} \hlnum{0.16}\hlstd{),} \hlkwc{.n.trees} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{500}\hlstd{),} \hlkwc{.interaction.depth} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{25}\hlstd{))}
+\hlstd{modelCoxGBM} \hlkwb{<-} \hlkwd{train}\hlstd{(dataset}\hlopt{$}\hlstd{x.train, dataset}\hlopt{$}\hlstd{y.train,}
+    \hlstd{method,} \hlkwc{tuneGrid} \hlstd{= tune.grid,} \hlkwc{trControl} \hlstd{= dataset}\hlopt{$}\hlstd{trControl)}
+\hlkwd{saveRDS}\hlstd{(modelCoxGBM,} \hlkwc{file} \hlstd{=} \hlstr{"model_GBM.rds"}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
 
 
 \section{Model Evaluation}
 
 Once the models are trained, the cross validated metrics can be calculated:
+We assume the metric used for the choice of the best combination of hyperparameters is 'RMSE'.
+In the following we focus on the RF model, though the same can be applied to the GBM and SVM models.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlcom{# Cross Validation Metrics.  We assume the metric}
-\hlcom{# used for the choice of the best combination of}
-\hlcom{# hyperparameters is 'RMSE'.  This can be checked}
-\hlcom{# by: 'my_model'$metric}
-\hlstd{RMSE_CV} \hlkwb{=} \hlkwd{signif}\hlstd{(}\hlkwd{min}\hlstd{(}\hlkwd{as.vector}\hlstd{(}\hlkwd{na.omit}\hlstd{(modelCoxRF}\hlopt{$}\hlstd{results}\hlopt{$}\hlstd{RMSE))),}
+\hlstd{RMSE_CV_rf} \hlkwb{=} \hlkwd{signif}\hlstd{(}\hlkwd{min}\hlstd{(}\hlkwd{as.vector}\hlstd{(}\hlkwd{na.omit}\hlstd{(modelCoxRF}\hlopt{$}\hlstd{results}\hlopt{$}\hlstd{RMSE))),}
     \hlkwc{digits} \hlstd{=} \hlnum{3}\hlstd{)}
-\hlstd{Rsquared_CV} \hlkwb{=} \hlstd{modelCoxRF}\hlopt{$}\hlstd{results}\hlopt{$}\hlstd{Rsquared[}\hlkwd{which}\hlstd{(modelCoxRF}\hlopt{$}\hlstd{results}\hlopt{$}\hlstd{RMSE} \hlopt{%in%}
+\hlstd{Rsquared_CV_rf} \hlkwb{=} \hlstd{modelCoxRF}\hlopt{$}\hlstd{results}\hlopt{$}\hlstd{Rsquared[}\hlkwd{which}\hlstd{(modelCoxRF}\hlopt{$}\hlstd{results}\hlopt{$}\hlstd{RMSE} \hlopt{%in%}
     \hlkwd{min}\hlstd{(modelCoxRF}\hlopt{$}\hlstd{results}\hlopt{$}\hlstd{RMSE,} \hlkwc{na.rm} \hlstd{=} \hlnum{TRUE}\hlstd{))]}
-\hlkwd{print}\hlstd{(RMSE_CV)}
+\hlkwd{print}\hlstd{(RMSE_CV_rf)}
 \end{alltt}
 \begin{verbatim}
-## [1] 0.78
+## [1] 0.775
 \end{verbatim}
 \begin{alltt}
-\hlkwd{print}\hlstd{(Rsquared_CV)}
+\hlkwd{print}\hlstd{(Rsquared_CV_rf)}
 \end{alltt}
 \begin{verbatim}
-## [1] 0.5834
+## [1] 0.5914
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
 
 
-On the basis of the soundness of the obtained models, we predict the values for the hod-out set:
+On the basis of the soundness of the obtained models, we predict the values for the external (hold-out) set:
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{holdout.predictions} \hlkwb{<-} \hlkwd{as.vector}\hlstd{(}\hlkwd{predict}\hlstd{(modelCoxRF,}
+\hlstd{holdout.predictions} \hlkwb{<-} \hlkwd{as.vector}\hlstd{(}\hlkwd{predict}\hlstd{(modelCoxRF}\hlopt{$}\hlstd{finalModel,}
     \hlkwc{newdata} \hlstd{= dataset}\hlopt{$}\hlstd{x.holdout))}
 \end{alltt}
 \end{kframe}
@@ -682,37 +695,20 @@ To be considered as predictive, a model must satisfy the following criteria:\cit
 \item $0.85 \leq k \leq 1.15$
 \end{enumerate}
 
-The metrics for the external validatin are given by:
+The metrics for the external validation are given by:
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{MetricsRf} \hlkwb{<-} \hlkwd{Validation}\hlstd{(holdout.predictions, dataset}\hlopt{$}\hlstd{y.holdout)}
-\hlstd{MetricsRf}
 \end{alltt}
-\begin{verbatim}
-## $R2
-## [1] 0.6073
-## 
-## $R02
-## [1] 0.602
-## 
-## $Q2
-## [1] 0.5998
-## 
-## $RMSE
-## [1] 0.7675
-## 
-## $Slope
-## [1] 0.9906
-## 
-## $MAE
-## [1] 0.5851
-\end{verbatim}
 \end{kframe}
 \end{knitrout}
 
 
 To have a look at the correlation between predicted and observed values, we can use the 'CorrelationPlot' function:
+
+
+
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -721,21 +717,158 @@ To have a look at the correlation between predicted and observed values, we can 
     \hlkwc{PointSize} \hlstd{=} \hlnum{3}\hlstd{,} \hlkwc{ColMargin} \hlstd{=} \hlstr{"blue"}\hlstd{,} \hlkwc{TitleSize} \hlstd{=} \hlnum{26}\hlstd{,}
     \hlkwc{XAxisSize} \hlstd{=} \hlnum{20}\hlstd{,} \hlkwc{YAxisSize} \hlstd{=} \hlnum{20}\hlstd{,} \hlkwc{TitleAxesSize} \hlstd{=} \hlnum{24}\hlstd{,}
     \hlkwc{margin} \hlstd{=} \hlnum{2}\hlstd{,} \hlkwc{PointColor} \hlstd{=} \hlstr{"black"}\hlstd{,} \hlkwc{PointShape} \hlstd{=} \hlnum{16}\hlstd{,}
-    \hlkwc{MarginWidth} \hlstd{=} \hlnum{1.5}\hlstd{)}
+    \hlkwc{MarginWidth} \hlstd{=} \hlnum{1}\hlstd{,} \hlkwc{AngleLab} \hlstd{=} \hlnum{0}\hlstd{,} \hlkwc{xlab} \hlstd{=} \hlstr{"Observed"}\hlstd{,}
+    \hlkwc{ylab} \hlstd{=} \hlstr{"Predicted"}\hlstd{)}
 \end{alltt}
 \end{kframe}\begin{figure}[]
 
 
-{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-38} 
+{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-43} 
 
 }
 
-\caption[Predicted vs Observed]{Predicted vs Observed\label{fig:unnamed-chunk-38}}
+\caption[Observed vs Predicted]{Observed vs Predicted\label{fig:unnamed-chunk-43}}
 \end{figure}
 
 
 \end{knitrout}
 
+
+\section{Ensemble Modeling}
+In the following section, we applied two ensemble modeling techniques, namely greedy optimization and model stacking, to create ensembles of models.
+Further information can be found in ref \cite{cortesCOX} and \cite{caretEnsemble}.
+
+
+
+To get (i) the training, (ii) the external set, (iii)the transformation applied to center and scale the descriptors before model training, and (iv) the model training options, we run the following lines:
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{data} \hlkwb{<-} \hlkwd{list}\hlstd{()}
+\hlkwd{attach}\hlstd{(dataset)}
+\hlstd{data}\hlopt{$}\hlstd{transformation} \hlkwb{<-} \hlstd{transformation}
+\hlstd{data}\hlopt{$}\hlstd{x.train} \hlkwb{<-} \hlstd{x.train}
+\hlstd{data}\hlopt{$}\hlstd{y.train} \hlkwb{<-} \hlstd{y.train}
+\hlstd{data}\hlopt{$}\hlstd{x.test} \hlkwb{<-} \hlstd{x.holdout}  \hlcom{# external set}
+\hlstd{data}\hlopt{$}\hlstd{y.test} \hlkwb{<-} \hlstd{y.holdout}  \hlcom{# external set}
+\hlstd{data}\hlopt{$}\hlstd{trControl} \hlkwb{<-} \hlstd{trControl}
+\hlkwd{saveRDS}\hlstd{(data,} \hlkwc{file} \hlstd{=} \hlstr{"data_ensemble.rds"}\hlstd{)}
+\hlkwd{detach}\hlstd{(dataset)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+Subsequently, we load the models previously trained.
+The list of models is in the file modelsEnsemble.
+Once all models have been loaded, we create the following ensembled:
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{greedy} \hlkwb{<-} \hlkwd{caretEnsemble}\hlstd{(all.models,} \hlkwc{iter} \hlstd{=} \hlnum{1000L}\hlstd{)}
+\hlkwd{sort}\hlstd{(greedy}\hlopt{$}\hlstd{weights,} \hlkwc{decreasing} \hlstd{=} \hlnum{TRUE}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+Subsequently, we load the models previously trained.
+The list of models is in the file modelsEnsemble.
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{all.models} \hlkwb{<-} \hlkwd{list}\hlstd{()}
+\hlstd{models} \hlkwb{<-} \hlkwd{as.vector}\hlstd{(}\hlkwd{read.table}\hlstd{(}\hlstr{"modelsEnsemble"}\hlstd{)}\hlopt{$}\hlstd{V1)}
+
+\hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{length}\hlstd{(models)) \{}
+    \hlstd{model_load} \hlkwb{=} \hlkwd{paste}\hlstd{(}\hlstr{"readRDS('"}\hlstd{, models[i],} \hlstr{"')"}\hlstd{,}
+        \hlkwc{sep} \hlstd{=} \hlstr{""}\hlstd{)}
+    \hlkwd{assign}\hlstd{(}\hlkwd{paste}\hlstd{(}\hlstr{"model_"}\hlstd{, i,} \hlkwc{sep} \hlstd{=} \hlstr{""}\hlstd{),} \hlkwd{eval}\hlstd{(}\hlkwd{parse}\hlstd{(}\hlkwc{text} \hlstd{= model_load)))}
+    \hlstd{all.models[[}\hlkwd{length}\hlstd{(all.models)} \hlopt{+} \hlnum{1}\hlstd{]]} \hlkwb{<-} \hlkwd{eval}\hlstd{(}\hlkwd{parse}\hlstd{(}\hlkwc{text} \hlstd{=} \hlkwd{paste}\hlstd{(}\hlstr{"model_"}\hlstd{,}
+        \hlstd{i,} \hlkwc{sep} \hlstd{=} \hlstr{""}\hlstd{)))}
+\hlstd{\}}
+
+\hlkwd{names}\hlstd{(all.models)} \hlkwb{<-} \hlkwd{sapply}\hlstd{(all.models,} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{) x}\hlopt{$}\hlstd{method)}
+\hlkwd{sort}\hlstd{(}\hlkwd{sapply}\hlstd{(all.models,} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)} \hlkwd{min}\hlstd{(}\hlkwd{as.vector}\hlstd{(}\hlkwd{na.omit}\hlstd{(x}\hlopt{$}\hlstd{results}\hlopt{$}\hlstd{RMSE)))))}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+Once all models have been loaded, we create the following ensembled:
+  %\begin{enumerate}
+%\item Greedy (now it can only optimize the hold-out RMSE)
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{greedy} \hlkwb{<-} \hlkwd{caretEnsemble}\hlstd{(all.models,} \hlkwc{iter} \hlstd{=} \hlnum{1000L}\hlstd{)}
+\hlkwd{sort}\hlstd{(greedy}\hlopt{$}\hlstd{weights,} \hlkwc{decreasing} \hlstd{=} \hlnum{TRUE}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+%\item Model Stacking
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{  # make a linear regression ensemble}
+  linear <- \hlkwd{caretStack}(all.models, method=\hlstr{'glm'})
+\hlkwd{summary}(linear$ens_model$finalModel)
+
+\hlcom{# make Elastic Net ensemble}
+enet_ens <- \hlkwd{caretStack}(all.models, method=\hlstr{'enet'})
+coefs_enet_ens <- enet_ens$ens_model$finalModel$beta.pure +
+[\hlkwd{ncol}(enet_ens$ens_model$finalModel$beta.pure)+1,]
+
+\hlcom{# make SVM linear ensemble}
+trControl <- \hlkwd{trainControl}(method = \hlstr{"cv"},  number=5)
+tune.grid <- \hlkwd{expand.grid}(.C=\hlkwd{expGrid}(power.from=-14,
+                                    power.to=10,power.by=1,base=2))
+linear_svm <- \hlkwd{caretStack}(all.models, method=\hlstr{'svmLinear'},
+                         trControl=trControl,tuneGrid=tune.grid)
+
+\hlcom{# make SVM radial ensemble}
+trControl <- \hlkwd{trainControl}(method = \hlstr{"cv"},  number=5)
+tune.grid <- \hlkwd{expand.grid}(.sigma=\hlkwd{expGrid}(power.from=-14,
+                                        power.to=10,power.by=1,base=2),
+                         .C=\hlkwd{expGrid}(power.from=-14,power.to=10,
+                                    power.by=2,base=2))
+radial_svm <- \hlkwd{caretStack}(all.models, method=\hlstr{'svmRadial'},
+                         trControl=trControl,tuneGrid=tune.grid)
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+%\end{enumerate}
+We proceed to predict the bioactivities for the external (hold-out) set,
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+preds <- \hlkwd{data.frame}(\hlkwd{sapply}(all.models, predict, newdata=dataa$x.test))
+preds$ENS_greedy <- \hlkwd{predict}(greedy, newdata=dataa$x.test)
+preds$ENS_linear <- \hlkwd{predict}(linear, newdata=dataa$x.test)
+preds$ENS_enet <- \hlkwd{predict}(enet_ens, newdata=x.test)
+preds$ENS_SVMrad <- \hlkwd{predict}(radial_svm, newdata=x.test)c
+preds$ENS_SVMlin <- \hlkwd{predict}(linear_svm, newdata=x.test)
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+and we calculate the metrics:
+  
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# Calculate metrics (We could also have applied}
+\hlcom{# Validation instead.)}
+\hlstd{Q2s} \hlkwb{<-} \hlkwd{apply}\hlstd{(preds,} \hlnum{2}\hlstd{,} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)} \hlkwd{Qsquared}\hlstd{(x, dataa}\hlopt{$}\hlstd{y.test))}
+\hlstd{R2s} \hlkwb{<-} \hlkwd{apply}\hlstd{(preds,} \hlnum{2}\hlstd{,} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)} \hlkwd{Rsquared}\hlstd{(x, dataa}\hlopt{$}\hlstd{y.test))}
+\hlstd{R20s} \hlkwb{<-} \hlkwd{apply}\hlstd{(preds,} \hlnum{2}\hlstd{,} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)} \hlkwd{Rsquared0}\hlstd{(x, dataa}\hlopt{$}\hlstd{y.test))}
+\hlstd{RMSEs} \hlkwb{<-} \hlkwd{apply}\hlstd{(preds,} \hlnum{2}\hlstd{,} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)} \hlkwd{RMSE}\hlstd{(x, dataa}\hlopt{$}\hlstd{y.test))}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
 
 %\section{Bibliography}
 \newpage

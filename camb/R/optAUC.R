@@ -5,7 +5,7 @@
 #' @param iter
 #' @export
 greedOptAUC <- function(X, Y, iter = 100L){ #TODO: ADD POSITIVE LEVEL IF NEEDED
-  require('caTools')
+  require('caTools') || stop("Pacakge 'caTools' is required")
 
   if(is.character(Y)){
     Y <- factor(Y)

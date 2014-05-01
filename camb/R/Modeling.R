@@ -27,7 +27,7 @@ RemoveColumnsWithMoreThanHalfNA <- function(d) {
                          
 ##############
 ImputeFeatures <- function(d, k=10) {
-  library(impute) || stop("Package impute is required. Install from CRAN or Bioconductor -depending on the R version you are using-.")
+  suppressWarnings(require(impute)) || stop("Package impute is required. Install from CRAN or Bioconductor -depending on the R version you are using-.")
   as.data.frame(impute.knn(as.matrix(d), k = k)$data)
 }
 
@@ -56,12 +56,12 @@ SplitSet <- function(ids, x, y, percentage = 20, seed = 1) {
 RemoveNearZeroVarianceFeatures <- function(ss, frequencyCutoff = 30/1) {
   nzv.columns <- nearZeroVar(ss$x.train, freqCut = frequencyCutoff)
   if (length(nzv.columns) != 0) {
-    print(paste(length(nzv.columns), "features removed with variance below cutoff"))
+    message(paste(length(nzv.columns), "features removed with variance below cutoff"))
     ss$x.train <- ss$x.train[, -nzv.columns]
     ss$x.holdout <- ss$x.holdout[, -nzv.columns]
   }
   else {
-    print("no features removed")
+    message("no features removed")
   }
   ss
 }
@@ -70,12 +70,12 @@ RemoveNearZeroVarianceFeatures <- function(ss, frequencyCutoff = 30/1) {
 RemoveHighlyCorrelatedFeatures <- function(ss, correlationCutoff = 0.95) {
   hc.columns <- findCorrelation(cor(ss$x.train), correlationCutoff)
   if (length(hc.columns) != 0) {
-    print(paste(length(hc.columns), "features removed with correlation above cutoff"))
+    message(paste(length(hc.columns), "features removed with correlation above cutoff"))
     ss$x.train <- ss$x.train[, -hc.columns]
     ss$x.holdout <- ss$x.holdout[, -hc.columns]
   }
   else {
-    print("no features removed")
+    message("no features removed")
   }
   ss
 }
