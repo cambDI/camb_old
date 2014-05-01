@@ -572,10 +572,9 @@ We proceed similarly in the case of a random forest (RF) model\cite{rf}.
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{method} \hlkwb{<-} \hlstr{"rf"}
-\hlstd{tune.grid} \hlkwb{<-} \hlkwd{expand.grid}\hlstd{(}\hlkwc{.mtry} \hlstd{=} \hlkwd{seq}\hlstd{(}\hlnum{5}\hlstd{,} \hlnum{100}\hlstd{,} \hlnum{5}\hlstd{))}
 
 \hlstd{modelCoxRF} \hlkwb{<-} \hlkwd{train}\hlstd{(dataset}\hlopt{$}\hlstd{x.train, dataset}\hlopt{$}\hlstd{y.train,}
-    \hlstd{method,} \hlkwc{tuneGrid} \hlstd{= tune.grid,} \hlkwc{trControl} \hlstd{= dataset}\hlopt{$}\hlstd{trControl)}
+    \hlstd{method,} \hlkwc{trControl} \hlstd{= dataset}\hlopt{$}\hlstd{trControl)}
 \hlkwd{saveRDS}\hlstd{(modelCoxRF,} \hlkwc{file} \hlstd{=} \hlstr{"model_RF.rds"}\hlstd{)}
 \end{alltt}
 \end{kframe}

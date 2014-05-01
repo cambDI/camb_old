@@ -38,7 +38,12 @@ export(ShowPropertiesSDF)
 export(SplitSet)
 export(StandardiseMolecules)
 export(Validation)
-
+export(RMSE)
+export(Rsquared)
+export(Rsquared0)
+export(Qsquared)
+export(slope)
+export(MAE)
 
 # Caret ensemble
 export(caretEnsemble)
@@ -69,7 +74,8 @@ import(
   gridExtra,
   protr,
   vegan,
-  pbapply
+  pbapply,
+  caTools
 )
 
 useDynLib(camb)
