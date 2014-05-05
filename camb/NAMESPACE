@@ -1,4 +1,4 @@
-#Export all names
+#Export all functions
 # exportPattern(".")
 
 # Export specific functions
