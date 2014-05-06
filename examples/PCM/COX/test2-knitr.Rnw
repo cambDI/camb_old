@@ -46,7 +46,7 @@ library(ggplot2,quietly=TRUE)
 @
 \maketitle
 
-In the following sections, we present a pipeline to generate a whole Proteochemometric (PCM) pipeline. For futher details about PCM, the interested reader is referred to ref
+In the following sections, we present a pipeline to generate a Proteochemometric (PCM) model for mammal cyclooxigenase (COX) inhibitors. For futher details about PCM, the interested reader is referred to ref
 \cite{review_pcm} and \cite{cortesReview}.
 Firstly, we load the package and set the working directory:
 <<echo=FALSE,results='hide',warning=FALSE,message=FALSE>>=
@@ -55,17 +55,26 @@ setwd('/Users/icortes/Desktop/camb_final/camb/examples/PCM/COX')
 @
 <<echo=TRUE,results='hide',warning=FALSE,message=FALSE>>=
 library(camb)
-#setwd('path_to_working_directory/camb/examples/COX')
+#setwd('path_to_working_directory')
 @
 
 \section{Compounds}
 
 \subsection{Reading and Preprocessing}
+We proceed to read the compounds. Given that some smiles contain smarts patterns where the hash symbol is present, 
+it is necessary to switch off the argument {\it comment.char} in order not to clip the smiles:
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
 smiles <- read.table("smiles_COX.smi", header=FALSE,comment.char=c(""))
 @
-Given that some smiles contain smarts patterns where the hash symbol is present, we need to avoid switch of the argument comment.char in order not to clip the smiles:
 
+The function {\it StandardiseMolecules} enables the depiction of molecular structures in a similar way.
+Moreover, the different arguments allow to control the maximum number of (i) fluorines, (ii) chlorines,
+(iii) bromines, and (iv) iodines a molecules can exhibit in order to be kept. If using the default value, {\it i.e.} "-1",
+all molecules will be kept irrespective of the number of fluorines, chlorines, bromines, and iodines.
+Inorgnaic molecules are removed if the argument "removed.inorganic" is set to "TRUE", which is the default value.
+Additionally, upper and lower limits for the molecular mass can be set with the arguments "min.mass.limit" and "max.mass.limit".
+The default value is "-1". Thus, all molecules will be kept irrespective of their molecular mass.
+The name of the file containing the chemical structures is input to the argument "structures.file".
 <<echo=TRUE,results='hide',warning=FALSE,message=FALSE,eval=FALSE>>=
 StandardiseMolecules(structures.file="smiles_COX.smi",
 standardised.file="standardised.sdf",
@@ -77,41 +86,50 @@ chlorine.limit=-1,
 bromine.limit=-1,
 iodine.limit=-1,
 min.mass.limit=-1, #suggested value 20
-max.mass.limit=-1) #suggested value  900)
+max.mass.limit=-1) #suggested value  900
 @
-The properties of all molecules and the index (in the column 'kept') indicating which molecules were deleted are written to a file called standardisation\_COX\_info.csv.
+The properties of all molecules and an index, in the column "kept", indicating which molecules were deleted,
+are written to the file indicated in the argument "output". In this case the file is \verb|"standardisation_COX_info.csv"|.
+Those molecules that passed the filters are written to the file indicated in the argument "standardised.file".
+By contrast, molecules that did not pass these filters are written to the file indicated in the "removed.file" argument.
 
 <<echo=TRUE,results='hide',warning=FALSE,message=FALSE,eval=FALSE>>=
 standardised_info <- read.table("standardisation_COX_info.csv",header=TRUE,sep="\t")
-head(standardised_info)
 @
 
-In this case, the criteria we chose to remove compounds (the arguments of the StandardiseMolecules function) were not really stringent, so all molecules were kept.
-This can be seen in the kept field, given that for all compounds (rows) we have a value equal to -1.\\
-Similarly, the properties of a .sdf file can be accessed witn the function:
+Default values of the arguments of the function "StandardiseMolecules" are not stringent.
+In the present case, all molecules were kept, thus all values in the columns "kept"
+are equal to "1".
+
+The properties of a ".sdf" file can be inspected witn the function:
 <<echo=TRUE,results='hide',warning=FALSE,message=FALSE,eval=FALSE>>=
-ShowPropertiesSDF("standardised.sdf",type=1)
+ShowPropertiesSDF("standardised.sdf")
 @
-A given property can be accessed, or all of them. In the latter case, a data.frame with all properties is returned:
-<<echo=TRUE,results='hide',warning=FALSE,message=FALSE,eval=FALSE>>=
-GetPropertySDF("standardised.sdf",property="property_name",number_processed=10,type=1)
-all_properties <- GetPropertiesSDF("standardised.sdf",number_processed=10,type=1)
+The values corresponding to an individual property can be accessed with the function "GetPropertySDF".
+Similarly, the function "GetPropertiesSDF" retrieves the information for all properties of a given ".sdf" file. A data.frame with all properties is returned.
+The number of molecules from which the information has to be retrieved can be indicated with the argument \verb|"number_processed"|.
+The default value for this argument is \verb|"-1"|, which indicates that the properties will be extracted for all molecules in the input file.
+<<echo=TRUE,results='hide',warning=FALSE,message=FALSE,eval=TRUE>>=
+GetPropertySDF("standardised.sdf",property="property_name",number_processed=10)
+all_properties <- GetPropertiesSDF("standardised.sdf",number_processed=10)
 head(all_properties)
 @
 
 \subsection{PaDEL Descriptors}
+One and two-dimensional PaDEL\cite{padel} descriptors and fingerprints can be calculated with the function "GeneratePadelDescriptors":
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
 descriptors_COX <- GeneratePadelDescriptors( +
   standardised.file="smiles_COX.smi",threads = 1)
 descriptors <- RemoveStandardisedPrefix(descriptors)
-saveRDS(descriptors, file="Padel_COX.rds")
-descriptors <- readRDS("Padel_COX.rds")
+#saveRDS(descriptors, file="Padel_COX.rds")
+#descriptors <- readRDS("Padel_COX.rds")
 @
 
-Sometimes, some descriptors are not calculated for all molecules, thus giving a 'NA' or 'Inf' as descriptor values.
+Sometimes, some descriptors are not calculated for all molecules, thus giving a "NA" or "Inf" as descriptor value.
 Instead of removing that descriptor for all molecules, the missing descriptor values can be imputed from the corresponding descriptor values of the rest of molecules.
-Descriptor values equalt to 'Inf' are converted to 'NA'.
-The R package {\it impute} is required. Depending on the R version, it can be accessed from either CRAN or Bioconductor.
+Descriptor values equal to "Inf" are converted to "NA".
+For the imputation of missing dscriptor values, the R package {\it impute} is required.
+Depending on the R version, it can be accessed from either {\it CRAN} or {\it Bioconductor}.
 
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),eval=FALSE>>=
 descriptors <- ReplaceInfinitesWithNA(descriptors)
@@ -119,22 +137,55 @@ descriptors <- ImputeFeatures(descriptors)
 @
 
 \subsection{Circular Morgan Fingerprints}
-The python library RDkit is required since the function 'MorganFPs' uses a python script for the calculation.
+The calculation of circular Morgan fingerprints requires the python library RDkit, given that the function "MorganFPs" calls a python script for the calculation of this type of fingerprints.
+For a detailed discussion about circular Morgan fingerprints, we refer
+the interested reader to ref. \cite{morgan}.
 When using integrated development environments (IDE) such as RStudio,
-the environment variables might not be seen.
-We can redefine them with the R function 'Sys.setenv'.
-In any case, the function 'MorganFPs' requires this information in the arguments 'PythonPath' and 'RDkitPath'.
+the environment variables might not be defined within the R session.
+However, they can be redefined with the R function "Sys.setenv".
+In any case, the function "MorganFPs" requires this information in the arguments "PythonPath", path to python in the system, and "RDkitPath", the path to the RDkit library. 
+For instance, the information of the latter is contained in the environment variable \verb|$RDBASE| in Mac OS.
+
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),eval=FALSE>>=
 Sys.setenv(RDBASE="/usr/local/share/RDKit")
 Sys.setenv(PYTHONPATH="/usr/local/lib/python2.7/site-packages")
 fps_COX_512 <- MorganFPs(bits=512,radius=2,type='smi',mols='smiles_COX.smi', 
                          output='COX',keep='hashed_counts',
-                         RDkitPath='/usr/local/share/RDKit', 
+                         RDkitPath='/usr/local/share/RDKit',
                          PythonPath='/usr/local/lib/python2.7/site-packages',
-                         verbose=TRUE)
+                         verbose=TRUE, images = FALSE, unhashed = FALSE, 
+                         extFileExtension = FALSE, extMols = FALSE, unhashedExt = FALSE, 
+                         logFile = FALSE)
 saveRDS(fps_COX_512,file="fps_COX_512.rds")
 fps_COX_512 <- readRDS("fps_COX_512.rds")
 @
+In the following paragraph we describe in detail the arguments of the function "MorganFPs":
+\begin{itemize}
+\item {\bf bits:} Number of bits of the hashed fingerprints. The default value is 512.
+\item {\bf radius:} Maximum radius of the substructures. A radius of 2 is equivalent to \verb|ECFP-4|, where 4 corresponds to the diameter. The default value is 2.
+More information on ECFP fingerprints can be found here: \verb|http://www.chemaxon.com/jchem/doc/user/ECFP.html|.
+\item {\bf type:} File format containing the input molecules. The default value is ".smi".
+\item {\bf mols:} File containing the input molecules.
+\item {\bf output:} Label that will be appended to all ouput files (see below).
+\item {\bf keep:} The fingeprints that will be kept after the calculation.
+Apart from calculating different types of fingerprints, the function returns a data.frame with the type of fingerprints specified with this argument.  Possible types are: \verb|hashed_binary|,\verb|hashed_counts|, \verb|unhashed_binary|, \verb|unhashed_counts|, and if applicable, \verb|hashed_binaryEXT|, \verb|hashed_countsEXT|, \verb|unhashed_binaryEXT| and \verb|unhashed_countsEXT|.
+The default value is "hashed_binary".
+\item {\bf images:} If TRUE, individual ".pdf" files containing (i) the image of each substructure in the context of a molecule presenting it, and (ii) each molecule correctly processed, are created.  Be aware that the number of substructures can be large depending on the number and diversity of the molecules present in the input file. Thus, allow for sufficient memory in those cases.
+The default value is FALSE.
+\item {\bf unhashed:} If TRUE, unhashed fingeprints, both in binary format and with counts, are calculated. The default value is FALSE.
+\item {\bf verbose:} If TRUE, information about the progression of the calculation is printed. The default value is FALSE.
+\item {\bf RDkitPath:} The path to the folder containing the RDkit library in your computer. On mac, the environment variable \verb|$RDBASE| contains this information. The default value is "/usr/local/share/RDKit".
+\item {\bf PythonPath:} Path to python (\verb|$PYTHONPATH|). The default value is "/usr/local/lib/python2.7/site-packages".
+\item {\bf extFileExtension:} If not FALSE, file extension for the file containing the molecules for which unhashed fingeprints are to be calculated with respect to the pool of substructures in the molecules present in the file specified in "mols". The default value is FALSE.
+\item {\bf extMols:} If not FALSE, file containing the molecules for which unhashed fingeprints are to be calculated with respect to the pool of
+substructures in the molecules present in the file specified in "mols". The default value is FALSE.
+\item {\bf unhashedExt:} If TRUE, unhashed fingerprints are calcualted for the molecules specified in "extMols". The default value is FALSE.
+\item {\bf logFile:} If not FALSE, file where the log messages will be dropped. The default value is FALSE.
+\end{itemize}
+
+add all options of the functions
+%Say the files that are generated.
+%"_smiles_substructures.csv"
 
 \section{Targets}
 
@@ -146,8 +197,8 @@ amino_compound_IDs <- read.table("AAs_COX.csv",sep=",",
                                  row.names=1)
 amino_compound_IDs <- amino_compound_IDs[,2:ncol(amino_compound_IDs)]
 @
-Now, 5 Z-scales are calculated, which will serve to describe the target space in the machine learning models.
-Subsequently, we save the descriptors to a .rds file.
+Now, 5 Z-scales are calculated, which will serve to describe the target space in the PCM models.
+Subsequently, we save the descriptors to a ".rds" file.
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),eval=FALSE,tidy=TRUE>>=
 amino_compound_IDs_zscales <- AA_descs(Data=amino_compound_IDs,type="Z5")
 saveRDS(amino_compound_IDs_zscales,file="Z5_COX.rds")
@@ -157,7 +208,7 @@ saveRDS(amino_compound_IDs_zscales,file="Z5_COX.rds")
 amino_compound_IDs_zscales <-readRDS("Z5_COX.rds")
 @
 
-In the case that we needed whole sequence descriptors, they can be calculated with the function 'SeqDescs'. 
+In the case that we needed whole sequence descriptors, they can be calculated with the function "SeqDescs". 
 The function takes as argument either a UniProt identifier, or either a matrix or dataframe with the protein sequences.
 If a UniProt identifier is provided, the function gets firstly the sequence and then calculates the descriptors on the sequence.
 
@@ -166,37 +217,40 @@ Seq_descriptors_P00374 <- SeqDescs("P00374",UniProtID=TRUE,type=c("AAC","DC"))
 @
 The available types of whole sequence descriptors are:\cite{protr}
 \begin{itemize}
-\item Amino Acid Composition ("AAC")\\
-\item Dipeptide Composition ("DC")\\
-\item Tripeptide Composition ("TC")\\
-\item Normalized Moreau-Broto Autocorrelation ("MoreauBroto")\\
-\item Moran Autocorrelation ("Moran")\\
-\item Geary Autocorrelation ("Geary")\\
-\item  CTD (Composition/Transition/Distribution) ("CTD")\\
-\item Conjoint Traid ("CTriad")\\
-\item Sequence Order Coupling Number ("SOCN")\\
-\item Quasi-sequence Order Descriptors ("QSO")\\
-\item Pseudo Amino Acid Composition ("PACC")\\
-\item Amphiphilic Pseudo Amino Acid Composition ("APAAC")\\
+\item Amino Acid Composition ("AAC")
+\item Dipeptide Composition ("DC")
+\item Tripeptide Composition ("TC")
+\item Normalized Moreau-Broto Autocorrelation ("MoreauBroto")
+\item Moran Autocorrelation ("Moran")
+\item Geary Autocorrelation ("Geary")
+\item  CTD (Composition/Transition/Distribution) ("CTD")
+\item Conjoint Traid ("CTriad")
+\item Sequence Order Coupling Number ("SOCN")
+\item Quasi-sequence Order Descriptors ("QSO")
+\item Pseudo Amino Acid Composition ("PACC")
+\item Amphiphilic Pseudo Amino Acid Composition ("APAAC")
 \end{itemize}
 
 \subsection{Reading the Data-set Information}
 Now, we are going to read the file with the information about the dataset, namely: target names, bioctivities, etc..
-Note that when reading smiles from a .csv file into an R dataframe, the smiles are clipped after a hash ('\#') symbol.
+Note that when reading smiles from a ".csv" file into an R dataframe, the smiles are clipped after a hash ("\#") symbol.
 A good practice is thus to also keep the smiles alone in a \{.smi,.smiles\} file.
 
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=TRUE>>=
 dataset <- readRDS("COX_dataset_info.rds")
 bioactivity <- dataset$standard_value
 @
-The bioactivity is in nM. We convert it to pIC50:
+The bioactivity is in nM. We convert it to pIC50. To do that, we multiply by \verb|10^-9| to convert the bioactivity units to M.
+Subsequently, the negative logarithm to base 10 is calculated:
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE>>=
 bioactivity <- bioactivity * 10^-9
 bioactivity <- -log(bioactivity,base=10)
 @
 
 \section{Data-set Visualization}
-Compounds can be depicted with the function 'PlotMolecules'. It returns a list of four plots, and plots can also be written into a .pdf file.
+Compounds can be depicted with the function "PlotMolecules".
+This function returns a list of four plots. Additionally, plots can also be written into a ".pdf" file if the argument "pdf.file" is not NULL. The argument "IDs" corresponds to the index of the molecules in the input file which are to be depicted.
+The name of the molecule in the input file will be used as the title of the image if the argument "useNameAsTitle" is set to TRUE.
 
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=TRUE,results='hide',echo=FALSE>>=
 # we redefine the function isnot
@@ -208,11 +262,11 @@ plot_molecules <- PlotMolecules("standardised.sdf",IDs=c(1,2,3,4),pdf.file=NULL,
 print(plot_molecules[[1]])
 @
 
-We can have a look at the response variable:
-<<highlight=TRUE,results='hide',tidy.opts=list(width.cutoff=50),tidy=TRUE,fig.align='center',fig.cap="Bioactivity Distribution",out.width='12cm',eval=TRUE>>=
+The distribution of the response variable can be explored with the function "DensityResponse" in the following way:  variable:
+<<highlight=TRUE,results='hide',tidy.opts=list(width.cutoff=50),tidy=TRUE,fig.align='center',fig.cap="Bioactivity Distribution",out.width='12cm',eval=FALSE>>=
 dens_resp <- DensityResponse(bioactivity,xlab="pIC50",main="",ylab="Densitiy",TitleSize=30,XAxisSize=22,YAxisSize=22,TitleAxesSize=24,AngleLab=0,lmar=0,rmar=0,bmar=0,tmar=0,binwidth=0.3)
 @
-
+%##
 Plotting a PCA analysis of the target descriptors gives:
 <<highlight=TRUE,results='hide',tidy.opts=list(width.cutoff=50),tidy=TRUE,fig.align='center',fig.cap="PCA Analysis on the\nAmino Acid Descriptors",eval=TRUE>>=
 target_PCA <- PCAProt(amino_compound_IDs_zscales,
@@ -220,13 +274,22 @@ target_PCA <- PCAProt(amino_compound_IDs_zscales,
 plot_PCA_Cox <- PCAProtPlot(target_PCA,PointSize=10,main="",TitleSize=30,XAxisSize=20,YAxisSize=20,TitleAxesSize=28,LegendPosition="bottom",RowLegend=3,ColLegend=5,LegendTitleSize=15,LegendTextSize=15)
 @
 
+incluir en PCAprotta
+aa = summary(ana)
+aa$importance
+
+aa$sdev
+
+incluir tanimoto
+
+
 Similarly, we can analyze the chemical space by calculating pairwise compound similarities based upon the compound descriptors. In this case, we use the Jaccard metric to calculate the distance between compounds.
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
 pw_dist_comp_fps <- PairwiseDist(fps_COX_512,method="jaccard")
 saveRDS(pw_dist_comp_fps,file="pairwise_dist_COX.rds")
 @
-
-<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=TRUE>>=
+% XXX
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
 pw_dist_comp_fps <- readRDS("pairwise_dist_COX.rds")
 plot_pwd <- PairwiseDistPlot(pw_dist_comp_fps,xlab="Jaccard Similarity",ylab="Density",TitleSize=26,XAxisSize=20,YAxisSize=20,TitleAxesSize=24,lmar=0,rmar=0,bmar=0,tmar=0,AngleLab=0)
 @
@@ -470,7 +533,7 @@ names(all.models) <- sapply(all.models, function(x) x$method)
 sort(sapply(all.models, function(x) min(as.vector(na.omit(x$results$RMSE)))))
 @
 
-Once all models have been loaded, we create the following ensembled:
+Once all models have been loaded, we create the following ensemble:
   %\begin{enumerate}
 %\item Greedy (now it can only optimize the hold-out RMSE)
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
