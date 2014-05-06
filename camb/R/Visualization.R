@@ -162,7 +162,7 @@ MaxPerf <- function(meanNoise=0,sdNoise,meanResp,sdResp,lenPred,iters=1000,
     noise <- rnorm(length(x),mean=meanNoise,sd=sdNoise)
     y <- x+noise
     R2[i] <- Rsquared(y,x)
-    Q2[i] <- Qsquared(y,x)
+    Q2[i] <- Qsquared2(y,x)
     R02[i] <- Rsquared0(y,x)
     rmsep[i] <- RMSE(y,x)
   }
