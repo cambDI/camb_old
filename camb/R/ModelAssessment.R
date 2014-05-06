@@ -249,7 +249,7 @@ Qsquared3 <- function(v1, v2,resp_tr) {
 Validation <- function(pred,obs,resp_tr){
   if (is.vector(pred) && is.vector(obs) && length(pred)==length(obs)){
     metrics <- list(R2 = Rsquared(pred,obs), R02 = Rsquared0(pred,obs), 
-   Q2_1 = Qsquared1(pred,obs,resp_tr),Q2_2 = Qsquared2(pred,obs),Q2_3 = Qsquared3(pred,obs,resp_tr)
+   Q2_1 = Qsquared1(pred,obs,resp_tr),Q2_2 = Qsquared2(pred,obs),Q2_3 = Qsquared3(pred,obs,resp_tr),
    RMSE = RMSE(pred,obs), Slope=slope(pred,obs), MAE = MAE(pred, obs))
   } else {
     stop("Wrong input: input arguments are not vector or have unequal length")

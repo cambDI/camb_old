@@ -34,7 +34,6 @@ df3 <- df3[, -nzv.columns]
 ################################################################
 df4 <- readRDS("Padel_COX.rds")
 
-###############################################################################################
 rows = seq(1,nrow(df1))
 df1=cbind(rows,df1)
 df3_not_repeated = c()
@@ -103,16 +102,16 @@ data_all1 = rbind(df_not_repeated,new_data)
 data_all2 = rbind(df2_not_repeated,new_data2)
 data_all3 = rbind(df3_not_repeated,new_data3)
 data_all4 = rbind(df4_not_repeated,new_data4)
-save(list=ls(), file="data_processing_repetitions_COX.RData")
 
 # We save the dataset
 final_data = data.frame(data_all1,data_all2,data_all3,data_all4)
-saveRDS(final_data, file="Whole_dataset_NO_REP.rds")
+saveRDS(final_data, file="Whole_dataset.rds")
 
 # We save the datasets for QSAR and QSAM comparisons
 final_AA_descs = data.frame(data_all1,data_all3)
 final_Compound_descs = data.frame(data_all1,data_all2,data_all4)
-saveRDS(final_AA_descs, file="Whole_dataset_AAs_NO_REP.rds")
-saveRDS(final_Compound_descs, file="Whole_dataset_Compounds_NO_REP.rds")
+saveRDS(final_AA_descs, file="Whole_dataset_aa_descriptors.rds")
+saveRDS(final_Compound_descs, file="Whole_dataset_compound_descriptors.rds")
 
+save(list=ls(), file="data_processing_repetitions_COX.RData")
 

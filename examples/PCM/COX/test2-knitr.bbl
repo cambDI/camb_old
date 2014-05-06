@@ -167,6 +167,114 @@
   \field{year}{2010}
 \endentry
 
+\entry{AAs1}{article}{}
+  \name{author}{6}{}{%
+    {{}%
+     {Westen}{W.}%
+     {GJP}{G.}%
+     {van}{v.}%
+     {}{}}%
+    {{}%
+     {Swier}{S.}%
+     {RF}{R.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Wegner}{W.}%
+     {J\"{o}rg~K}{J.~K.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {IJzerman}{I.}%
+     {Adriaan~P.}{A.~P.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Vlijmen}{V.}%
+     {Herman~WT}{H.~W.}%
+     {van}{v.}%
+     {}{}}%
+    {{}%
+     {Bender}{B.}%
+     {Andreas}{A.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{WGvSRWJK+1}
+  \strng{fullhash}{WGvSRWJKIAPVHWvBA1}
+  \field{number}{1}
+  \field{pages}{41}
+  \field{title}{{Benchmarking of protein descriptor sets in proteochemometric
+  modeling (part 1): comparative study of 13 amino acid descriptor sets}}
+  \field{volume}{5}
+  \field{journaltitle}{J. Cheminf.}
+  \field{year}{2013}
+\endentry
+
+\entry{AAs2}{article}{}
+  \name{author}{10}{}{%
+    {{}%
+     {Westen}{W.}%
+     {Gerard~JP}{G.~J.}%
+     {van}{v.}%
+     {}{}}%
+    {{}%
+     {Swier}{S.}%
+     {Remco~F}{R.~F.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Wegner}{W.}%
+     {J\"{o}rg~K}{J.~K.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {IJzerman}{I.}%
+     {Adriaan~P}{A.~P.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Vlijmen}{V.}%
+     {Herman~WT}{H.~W.}%
+     {van}{v.}%
+     {}{}}%
+    {{}%
+     {Bender}{B.}%
+     {Andreas}{A.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Cortes-Ciriano}{C.-C.}%
+     {Isidro}{I.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Overington}{O.}%
+     {John~P}{J.~P.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Westen}{W.}%
+     {Gerard J P~Van}{G.~J. P.~V.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Vlijmen}{V.}%
+     {Herman W T~Van}{H.~W. T.~V.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{WGJvSRFWJK+1}
+  \strng{fullhash}{WGJvSRFWJKIAPVHWvBACCIOJPWGJPVVHWTV1}
+  \field{number}{1}
+  \field{pages}{41}
+  \field{title}{{Benchmarking of protein descriptor sets in proteochemometric
+  modeling (part 2): modeling performance of 13 amino acid descriptor sets}}
+  \field{volume}{5}
+  \field{journaltitle}{Journal of Cheminformatics}
+  \field{year}{2013}
+\endentry
+
 \entry{protr}{manual}{}
   \name{author}{2}{}{%
     {{}%
@@ -186,6 +294,45 @@
   \field{title}{protr: Protein Sequence Descriptor Calculation and Similarity
   Computation with R}
   \field{year}{2014}
+\endentry
+
+\entry{cortesGP}{article}{}
+  \name{author}{6}{}{%
+    {{}%
+     {{Cortes Ciriano}}{C.}%
+     {Isidro}{I.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Westen}{W.}%
+     {Gerard J~P}{G.~J.~P.}%
+     {van}{v.}%
+     {}{}}%
+    {{}%
+     {Lenselink}{L.}%
+     {Eelke~B}{E.~B.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Murrell}{M.}%
+     {Daniel~S}{D.~S.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Bender}{B.}%
+     {Andreas}{A.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Malliavin}{M.}%
+     {Th\'{e}r\`{e}se}{T.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{CIWGJPvLEB+1}
+  \strng{fullhash}{CIWGJPvLEBMDSBAMT1}
+  \field{title}{{Proteochemometrics Modeling in a Bayesian Framework}}
+  \field{journaltitle}{J. Cheminf. In revision}
 \endentry
 
 \entry{svmreview}{article}{}
