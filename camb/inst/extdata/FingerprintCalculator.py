@@ -11,9 +11,9 @@ import os,sys
 # Arguments passed to the scripts
 parser = argparse.ArgumentParser(prog='PROG',description='Get Morgan Fingerprints for compounds codified in either SMILES or SDF format using RDkit. Isidro Cortes Ciriano. August/September 2013')
 parser.add_argument('--bits', required='TRUE',type=int, help="Size of the hashed Morgan Fingerprints (binary and with counts)")
-parser.add_argument('--rad', required='TRUE', type=int, help="Maximum radius. Deafault is two, equivalent to ECFP4 from PipelinePilot")
+parser.add_argument('--rad', required='TRUE', type=int, help="Maximum radius of the substructures. Deafault is two, equivalent to ECFP4 from PipelinePilot")
 parser.add_argument('--f', required='TRUE', type=str, help="Format of the input file")
-parser.add_argument('--mols', type=str,help="File containing the molecules {.smi|.smiles|.sdf}. If the format is smiles, each line should contain the smiles and the name separated by a comma (in this order)")
+parser.add_argument('--mols', type=str,help="File containing the molecules {.smi|.smiles|.sdf|.mol2}. If the format is smiles, each line should contain the smiles and the name separated by a comma (in this order)")
 parser.add_argument('--image', action='store_true', help="Write --image if you want the images of the substructures")
 parser.add_argument('--unhashed', action='store_true', help="Write --unhashed if you want the unhashed fingerprints")
 parser.add_argument('--v', action='store_true', help="Verbose")
@@ -92,6 +92,22 @@ f_fp_counts=open(fp_hash_c,'w')
 #####################################
 # Read Molecules
 #####################################
+### Read Mol2 files
+def RetrieveMol2Block(fileLikeObject, delimiter="@<TRIPOS>MOLECULE"):
+	import rdkit.Chem
+	"""generator which retrieves one mol2 block at a time
+	"""
+	mol2 = []
+	for line in fileLikeObject:
+		if line.startswith(delimiter) and mol2:
+			yield "".join(mol2)
+			mol2 = []
+			mol2.append(line)
+	if mol2:
+		yield "".join(mol2)
+
+
+
 if formatFile == 'smi' or formatFile == 'smiles':
 	if verbose:
 		print "Format of the main file = SMILES"
@@ -103,6 +119,21 @@ if formatFile == 'smi' or formatFile == 'smiles':
 			mols.append(m)
 		else:
 			molserr.append(i)
+	nbMols=len(mols)
+elif formatFile == 'mol2':
+	molss=[]
+	with open(fileMols) as fi:
+		for mol2 in RetrieveMol2Block(fi):
+			rdkMolecule = rdkit.Chem.MolFromMol2
+			molss.append(rdkMolecule)
+	molserr=[]
+	mols=[]
+	for i,m in enumerate(molss):
+		if m is not None:
+			mols.append(m)
+		else:
+			molserr.append(i)
+			mols.append(m)  
 	nbMols=len(mols)
 else:
 	if verbose:
@@ -116,6 +147,9 @@ else:
 		else:
 			molserr.append(i)
 	nbMols=len(mols)
+
+
+
 
 if verbose: 
 	if len(molserr) !=0:
@@ -313,6 +347,7 @@ for molecule_nb,m in enumerate(mols):
 		f_fp_counts.write("\n")
 
 # Updating the progress bar.
+	#if verbose:
 	if nbMols % (1+molecule_nb) == 0:
 		pbar.update(molecule_nb)
 		print "\n"
