@@ -212,7 +212,17 @@ Rsquared_CV <- function(model, digits = 3) {
 
 # Calculates the Q squared 
 #Qsquared (z.test,y.test) (predicted vs observed)
-Qsquared <- function(v1, v2) {
+Qsquared1 <- function(v1, v2,resp_tr) {
+  if (is.vector(v1) && is.vector(v2) && length(v1)==length(v2)){
+    y_tr_mean <- mean(resp_tr)
+    first_term <- abs(v1-v2)*abs(v1-v2)
+    second_term <- abs(v2-y_tr_mean)*abs(v2-y_tr_mean)
+    return(1-(sum(first_term)/sum(second_term)))
+  }
+  else {print("Wrong input: input arguments are not vector or have unequal length")}
+}
+##
+Qsquared2 <- function(v1, v2) {
   if (is.vector(v1) && is.vector(v2) && length(v1)==length(v2)){
     y_obs_mean <- mean(v2)
     first_term <- abs(v1-v2)*abs(v1-v2)
@@ -221,12 +231,26 @@ Qsquared <- function(v1, v2) {
   }
   else {print("Wrong input: input arguments are not vector or have unequal length")}
 }
-
+##
+Qsquared3 <- function(v1, v2,resp_tr) {
+  if (is.vector(v1) && is.vector(v2) && length(v1)==length(v2)){
+    y_obs_mean <- mean(v2)
+    y_tr_mean <- mean(resp_tr)
+    first_term <- abs(v1-v2)*abs(v1-v2)
+    first_term <- sum(first_term)/length(v1)
+    second_term <- abs(resp_tr-y_tr_mean)*abs(resp_tr-y_tr_mean)
+    second_term <- sum(second_term)/length(resp_tr)
+    return(1-(first_term/second_term))
+  }
+  else {print("Wrong input: input arguments are not vector or have unequal length")}
+}
 ##############
 ## Validation of models
-Validation <- function(pred,obs){
+Validation <- function(pred,obs,resp_tr){
   if (is.vector(pred) && is.vector(obs) && length(pred)==length(obs)){
-    metrics <- list(R2 = Rsquared(pred,obs), R02 = Rsquared0(pred,obs), Q2 = Qsquared(pred,obs), RMSE = RMSE(pred,obs), Slope=slope(pred,obs), MAE = MAE(pred, obs))
+    metrics <- list(R2 = Rsquared(pred,obs), R02 = Rsquared0(pred,obs), 
+   Q2_1 = Qsquared1(pred,obs,resp_tr),Q2_2 = Qsquared2(pred,obs),Q2_3 = Qsquared3(pred,obs,resp_tr)
+   RMSE = RMSE(pred,obs), Slope=slope(pred,obs), MAE = MAE(pred, obs))
   } else {
     stop("Wrong input: input arguments are not vector or have unequal length")
   }

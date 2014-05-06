@@ -39,6 +39,11 @@ RDkitPath=args['f']
 outname=args['output']
 sys.path.append(RDkitPath)
 
+
+if (formatFileEXT and not fileMolsEXT) or (fileMolsEXT and not formatFileEXT):
+	sys.exit("If molsEXT is defined, the argument extF also needs to be defined and vice versa.\nThe calculation has stopped here.")
+
+
 if verbose:
 	if image:
 		print "\nCalculation of Morgan Fingerprints with diameter %d hashed into a fingerprint size equal to %d.\nMolecules file: %s.\nImages for the chemical substructures will be created.\n" %(args['rad'],args['bits'],args['mols'])
@@ -148,9 +153,6 @@ else:
 			molserr.append(i)
 	nbMols=len(mols)
 
-
-
-
 if verbose: 
 	if len(molserr) !=0:
 		print "The following %d molecules (starting at zero) could not be processed:\n"%(len(molserr))
@@ -164,27 +166,63 @@ if verbose:
 	else:
 		print "All molecules in the input file were processed correctly"
 
-
-
+###########################
 # External File
+##########################
 if formatFileEXT:
+	molserrEXT=[]
+	molsEXT=[]
 	if formatFileEXT == 'smi' or formatFileEXT == 'smiles':
 		if verbose:
 			print "Format of the external file = SMILES"
-		supplEXT = Chem.SmilesMolSupplier(fileMols,smilesColumn=0,nameColumn=1,delimiter=',',titleLine=False)
-		molsEXT= [x for x in supplEXT]
+		supplEXT = Chem.SmilesMolSupplier(fileMolsEXT,smilesColumn=0,nameColumn=1,delimiter=',',titleLine=False)
+		for i,m in enumerate(supplEXT):
+			if m is not None:
+				molsEXT.append(m)
+			else:
+				molserrEXT.append(i)
+		nbMolsEXT=len(molsEXT)
+	elif formatFile == 'mol2':
+		molssEXT=[]
+		with open(fileMolsEXT) as fi:
+			for mol2 in RetrieveMol2Block(fi):
+				rdkMolecule = rdkit.Chem.MolFromMol2
+				molssEXT.append(rdkMolecule)
+		for i,m in enumerate(molssEXT):
+			if m is not None:
+				molsEXT.append(m)
+			else:
+				molserrEXT.append(i)
+				molsEXT.append(m)  
 		nbMolsEXT=len(molsEXT)
 	else:
 		if verbose:
 			print "Format of the external file = SDF"
 		supplEXT = Chem.SDMolSupplier(fileMolsEXT)
-		molsEXT= [ x for x in supplEXT]
+		for i,m in enumerate(supplEXT):
+			if m is not None:
+				molsEXT.append(m)
+			else:
+				molserrEXT.append(i)
 		nbMolsEXT=len(molsEXT)
 
+if verbose and formatFileEXT: 
+	if len(molserrEXT) !=0:
+		print "The following %d molecules (starting at zero) from the EXTERNAL file could not be processed:\n"%(len(molserr))
+		for x in molserrEXT: print x
+		print "NOTE: the indexes of the molecules start at zero. Thus the first molecule is molecule 0."
+		errfileEXT="incorrect_molecules_EXT_"+outname+".csv"
+		print "This information has been saved in the following file: %s\n"%(errfileEXT)
+		# Save the information about which molecules could not be processed correctly.
+		np.savetxt(errfileEXT,molserrEXT,fmt="%d")
+		del errfileEXT
+	else:
+		print "All molecules in the EXTERNAL file were processed correctly"
+
 	if verbose:
-		print 'Your molecules file has %d molecules\n' % (len(mols))
+		print 'Your molecules file has %d CORRECT molecules\n' % (len(mols))
 		if formatFileEXT:
-			print 'Your external file contains %d molecules\n' % (len(molsEXT))
+			print 'Your external file contains %d CORRECT molecules\n' % (len(molsEXT))
 
 #declare the vector of zeros to know which positions have appeared
 position_track=[0]*nbBits
@@ -422,14 +460,14 @@ f.close()
 # External Dataset
 ###############################
 if formatFileEXT:
-	if verbose:
-		print "\nProcessing the external file..\n"
+#	if verbose:
+#		print "\nProcessing the external file..\n"
 ###############################
 # Open File
 ###############################
 # Open the files where the fingerprints will be kept:
-	binaryEXT=outname+"_hashed_binaryEXT.csv"
-	countsEXT=outname+"_hashed_countsEXT.csv"
+	binaryEXT=outname+"_hashed_binary_EXT.csv"
+	countsEXT=outname+"_hashed_counts_EXT.csv"
 	if os.path.exists(binaryEXT):
 		os.remove(binaryEXT)
 	f_fp_binEXT=open(binaryEXT,'w')
@@ -460,15 +498,15 @@ if formatFileEXT:
 #Loop over the molecules
 	for molecule_nb,m in enumerate(molsEXT):
 		infoFP={}; infoEXT={}
-		if m is None:	
+		if m is None:
 				print "Erroneous input at molecule (external file): %d" %(molecule_nb)
 		else:
 			if image:
 				image_name="Molecule_Ext_%d.pdf"%(molecule_nb+1)
 				tmp=AllChem.Compute2DCoords(m)
 				Draw.MolToFile(m,image_name,size=(300,300),wedgeBonds=True,kekulize=True)
-			if verbose:
-				print "External molecule: %d\n" % (molecule_nb)
+			#if verbose:
+			#	print "External molecule: %d\n" % (molecule_nb)
 			fpEXT = AllChem.GetMorganFingerprintAsBitVect(m,fp_diam,nbBits,bitInfo=infoFP) 
 			fp_bitsEXT=BitVectToText(fpEXT)
 			fp_countsEXT=list(fp_bitsEXT)
@@ -534,8 +572,8 @@ if formatFileEXT:
 					FPS_EXT[i][j]=0
 					FPS_countsEXT[i][j]=0
 
-		outEXTbinary=outname+"unhashed_binary.csv"
-		outEXTcounts=outname+"unhashed_counts.csv"
+		outEXTbinary=outname+"_unhashed_binary_EXT.csv"
+		outEXTcounts=outname+"_unhashed_counts_EXT.csv"
 #		np.save("unhashed_binary.npy",FPS_EXT)
 #		np.save("unhashed_counts.npy",FPS_countsEXT)
 		np.savetxt(outEXTbinary, FPS_EXT, fmt='%1s', delimiter=',', newline='\n')
