@@ -53,9 +53,8 @@ PCAProtPlot <- function (Data,main="",ylab="PC2",xlab="PC1",Seqs=NULL,PointSize=
                          TitleSize=15,TextSize=15,XAxisSize=15,YAxisSize=15,AngleLab=30,
                          TitleAxesSize=15,LegendTitleSize=15,LegendTextSize=15,tmar=1,bmar=1,rmar=1,lmar=1) 
 {
-	isnot.vector <- function(x) ! is.vector(x) 
 	isnot.null <- function(x) ! is.null(x)
-
+	isnot.vector <- function(x) ! is.vector(x)
   if (length(names(Data)) < 2 || length(names(Data)) > 3){
     stop("Two PCA required. The Data.frame provided has less than two columns (PCA) or more than 3")
   } else if (names(Data)[1] != "PC1" || names(Data)[2] != "PC2"){
