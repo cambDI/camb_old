@@ -176,9 +176,19 @@ Unhashed fingerprints in {\bf binary format} are dropped to the output file \ver
 
 \item Unhashed fingerprints in {\bf counts format}. All substructures present in the input molecules (argument 'mols') will be considered. Each position in the unhashed fingerprint corresponds to a given substructures. Thus, the resulting fingeprints are keyed. In contrast to binary format, where a given bit is set on if a substructure appears in a molecule irrespective of the number of times the substructure is present therein, the number of occurrences of each substructure is accounted. The smiles for each substructure and the number of atoms thereof is given in the output file \verb|COX_smiles_substructures.csv|. These fingerprints are dropped to the output file \verb|COX_unhashed_counts.csv|.
 
+\item In those cases where a given predictive model has been built on unhashed fingeprints, the same fingerprints should be 
+calcualted for new molecules for which predictions are to be made by that model. 
+To this aim, the function "MorganFPs" enables the calculation of both hashed and unhashed fingerprints (in both binary and counts format) for the molecules present in a given file (hereinafter referred to as external file). The unhashed fingeprints will be calculated based on the pool of substructures present in the file indicated in the argument "mols".
+To enable the calculation of fingerprints for the external file, the arguments "extMols" (name of the external file) and "extFileExtension" (file extension of the external file) need to be set on. 
+The hashed fingerprints will be dropped to the following files:
+(i) binary format: \verb|{\it output}_hashed_binaryEXT.csv|, and (ii) counts format: \verb|{\it output}_hashed_countsEXT.csv|.
+If the user also wants the calculation of unhashed fingerprints for the molecules present in the external file, the argument "unhashedExt" needs to be set to TRUE. 
+In this case the unhashed fingeprints will be dropped to the following files:
+(i) binary format: \verb|{\it output}_hashed_binaryEXT.csv|, and (ii) counts format: \verb|{\it output}_hashed_countsEXT.csv|.
+
 \end{itemize}
 
-The index of the molecules that could not be handled during the calculation are dropped to the file \verb|incorrect_molecules_COX.csv|.
+The indexes of the molecules that could not be handled during the calculation are dropped to the file \verb|incorrect_molecules_COX.csv|. Similarly, the indexes of the molecules from the external file that could not be processed are given in the file \verb|incorrect_molecules_EXT_COX.csv.|
 
 In the following paragraph we describe in detail the arguments of the function "MorganFPs":
 \begin{itemize}
