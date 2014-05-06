@@ -29,7 +29,7 @@ Validation(pred, obs)
 }
 \value{
 	A list containing the values for the followin metrics:
-	(i) R2, (ii) R02, (iii) Q2,
+	(i) R2, (ii) R02, (iii) three formualtions of Q2 (see the PCM camb tutorial),
 	(iv) RMSE, (v) Slope, and (vi) MAE.
 	Further details can be found in the references below.
 %%  ~Describe the value returned
@@ -42,6 +42,7 @@ Validation(pred, obs)
 	\cite{beware}
 	\cite{earnest}
 	\cite{cortesGP}
+	\cite{consonni}
 %% ~put references to the literature/web site here ~
 }
 \author{
