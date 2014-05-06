@@ -17,9 +17,8 @@ loadMorganFPs
 	MorganFPs
 	PairwiseDist 
 	PairwiseDistPlot
-PCAProt 
-PCAProtPlot
-plotGrid 
+PCA
+PCAPlot
 	PlotMolecules
 PreProcess 
 RemoveColumnsWithMoreThanHalfNA 
