@@ -159,6 +159,27 @@ fps_COX_512 <- MorganFPs(bits=512,radius=2,type='smi',mols='smiles_COX.smi',
 saveRDS(fps_COX_512,file="fps_COX_512.rds")
 fps_COX_512 <- readRDS("fps_COX_512.rds")
 @
+
+The function 'MorganFPs" enables the calculation of the following types of fingerprints:
+\begin{itemize}
+
+\item Hashed fingerprints in {\bf binary format} of a given number of bits (argument 'bits') considering substructures with a maximum radius, defined with the argument 'radius' for the molecules specified in the argument 'mols'. These fingerprints are dropped to the output file \verb|COX_hashed_binary.csv|, where output corresponds to the value of the argument 'output'. In the example above: 'COX'. 
+In hashed fingerprint several substructures can be mapped to the same bit position.
+Therefore, it might be important for the sake of interpretability to know which substructures are mapped to which bit in the fingerprint. This information is given in the file \verb|COX_features_per_bit_hashed_fp.csv|.
+The first column of the file corresponds to the bit index, whereas the remaining columns correspond to substructure ids.
+This file is created automatically every time the function is run.
+
+\item Hashed fingerprints in {\bf counts format} of a given number of bits (argument 'bits') considering substructures with a maximum radius, defined with the argument 'radius' for the molecules specified in the argument 'mols'. These fingerprints are dropped to the output file \verb|COX_hashed_counts.csv|.
+
+\item Unhashed fingerprints in {\bf binary format}. All substructures present in the input molecules (argument 'mols') will be considered. Each position in the unhashed fingerprint corresponds to a given substructures. Thus, the resulting fingeprints are keyed. The smiles for each substructure and the number of atoms thereof is given in the output file \verb|COX_smiles_substructures.csv|. This file is created automatically every time the function is run. 
+Unhashed fingerprints in {\bf binary format} are dropped to the output file \verb|COX_unhashed_binary.csv|.
+
+\item Unhashed fingerprints in {\bf counts format}. All substructures present in the input molecules (argument 'mols') will be considered. Each position in the unhashed fingerprint corresponds to a given substructures. Thus, the resulting fingeprints are keyed. In contrast to binary format, where a given bit is set on if a substructure appears in a molecule irrespective of the number of times the substructure is present therein, the number of occurrences of each substructure is accounted. The smiles for each substructure and the number of atoms thereof is given in the output file \verb|COX_smiles_substructures.csv|. These fingerprints are dropped to the output file \verb|COX_unhashed_counts.csv|.
+
+\end{itemize}
+
+The index of the molecules that could not be handled during the calculation are dropped to the file \verb|incorrect_molecules_COX.csv|.
+
 In the following paragraph we describe in detail the arguments of the function "MorganFPs":
 \begin{itemize}
 \item {\bf bits:} Number of bits of the hashed fingerprints. The default value is 512.
@@ -169,7 +190,7 @@ More information on ECFP fingerprints can be found here: \verb|http://www.chemax
 \item {\bf output:} Label that will be appended to all ouput files (see below).
 \item {\bf keep:} The fingeprints that will be kept after the calculation.
 Apart from calculating different types of fingerprints, the function returns a data.frame with the type of fingerprints specified with this argument.  Possible types are: \verb|hashed_binary|,\verb|hashed_counts|, \verb|unhashed_binary|, \verb|unhashed_counts|, and if applicable, \verb|hashed_binaryEXT|, \verb|hashed_countsEXT|, \verb|unhashed_binaryEXT| and \verb|unhashed_countsEXT|.
-The default value is "hashed_binary".
+The default value is \verb|"hashed_binary"|.
 \item {\bf images:} If TRUE, individual ".pdf" files containing (i) the image of each substructure in the context of a molecule presenting it, and (ii) each molecule correctly processed, are created.  Be aware that the number of substructures can be large depending on the number and diversity of the molecules present in the input file. Thus, allow for sufficient memory in those cases.
 The default value is FALSE.
 \item {\bf unhashed:} If TRUE, unhashed fingeprints, both in binary format and with counts, are calculated. The default value is FALSE.
@@ -182,6 +203,7 @@ substructures in the molecules present in the file specified in "mols". The defa
 \item {\bf unhashedExt:} If TRUE, unhashed fingerprints are calcualted for the molecules specified in "extMols". The default value is FALSE.
 \item {\bf logFile:} If not FALSE, file where the log messages will be dropped. The default value is FALSE.
 \end{itemize}
+
 
 add all options of the functions
 %Say the files that are generated.
