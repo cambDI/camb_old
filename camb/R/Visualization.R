@@ -109,14 +109,14 @@ PCAPlot <- function (Data,main="",ylab="PC2",xlab="PC1",Seqs=NULL,PointSize=4,
 }
 
 ##############
-PairwiseDist <- function(Data,method="jaccard",..){
+PairwiseDist <- function(Data,method="jaccard",...){
   if (is.matrix(Data) || is.data.frame(Data)){
     Data <- unique(Data)
     methods <- c("manhattan", "euclidean", "canberra", "bray", "kulczynski", "jaccard",
                  "gower", "altGower", "morisita", "horn", "mountford", "raup" , "binomial",
                  "chao", "cao")
     method <- match.arg(method,methods)
-    pwdist <- vegdist(Data, method = method)
+    pwdist <- vegdist(Data, method = method,...)
     pwdist <- data.frame(as.vector(pwdist))
     names(pwdist) <- "Distance"
     return(pwdist)
