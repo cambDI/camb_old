@@ -10,7 +10,6 @@ isnot.vector <- function(x) ! is.vector(x)
 isnot.null <- function(x) ! is.null(x)
   suppressWarnings(require(pbapply,quietly=TRUE,warn.conflicts=FALSE)) || stop("Pacakge 'pbapply' is required")
   is.installed <- function(mypkg) is.element(mypkg, installed.packages()[,1])
-  isnot.null <- function(x) ! is.null(x)
   if (length(IDs) !=4) {stop("Only four compounds per plot supported at the moment..")}
   if (file.info(sdf.file)$size  == 0) {stop("Input file is empty")}
   if (!is.installed('png')){stop("Pacakge 'png' is required")}
