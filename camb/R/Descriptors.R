@@ -82,7 +82,7 @@ sink()
 return(properties)
 }
 
-ShowPropertiesSDF <- function(structures.file,type=1 ){ ## 1 refers to not smiles
+ShowPropertiesSDF <- function(structures.file,type=1){ ## 1 refers to not smiles
 if (!file.exists(structures.file)) {stop("File does not exist")}
 if (file.info(structures.file)$size  == 0) {stop("Input file is empty")}
 output <- tempfile("props_temp",fileext=".csv")
