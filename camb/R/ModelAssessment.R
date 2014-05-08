@@ -36,73 +36,73 @@ ErrorBarplot <- function(X, Y, err, fill = X,
 }
 
 ##############
-plotGrid <- function(plots,NRows,NCols,HeightBlocks,MyLegend=NULL,LegendRight=NULL,filename=NULL,PDFheight=10,PDFwidth=10){ 
-	isnot.null <- function(x) ! is.null(x)
-	isnot.vector <- function(x) ! is.vector(x)
-  if(is.null(MyLegend) && length(HeightBlocks) != NRows){stop("The length of each column is given in HeightBlocks. Thus, the length of HeightBlocks should be equal to the number of columns")}
-  if(isnot.null(MyLegend) && length(HeightBlocks) != 2 && is.null(LegendRight)){stop("HeightBlocks defines the height of the plots and the legend. Therefore, its length has to be equal to 2")}
-  if(isnot.null(MyLegend) && isnot.null(LegendRight) && length(HeightBlocks) != NRows){stop("The length of each column is given in HeightBlocks. Thus, the length of HeightBlocks should be equal to the number of columns")}
-  
-  if (is.null(filename)){
-    t <- c("grid.arrange(arrangeGrob(")
-    for (i in 1:length(plots)){
-      t <- paste(t,plots[i]," + theme(legend.position='none'),",sep="")
-    }
-    if (isnot.null(MyLegend)){
-      if (length(HeightBlocks)>1){
-        jj <-  c(paste0(HeightBlocks[1:length(HeightBlocks)-1],","),HeightBlocks[length(HeightBlocks)])
-      } else {
-        jj <- HeightBlocks[1]
-      }
-      jj <- paste(jj,collapse=" ")
-      t <- paste(t,"nrow= ",NRows ,", ncol= ",NCols,"),arrangeGrob(MyLegend,nrow=1),heights=c(",jj,"))" )
-    } else {
-      if (length(HeightBlocks)>1){
-        jj <-  c(paste0(HeightBlocks[1:length(HeightBlocks)-1],","),HeightBlocks[length(HeightBlocks)])
-      } else {
-        jj <- HeightBlocks[1]
-      }
-      jj <- paste(jj,collapse=" ")
-      t <- paste(t,"nrow= ",NRows ,", ncol= ",NCols ,", heights=c(",jj,")))" )
-    }
-    if(isnot.null(LegendRight)){
-      substr(t,nchar(t),nchar(t)) = ""
-      t <- paste(t,",ncol=2)")
-    }
-    return(eval(parse(text=t)))
-  } else {
-    t <- c("grid.arrange(arrangeGrob(")
-    for (i in 1:length(plots)){
-      t <- paste(t,plots[i]," + theme(legend.position='none'),",sep="")
-    }
-    if (isnot.null(MyLegend)){
-      if (length(HeightBlocks)>1){
-        jj <-  c(paste0(HeightBlocks[1:length(HeightBlocks)-1],","),HeightBlocks[length(HeightBlocks)])
-      } else {
-        jj <- HeightBlocks[1]
-      }
-      jj <- paste(jj,collapse=" ")
-      t <- paste(t,"nrow= ",NRows ,", ncol= ",NCols,"),arrangeGrob(MyLegend,nrow=1),heights=c(",jj,"))" )
-    } else {
-      if (length(HeightBlocks)>1){
-        jj <-  c(paste0(HeightBlocks[1:length(HeightBlocks)-1],","),HeightBlocks[length(HeightBlocks)])
-      } else {
-        jj <- HeightBlocks[1]
-      }
-      jj <- paste(jj,collapse=" ")
-      t <- paste(t,"nrow= ",NRows ,", ncol= ",NCols ,", heights=c(",jj,")))" )
-    }
-    if(isnot.null(LegendRight)){
-      substr(t,nchar(t),nchar(t)) = ""
-      t <- paste(t,",ncol=2)")
-    }
-    pdfname <- paste(filename,".pdf",sep="")
-    pdf(file=pdfname,width=PDFwidth,height=PDFheight)
-    eval(parse(text=t))
-    dev.off()
-    return(1) 
-  }
-}
+#plotGrid <- function(plots,NRows,NCols,HeightBlocks,MyLegend=NULL,LegendRight=NULL,filename=NULL,PDFheight=10,PDFwidth=10){ 
+#	isnot.null <- function(x) ! is.null(x)
+#	isnot.vector <- function(x) ! is.vector(x)
+#  if(is.null(MyLegend) && length(HeightBlocks) != NRows){stop("The length of each column is given in HeightBlocks. Thus, the length of HeightBlocks should be equal to the number of columns")}
+#  if(isnot.null(MyLegend) && length(HeightBlocks) != 2 && is.null(LegendRight)){stop("HeightBlocks defines the height of the plots and the legend. Therefore, its length has to be equal to 2")}
+#  if(isnot.null(MyLegend) && isnot.null(LegendRight) && length(HeightBlocks) != NRows){stop("The length of each column is given in HeightBlocks. Thus, the length of HeightBlocks should be equal to the number of columns")}
+#  
+#  if (is.null(filename)){
+#    t <- c("grid.arrange(arrangeGrob(")
+#    for (i in 1:length(plots)){
+#      t <- paste(t,plots[i]," + theme(legend.position='none'),",sep="")
+#    }
+#    if (isnot.null(MyLegend)){
+#      if (length(HeightBlocks)>1){
+#        jj <-  c(paste0(HeightBlocks[1:length(HeightBlocks)-1],","),HeightBlocks[length(HeightBlocks)])
+#      } else {
+#        jj <- HeightBlocks[1]
+#      }
+#      jj <- paste(jj,collapse=" ")
+#      t <- paste(t,"nrow= ",NRows ,", ncol= ",NCols,"),arrangeGrob(MyLegend,nrow=1),heights=c(",jj,"))" )
+#    } else {
+#      if (length(HeightBlocks)>1){
+#        jj <-  c(paste0(HeightBlocks[1:length(HeightBlocks)-1],","),HeightBlocks[length(HeightBlocks)])
+#      } else {
+#        jj <- HeightBlocks[1]
+#      }
+#      jj <- paste(jj,collapse=" ")
+#      t <- paste(t,"nrow= ",NRows ,", ncol= ",NCols ,", heights=c(",jj,")))" )
+#    }
+#    if(isnot.null(LegendRight)){
+#      substr(t,nchar(t),nchar(t)) = ""
+#      t <- paste(t,",ncol=2)")
+#    }
+#    return(eval(parse(text=t)))
+#  } else {
+#    t <- c("grid.arrange(arrangeGrob(")
+#    for (i in 1:length(plots)){
+#      t <- paste(t,plots[i]," + theme(legend.position='none'),",sep="")
+#    }
+#    if (isnot.null(MyLegend)){
+#      if (length(HeightBlocks)>1){
+#        jj <-  c(paste0(HeightBlocks[1:length(HeightBlocks)-1],","),HeightBlocks[length(HeightBlocks)])
+#      } else {
+#        jj <- HeightBlocks[1]
+#      }
+#      jj <- paste(jj,collapse=" ")
+#      t <- paste(t,"nrow= ",NRows ,", ncol= ",NCols,"),arrangeGrob(MyLegend,nrow=1),heights=c(",jj,"))" )
+#    } else {
+#      if (length(HeightBlocks)>1){
+#        jj <-  c(paste0(HeightBlocks[1:length(HeightBlocks)-1],","),HeightBlocks[length(HeightBlocks)])
+#      } else {
+#        jj <- HeightBlocks[1]
+#      }
+#      jj <- paste(jj,collapse=" ")
+#      t <- paste(t,"nrow= ",NRows ,", ncol= ",NCols ,", heights=c(",jj,")))" )
+#    }
+#    if(isnot.null(LegendRight)){
+#      substr(t,nchar(t),nchar(t)) = ""
+#      t <- paste(t,",ncol=2)")
+#    }
+#    pdfname <- paste(filename,".pdf",sep="")
+#    pdf(file=pdfname,width=PDFwidth,height=PDFheight)
+#    eval(parse(text=t))
+#    dev.off()
+#    return(1) 
+#  }
+#}
 
 ##############
 ## Observed vs predicted
@@ -212,7 +212,17 @@ Rsquared_CV <- function(model, digits = 3) {
 
 # Calculates the Q squared 
 #Qsquared (z.test,y.test) (predicted vs observed)
-Qsquared <- function(v1, v2) {
+Qsquared1 <- function(v1, v2,resp_tr) {
+  if (is.vector(v1) && is.vector(v2) && length(v1)==length(v2)){
+    y_tr_mean <- mean(resp_tr)
+    first_term <- abs(v1-v2)*abs(v1-v2)
+    second_term <- abs(v2-y_tr_mean)*abs(v2-y_tr_mean)
+    return(1-(sum(first_term)/sum(second_term)))
+  }
+  else {print("Wrong input: input arguments are not vector or have unequal length")}
+}
+##
+Qsquared2 <- function(v1, v2) {
   if (is.vector(v1) && is.vector(v2) && length(v1)==length(v2)){
     y_obs_mean <- mean(v2)
     first_term <- abs(v1-v2)*abs(v1-v2)
@@ -221,12 +231,26 @@ Qsquared <- function(v1, v2) {
   }
   else {print("Wrong input: input arguments are not vector or have unequal length")}
 }
-
+##
+Qsquared3 <- function(v1, v2,resp_tr) {
+  if (is.vector(v1) && is.vector(v2) && length(v1)==length(v2)){
+    y_obs_mean <- mean(v2)
+    y_tr_mean <- mean(resp_tr)
+    first_term <- abs(v1-v2)*abs(v1-v2)
+    first_term <- sum(first_term)/length(v1)
+    second_term <- abs(resp_tr-y_tr_mean)*abs(resp_tr-y_tr_mean)
+    second_term <- sum(second_term)/length(resp_tr)
+    return(1-(first_term/second_term))
+  }
+  else {print("Wrong input: input arguments are not vector or have unequal length")}
+}
 ##############
 ## Validation of models
-Validation <- function(pred,obs){
+Validation <- function(pred,obs,resp_tr){
   if (is.vector(pred) && is.vector(obs) && length(pred)==length(obs)){
-    metrics <- list(R2 = Rsquared(pred,obs), R02 = Rsquared0(pred,obs), Q2 = Qsquared(pred,obs), RMSE = RMSE(pred,obs), Slope=slope(pred,obs), MAE = MAE(pred, obs))
+    metrics <- list(R2 = Rsquared(pred,obs), R02 = Rsquared0(pred,obs), 
+   Q2_1 = Qsquared1(pred,obs,resp_tr),Q2_2 = Qsquared2(pred,obs),Q2_3 = Qsquared3(pred,obs,resp_tr),
+   RMSE = RMSE(pred,obs), Slope=slope(pred,obs), MAE = MAE(pred, obs))
   } else {
     stop("Wrong input: input arguments are not vector or have unequal length")
   }

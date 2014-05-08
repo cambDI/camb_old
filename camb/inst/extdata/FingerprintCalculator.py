@@ -11,9 +11,9 @@ import os,sys
 # Arguments passed to the scripts
 parser = argparse.ArgumentParser(prog='PROG',description='Get Morgan Fingerprints for compounds codified in either SMILES or SDF format using RDkit. Isidro Cortes Ciriano. August/September 2013')
 parser.add_argument('--bits', required='TRUE',type=int, help="Size of the hashed Morgan Fingerprints (binary and with counts)")
-parser.add_argument('--rad', required='TRUE', type=int, help="Maximum radius. Deafault is two, equivalent to ECFP4 from PipelinePilot")
+parser.add_argument('--rad', required='TRUE', type=int, help="Maximum radius of the substructures. Deafault is two, equivalent to ECFP4 from PipelinePilot")
 parser.add_argument('--f', required='TRUE', type=str, help="Format of the input file")
-parser.add_argument('--mols', type=str,help="File containing the molecules {.smi|.smiles|.sdf}. If the format is smiles, each line should contain the smiles and the name separated by a comma (in this order)")
+parser.add_argument('--mols', type=str,help="File containing the molecules {.smi|.smiles|.sdf|.mol2}. If the format is smiles, each line should contain the smiles and the name separated by a comma (in this order)")
 parser.add_argument('--image', action='store_true', help="Write --image if you want the images of the substructures")
 parser.add_argument('--unhashed', action='store_true', help="Write --unhashed if you want the unhashed fingerprints")
 parser.add_argument('--v', action='store_true', help="Verbose")
@@ -38,6 +38,11 @@ unhashedEXT=args['unhashedEXT']
 RDkitPath=args['f']
 outname=args['output']
 sys.path.append(RDkitPath)
+
+
+if (formatFileEXT and not fileMolsEXT) or (fileMolsEXT and not formatFileEXT):
+	sys.exit("If molsEXT is defined, the argument extF also needs to be defined and vice versa.\nThe calculation has stopped here.")
+
 
 if verbose:
 	if image:
@@ -92,6 +97,22 @@ f_fp_counts=open(fp_hash_c,'w')
 #####################################
 # Read Molecules
 #####################################
+### Read Mol2 files
+def RetrieveMol2Block(fileLikeObject, delimiter="@<TRIPOS>MOLECULE"):
+	import rdkit.Chem
+	"""generator which retrieves one mol2 block at a time
+	"""
+	mol2 = []
+	for line in fileLikeObject:
+		if line.startswith(delimiter) and mol2:
+			yield "".join(mol2)
+			mol2 = []
+			mol2.append(line)
+	if mol2:
+		yield "".join(mol2)
+
+
+
 if formatFile == 'smi' or formatFile == 'smiles':
 	if verbose:
 		print "Format of the main file = SMILES"
@@ -103,6 +124,21 @@ if formatFile == 'smi' or formatFile == 'smiles':
 			mols.append(m)
 		else:
 			molserr.append(i)
+	nbMols=len(mols)
+elif formatFile == 'mol2':
+	molss=[]
+	with open(fileMols) as fi:
+		for mol2 in RetrieveMol2Block(fi):
+			rdkMolecule = rdkit.Chem.MolFromMol2
+			molss.append(rdkMolecule)
+	molserr=[]
+	mols=[]
+	for i,m in enumerate(molss):
+		if m is not None:
+			mols.append(m)
+		else:
+			molserr.append(i)
+			mols.append(m)  
 	nbMols=len(mols)
 else:
 	if verbose:
@@ -130,27 +166,63 @@ if verbose:
 	else:
 		print "All molecules in the input file were processed correctly"
 
-
-
+###########################
 # External File
+##########################
 if formatFileEXT:
+	molserrEXT=[]
+	molsEXT=[]
 	if formatFileEXT == 'smi' or formatFileEXT == 'smiles':
 		if verbose:
 			print "Format of the external file = SMILES"
-		supplEXT = Chem.SmilesMolSupplier(fileMols,smilesColumn=0,nameColumn=1,delimiter=',',titleLine=False)
-		molsEXT= [x for x in supplEXT]
+		supplEXT = Chem.SmilesMolSupplier(fileMolsEXT,smilesColumn=0,nameColumn=1,delimiter=',',titleLine=False)
+		for i,m in enumerate(supplEXT):
+			if m is not None:
+				molsEXT.append(m)
+			else:
+				molserrEXT.append(i)
+		nbMolsEXT=len(molsEXT)
+	elif formatFile == 'mol2':
+		molssEXT=[]
+		with open(fileMolsEXT) as fi:
+			for mol2 in RetrieveMol2Block(fi):
+				rdkMolecule = rdkit.Chem.MolFromMol2
+				molssEXT.append(rdkMolecule)
+		for i,m in enumerate(molssEXT):
+			if m is not None:
+				molsEXT.append(m)
+			else:
+				molserrEXT.append(i)
+				molsEXT.append(m)  
 		nbMolsEXT=len(molsEXT)
 	else:
 		if verbose:
 			print "Format of the external file = SDF"
 		supplEXT = Chem.SDMolSupplier(fileMolsEXT)
-		molsEXT= [ x for x in supplEXT]
+		for i,m in enumerate(supplEXT):
+			if m is not None:
+				molsEXT.append(m)
+			else:
+				molserrEXT.append(i)
 		nbMolsEXT=len(molsEXT)
 
+if verbose and formatFileEXT: 
+	if len(molserrEXT) !=0:
+		print "The following %d molecules (starting at zero) from the EXTERNAL file could not be processed:\n"%(len(molserr))
+		for x in molserrEXT: print x
+		print "NOTE: the indexes of the molecules start at zero. Thus the first molecule is molecule 0."
+		errfileEXT="incorrect_molecules_EXT_"+outname+".csv"
+		print "This information has been saved in the following file: %s\n"%(errfileEXT)
+		# Save the information about which molecules could not be processed correctly.
+		np.savetxt(errfileEXT,molserrEXT,fmt="%d")
+		del errfileEXT
+	else:
+		print "All molecules in the EXTERNAL file were processed correctly"
+
 	if verbose:
-		print 'Your molecules file has %d molecules\n' % (len(mols))
+		print 'Your molecules file has %d CORRECT molecules\n' % (len(mols))
 		if formatFileEXT:
-			print 'Your external file contains %d molecules\n' % (len(molsEXT))
+			print 'Your external file contains %d CORRECT molecules\n' % (len(molsEXT))
 
 #declare the vector of zeros to know which positions have appeared
 position_track=[0]*nbBits
@@ -189,8 +261,10 @@ widgets = ['Progression: ', Percentage(), ' ', Bar(marker='.',left='[',right=']'
 pbar = ProgressBar(widgets=widgets, maxval=nbMols)
 pbar.start()
 
-
+smiles_subs_kept =[]
+Atoms_subs=[]
 nbFeatTot=0
+
 #Loop over the molecules
 for molecule_nb,m in enumerate(mols):
 	info={}; info2={}
@@ -234,29 +308,34 @@ for molecule_nb,m in enumerate(mols):
 				env=Chem.FindAtomEnvironmentOfRadiusN(m,radius,atom)
 				amap={}
 				submol=Chem.PathToSubmol(m,env,atomMap=amap)
-				if len(amap)==0: # This means that the radius is zero, so the feature is a single atom
-					arr[1][bit].append(ids_now[i]) #submol
-					# Draw the feature
-					if image and ids_now[i] not in subm_all:
-						image_name="%s_Feature_%d.pdf"%(outname,nbFeatTot)
-						amap={}; amap[atom] = atom	
-						Draw.MolToFile(m,image_name,size=(300,300),highlightAtoms=amap.keys())
-					if ids_now[i]  not in subm_all:
-						nbFeatTot+=1 
-						subm_all.append(ids_now[i])
-					# For each molecule keep the substructures
-					fps_by_comp[0][molecule_nb].append(ids_now[i])
-					arr2[1][bit].append(str(nbFeatTot))
+				if radius ==0: ##if len(amap)==0: # This means that the radius is zero, so the feature is a single atom
+					pass
+				#	arr[1][bit].append(ids_now[i]) #submol
+				#	# Draw the feature
+				#	if image and ids_now[i] not in subm_all:
+				#		image_name="%s_Feature_%d.pdf"%(outname,nbFeatTot)
+				#		amap={}; amap[atom] = atom	
+				#		Draw.MolToFile(m,image_name,size=(300,300),highlightAtoms=amap.keys())
+				#	smiles_subs_kept.append(Chem.MolToSmiles(submol))
+				#	Atoms_subs.append(submol.GetNumAtoms())
+				#	if ids_now[i]  not in subm_all:
+				#		nbFeatTot+=1 
+				#		subm_all.append(ids_now[i])
+				#	# For each molecule keep the substructures
+				#	fps_by_comp[0][molecule_nb].append(ids_now[i])
+				#	arr2[1][bit].append(str(nbFeatTot))
 				else:
 					arr[1][bit].append(ids_now[i] )
 					if image and ids_now[i]  not in subm_all:
 						image_name="%s_Feature_%d.pdf"%(outname,nbFeatTot)
 						Draw.MolToFile(m,image_name,size=(300,300),highlightAtoms=amap.keys())
+					smiles_subs_kept.append(Chem.MolToSmiles(submol))
+					Atoms_subs.append(submol.GetNumAtoms())
 					if ids_now[i] not in subm_all:
 						nbFeatTot+=1
 						subm_all.append(ids_now[i] )
-					fps_by_comp[0][molecule_nb].append(ids_now[i] )
-					arr2[1][bit].append(str(nbFeatTot))
+					fps_by_comp[0][molecule_nb].append(ids_now[i] ) 
+					arr2[1][bit].append(str(nbFeatTot)) 
 
 
 			else: #The bit is already on!
@@ -264,33 +343,39 @@ for molecule_nb,m in enumerate(mols):
 				amap={}
 				submol=Chem.PathToSubmol(m,env,atomMap=amap)
 
-				if len(amap)==0 and ids_now[i]  not in arr[1][bit]:
-					arr[1][bit].append(ids_now[i] )
-					if image and ids_now[i]  not in subm_all:
-						image_name="%s_Feature_%d.pdf"%(outname,nbFeatTot)
-						amap={}; amap[atom] = atom
-						Draw.MolToFile(m,image_name,size=(300,300),highlightAtoms=amap.keys())
-					if ids_now[i]  not in subm_all:
-						nbFeatTot+=1
-						subm_all.append(ids_now[i] )
-					fps_by_comp[0][molecule_nb].append(ids_now[i] )
-					arr2[1][bit].append(str(nbFeatTot))
+				if radius == 0 and ids_now[i]  not in arr[1][bit]:  ####:if len(amap)==0 and ids_now[i]  not in arr[1][bit]:
+					pass
+				#	arr[1][bit].append(ids_now[i] )
+				#	if image and ids_now[i]  not in subm_all:
+				#		image_name="%s_Feature_%d.pdf"%(outname,nbFeatTot)
+				#		amap={}; amap[atom] = atom
+				#		Draw.MolToFile(m,image_name,size=(300,300),highlightAtoms=amap.keys())
+				#	smiles_subs_kept.append(Chem.MolToSmiles(submol))
+				#	Atoms_subs.append(submol.GetNumAtoms())
+				#	if ids_now[i]  not in subm_all:
+				#		nbFeatTot+=1
+				#		subm_all.append(ids_now[i])
+				#	fps_by_comp[0][molecule_nb].append(ids_now[i])
+				#	arr2[1][bit].append(str(nbFeatTot)) 
 				# We keep the all the features for each compound anyway
-				if len(amap)==0 and ids_now[i]  in arr[1][bit]:
-					fps_by_comp[0][molecule_nb].append(ids_now[i] )
+				if radius == 123123 and ids_now[i]  in arr[1][bit]: ###if len(amap)==0 and ids_now[i]  in arr[1][bit]:
+					pass
+					#fps_by_comp[0][molecule_nb].append(ids_now[i] )
 
-				if len(amap)!=0 and ids_now[i]  not in arr[1][bit]:
+				if submol.GetNumAtoms() >1 and ids_now[i]  not in arr[1][bit]: #####len(amap)!=0 and ids_now[i]  not in arr[1][bit]:
 					arr[1][bit].append(ids_now[i] )
 					if image and ids_now[i]  not in subm_all:
 						image_name="%s_Feature_%d.pdf"%(outname,nbFeatTot)
 						Draw.MolToFile(m,image_name,size=(300,300),highlightAtoms=amap.keys())
+					smiles_subs_kept.append(Chem.MolToSmiles(submol))
+					Atoms_subs.append(submol.GetNumAtoms())
 					if ids_now[i] not in subm_all:
 						nbFeatTot+=1
 						subm_all.append(ids_now[i] )
-					fps_by_comp[0][molecule_nb].append(ids_now[i] )
-					arr2[1][bit].append(str(nbFeatTot))
+					fps_by_comp[0][molecule_nb].append(ids_now[i] ) 
+					arr2[1][bit].append(str(nbFeatTot)) 
 				# We keep the all the features for each compound anyway
-				if len(amap)!=0 and ids_now[i]  in arr[1][bit]:
+				if submol.GetNumAtoms() >1 and ids_now[i]  in arr[1][bit]: ####if len(amap)!=0 and ids_now[i]  in arr[1][bit]:
 					fps_by_comp[0][molecule_nb].append(ids_now[i] )
 
 		 # Print the features in the corresponding files
@@ -313,6 +398,7 @@ for molecule_nb,m in enumerate(mols):
 		f_fp_counts.write("\n")
 
 # Updating the progress bar.
+	#if verbose:
 	if nbMols % (1+molecule_nb) == 0:
 		pbar.update(molecule_nb)
 		print "\n"
@@ -320,7 +406,7 @@ for molecule_nb,m in enumerate(mols):
 f_fp_bin.close()
 f_fp_counts.close()
 
-fp_per_bit=outname+'features_per_bit_hashed_fp.csv'
+fp_per_bit=outname+'_features_per_bit_hashed_fp.csv'
 if os.path.exists(fp_per_bit):
 	os.remove(fp_per_bit)
 
@@ -357,18 +443,31 @@ if unhashed:
 	np.savetxt(fpcounts, FPS_counts, fmt='%1s', delimiter=',', newline='\n')
 
 
+
+###############################
+# Write the smiles for the substructures
+###############################
+
+filename = outname+"_smiles_substructures.csv"
+f = open(filename,'w')
+dat = 'Substructure_ID\tSmiles'
+f.write(dat)
+for i,m in enumerate(smiles_subs_kept):
+	dat = str(Atoms_subs[i])+'\t'+m+'\n'
+	f.write(dat)
+f.close()
 ###############################
 # External Dataset
 ###############################
 if formatFileEXT:
-	if verbose:
-		print "\nProcessing the external file..\n"
+#	if verbose:
+#		print "\nProcessing the external file..\n"
 ###############################
 # Open File
 ###############################
 # Open the files where the fingerprints will be kept:
-	binaryEXT=outname+"_hashed_binaryEXT.csv"
-	countsEXT=outname+"_hashed_countsEXT.csv"
+	binaryEXT=outname+"_hashed_binary_EXT.csv"
+	countsEXT=outname+"_hashed_counts_EXT.csv"
 	if os.path.exists(binaryEXT):
 		os.remove(binaryEXT)
 	f_fp_binEXT=open(binaryEXT,'w')
@@ -399,15 +498,15 @@ if formatFileEXT:
 #Loop over the molecules
 	for molecule_nb,m in enumerate(molsEXT):
 		infoFP={}; infoEXT={}
-		if m is None:	
+		if m is None:
 				print "Erroneous input at molecule (external file): %d" %(molecule_nb)
 		else:
 			if image:
 				image_name="Molecule_Ext_%d.pdf"%(molecule_nb+1)
 				tmp=AllChem.Compute2DCoords(m)
 				Draw.MolToFile(m,image_name,size=(300,300),wedgeBonds=True,kekulize=True)
-			if verbose:
-				print "External molecule: %d\n" % (molecule_nb)
+			#if verbose:
+			#	print "External molecule: %d\n" % (molecule_nb)
 			fpEXT = AllChem.GetMorganFingerprintAsBitVect(m,fp_diam,nbBits,bitInfo=infoFP) 
 			fp_bitsEXT=BitVectToText(fpEXT)
 			fp_countsEXT=list(fp_bitsEXT)
@@ -473,8 +572,8 @@ if formatFileEXT:
 					FPS_EXT[i][j]=0
 					FPS_countsEXT[i][j]=0
 
-		outEXTbinary=outname+"unhashed_binary.csv"
-		outEXTcounts=outname+"unhashed_counts.csv"
+		outEXTbinary=outname+"_unhashed_binary_EXT.csv"
+		outEXTcounts=outname+"_unhashed_counts_EXT.csv"
 #		np.save("unhashed_binary.npy",FPS_EXT)
 #		np.save("unhashed_counts.npy",FPS_countsEXT)
 		np.savetxt(outEXTbinary, FPS_EXT, fmt='%1s', delimiter=',', newline='\n')

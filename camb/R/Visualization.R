@@ -23,32 +23,35 @@ return(p)
 }
 
 #################################################################################
-## PCA analysis of the Proteins 
+## PCA analysis 
 
 isnot.null <- function(x) ! is.null(x)
 isnot.vector <- function(x) ! is.vector(x)
 
 ##############
-## Get the two first PC of the sequence descriptors
-PCAProt <- function(Data,SeqsName=NULL){ 
-  if (is.matrix(Data) || is.data.frame(Data)){
-    ana <- prcomp(t(Data), cor=TRUE,scale=TRUE,center=TRUE)  
-    PC1 <- as.vector(ana$rotation[,1])   
-    PC2 <- as.vector(ana$rotation[,2])
-    if (is.null(SeqsName)){
-      Data <- data.frame(PC1,PC2)
-    } else {
-      Data <- data.frame(PC1,PC2,SeqsName)
+PCA <- function (Data, RowNames = NULL,cor=TRUE, scale = TRUE, center = TRUE,...) {
+  if (is.matrix(Data) || is.data.frame(Data)) {
+      ana <- prcomp(t(Data), cor = cor, scale = scale, center = center,...)
+      PC1 <- as.vector(ana$rotation[, 1])
+      PC2 <- as.vector(ana$rotation[, 2])
+      if (is.null(RowNames)) {
+        Data <- data.frame(PC1, PC2)
+      out <- list(Data=Data,PCs_all=ana$rot,Std=ana$sdev,Info=summary(ana))
+      }
+      else {
+        Data <- data.frame(PC1, PC2, RowNames)
+      out <- list(Data=Data,PCs_all=ana$rot,Std=ana$sdev,Info=summary(ana))
+      }
+      return(out)
     }
-    return(Data)
-  }else{
-    stop("Input data must be a numeric matrix or data.frame")
-  }
+  else {
+      stop("Input data must be a numeric matrix or data.frame")
+    }
 }
 
 ##############
 # Plot the towo first PC of the sequence descriptors
-PCAProtPlot <- function (Data,main="",ylab="PC2",xlab="PC1",Seqs=NULL,PointSize=4,
+PCAPlot <- function (Data,main="",ylab="PC2",xlab="PC1",Seqs=NULL,PointSize=4,
                          LegendPosition="right",LegendName="Sequences",ColLegend=1,RowLegend=NULL,
                          TitleSize=15,TextSize=15,XAxisSize=15,YAxisSize=15,AngleLab=30,
                          TitleAxesSize=15,LegendTitleSize=15,LegendTextSize=15,tmar=1,bmar=1,rmar=1,lmar=1) 
@@ -56,11 +59,11 @@ PCAProtPlot <- function (Data,main="",ylab="PC2",xlab="PC1",Seqs=NULL,PointSize=
 	isnot.null <- function(x) ! is.null(x)
 	isnot.vector <- function(x) ! is.vector(x)
   if (length(names(Data)) < 2 || length(names(Data)) > 3){
-    stop("Two PCA required. The Data.frame provided has less than two columns (PCA) or more than 3")
+    stop("Two PCs required. The Data.frame provided has less than two columns (PCs) or more than 3")
   } else if (names(Data)[1] != "PC1" || names(Data)[2] != "PC2"){
     stop("Column names have to be {PC1, PC2}")
   } else if (length(names(Data)) == 2 && is.null(Seqs)){
-    print("No sequence names provided")
+    print("No names provided")
     p <- ggplot(Data, aes(x=PC1, y=PC2)) +
       geom_point(size=PointSize) + theme_bw() + ggtitle(main) + ylab(ylab) + xlab(xlab) +
       theme(text = element_text(size=TextSize),axis.text.x = element_text(size=XAxisSize,angle = AngleLab, hjust = 1),
@@ -73,9 +76,9 @@ PCAProtPlot <- function (Data,main="",ylab="PC2",xlab="PC1",Seqs=NULL,PointSize=
              shape = guide_legend(LegendName,ncol=ColLegend,nrow=RowLegend))
   } else if (length(names(Data)) == 2 && isnot.null(Seqs)){
     if (length(Seqs) != nrow(Data) || isnot.vector(Seqs)) {
-      stop("Either the sequences are not in a vector, or its length is not equal to the number of datapoints (rows of the input data)")
+      stop("Either the names are not in a vector, or its length is not equal to the number of datapoints (rows of the input data)")
     } else {
-      print("Sequence names provided")
+      print("Names provided")
       Data <- data.frame(Data,Seqs=Seqs)
       a <- length(unique(Seqs))
       p <- ggplot(Data, aes(x=PC1, y=PC2, color=Seqs,shape=Seqs)) +
@@ -89,7 +92,7 @@ PCAProtPlot <- function (Data,main="",ylab="PC2",xlab="PC1",Seqs=NULL,PointSize=
                shape = guide_legend(LegendName,ncol=ColLegend,nrow=RowLegend))
     } 
   } else {
-    print("Sequence names provided in the third column of the data.frame")
+    print("Names provided in the third column of the data.frame")
     Seqs <- unlist(Data[names(Data)[3]])
     a <- length(unique(Seqs))
     namee <- names(Data)[3]
@@ -106,14 +109,14 @@ PCAProtPlot <- function (Data,main="",ylab="PC2",xlab="PC1",Seqs=NULL,PointSize=
 }
 
 ##############
-PairwiseDist <- function(Data,method="jaccard",..){
+PairwiseDist <- function(Data,method="jaccard",...){
   if (is.matrix(Data) || is.data.frame(Data)){
     Data <- unique(Data)
     methods <- c("manhattan", "euclidean", "canberra", "bray", "kulczynski", "jaccard",
                  "gower", "altGower", "morisita", "horn", "mountford", "raup" , "binomial",
                  "chao", "cao")
     method <- match.arg(method,methods)
-    pwdist <- vegdist(Data, method = method)
+    pwdist <- vegdist(Data, method = method,...)
     pwdist <- data.frame(as.vector(pwdist))
     names(pwdist) <- "Distance"
     return(pwdist)
@@ -159,7 +162,7 @@ MaxPerf <- function(meanNoise=0,sdNoise,meanResp,sdResp,lenPred,iters=1000,
     noise <- rnorm(length(x),mean=meanNoise,sd=sdNoise)
     y <- x+noise
     R2[i] <- Rsquared(y,x)
-    Q2[i] <- Qsquared(y,x)
+    Q2[i] <- Qsquared2(y,x)
     R02[i] <- Rsquared0(y,x)
     rmsep[i] <- RMSE(y,x)
   }
