@@ -43,7 +43,7 @@ Install the camb package and it's dependencies. Then load the package.
 <<echo=FALSE,results='hide',warning=FALSE,message=FALSE>>=
 library(camb)
 library(ggplot2)
-setwd("~/Dropbox/projects/camb/examples/LogS/Reference_2")
+setwd("~/Dropbox/projects/camb/examples/QSPR/LogS/Reference_2")
 @
 \section{Molecules}
 

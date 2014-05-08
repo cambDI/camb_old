@@ -7,7 +7,7 @@
 \arguments{
   \item{all.models}{a list of caret models to ensemble.}
 
-  \item{optFUN}{the optimization function to use}
+  \item{optFUN}{the optimization function to use} 
 
   \item{...}{additional arguments to pass to the
   optimization function}
