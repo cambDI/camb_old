@@ -73,6 +73,7 @@ We can have a look at the response variable:
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,fig.align='center',fig.cap="LogS Distribution",out.width='12cm'>>=
 properties <- read.csv("properties.csv")
 properties <- properties[properties$Kept==1, ]
+head(properties)
 targets <- data.frame(Name = properties$Name, target = properties$EXPT)
 p <- DensityResponse(targets$target) + xlab("LogS")
 p
