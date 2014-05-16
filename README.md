@@ -1,5 +1,6 @@
-camb - chemistry aware model builder
-====================================
+camb - chemistry aware model builder is an R package that can be used for the rapid generation of quantitative predictive models in the area of medicinal chemistry (QSAR, QSPR, QSAM, PCM). It is aimed at both advanced and beginner R users.
+Its capabilities include the standardisation of representation of chemical structures, computation of 905 two-dimensional and 14 fingerprint type descriptors for small molecules, 8 types of amino acid descriptors, 13 whole protein sequence descriptors, filter methods for feature selection, generation of predictive models (R package {\it caret}), as well as techniques to ensemble these models (R package {\it caretEnsemble}).
+Results can be visualised through high-quality, customisable plots (R package {\it ggplot2}).
 
 To install camb type, "R CMD install camb"
 

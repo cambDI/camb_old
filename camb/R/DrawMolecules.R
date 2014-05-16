@@ -1,9 +1,11 @@
-
+# This function isn't working right now... moving on.
 DrawMoleculeInSDF <- function(structures.file, structure.number, file.name, useNameAsTitle) {
   if (file.info(structures.file)$size  == 0) {stop("Input file is empty")}
   print(structure.number)
   .C("R_drawMoleculeInSDF", structures.file, as.integer(structure.number), file.name, useNameAsTitle)
 }
+
+#.C("R_drawMoleculeInSDF", system.file("test_structures", "structures_10.sdf", package = "camb"), 1, "output.png", FALSE)
 
 PlotMolecules <- function(sdf.file, IDs,pdf.file=NULL,PDFMain=NULL,useNameAsTitle=TRUE) {
 isnot.vector <- function(x) ! is.vector(x) 
