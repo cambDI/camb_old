@@ -2,8 +2,19 @@
 ## Visualization
 #################################################################################
 
-##############
-## Density of the response variable
+#' Visualise the target distribution
+#' 
+#' TBD: add details here and complete the documentation for the rest of the method (which has another methods docs for now)
+#' 
+#' @param structures.file A character, vector, matrix or data.frame containing the amino acids in either one-letter or three-letter format. 
+#' Amino acids symbols are valid in capitals or in lower-case.
+#' @export
+#' @return A data.frame with the properties of the molecules read from the original structure file.
+#' @references \url{http://www.ggasoftware.com/opensource/indigo}
+#' @examples
+#' test_mols <- system.file("test_structures", "structures_10.sdf", package = "camb")
+#' StandardiseMolecules(structures.file=test_mols, standardised.file="st.sdf", removed.file="removed.sdf", properties.file="properties.csv")
+#' @author Daniel Murrell <dsmurrell@@gmail.com> and Isidro Cortes <isidrolauscher@@gmail.com>
 DensityResponse <- function(Data,xlab="",ylab="",main="",alpha=0.2,
                             binwidth=NULL,histFill="white",histCol="black",
                             densityFill="#FF6666",TitleSize=15,TextSize=15,

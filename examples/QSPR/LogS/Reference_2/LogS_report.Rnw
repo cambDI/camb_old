@@ -52,7 +52,7 @@ setwd("~/Dropbox/projects/camb/examples/QSPR/LogS/Reference_2")
 StandardiseMolecules(structures.file="solubility_2007_ref2.sdf", 
                      standardised.file="standardised.sdf", 
                      removed.file="removed.sdf",
-                     output = "properties.csv",
+                     properties.file = "properties.csv",
                      remove.inorganic=TRUE, 
                      fluorine.limit=3, 
                      chlorine.limit=3, 
@@ -71,11 +71,11 @@ descriptors <- RemoveStandardisedPrefix(descriptors)
 \section{Target Visualization}
 We can have a look at the response variable:
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,fig.align='center',fig.cap="LogS Distribution",out.width='12cm'>>=
-properties <- read.csv("properties.csv")
+properties <- read.table("properties.txt", header=TRUE, sep="\t")
 properties <- properties[properties$Kept==1, ]
 head(properties)
-targets <- data.frame(Name = properties$Name, target = properties$EXPT)
-p <- DensityResponse(targets$target) + xlab("LogS")
+targets <- data.frame(Name = properties$NAME, target = properties$EXPT)
+p <- DensityResponse(targets$target) + xlab("LogS Target Distribution")
 p
 @
 
