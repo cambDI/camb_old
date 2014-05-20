@@ -23,13 +23,13 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="LogS_report.Rnw" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="LogS_report.Rnw" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/examples/QSPR/LogS/Reference_2/LogS_report.Rnw">
           <provider editor-type-id="com.intellij.persistence.database.editor.CsvTableFileEditorProvider">
             <state />
           </provider>
           <provider selected="true" editor-type-id="text-editor">
-            <state line="78" column="0" selection-start="3006" selection-end="3006" vertical-scroll-proportion="0.5416667" vertical-offset="897" max-vertical-offset="3540">
+            <state line="78" column="0" selection-start="3006" selection-end="3006" vertical-scroll-proportion="-10.111111" vertical-offset="897" max-vertical-offset="3540">
               <folding />
             </state>
           </provider>
@@ -53,10 +53,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Descriptors.R" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="Descriptors.R" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/camb/R/Descriptors.R">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="225" column="0" selection-start="9286" selection-end="9286" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="7605">
+            <state line="385" column="0" selection-start="16266" selection-end="16266" vertical-scroll-proportion="0.36158192" vertical-offset="5583" max-vertical-offset="7605">
               <folding />
             </state>
           </provider>
@@ -86,9 +86,9 @@
       <list>
         <option value="$PROJECT_DIR$/camb/src/api/src/indigo_version.h" />
         <option value="$PROJECT_DIR$/camb/src/standardise.cpp" />
-        <option value="$PROJECT_DIR$/camb/R/Descriptors.R" />
         <option value="$PROJECT_DIR$/camb/NAMESPACE" />
         <option value="$PROJECT_DIR$/examples/QSPR/LogS/Reference_2/LogS_report.Rnw" />
+        <option value="$PROJECT_DIR$/camb/R/Descriptors.R" />
       </list>
     </option>
   </component>
@@ -220,13 +220,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/camb/R/Descriptors.R">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="225" column="0" selection-start="9286" selection-end="9286" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="7605">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/camb/NAMESPACE">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="570">
@@ -239,7 +232,14 @@
         <state />
       </provider>
       <provider selected="true" editor-type-id="text-editor">
-        <state line="78" column="0" selection-start="3006" selection-end="3006" vertical-scroll-proportion="0.5416667" vertical-offset="897" max-vertical-offset="3540">
+        <state line="78" column="0" selection-start="3006" selection-end="3006" vertical-scroll-proportion="-10.111111" vertical-offset="897" max-vertical-offset="3540">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/camb/R/Descriptors.R">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="385" column="0" selection-start="16266" selection-end="16266" vertical-scroll-proportion="0.36158192" vertical-offset="5583" max-vertical-offset="7605">
           <folding />
         </state>
       </provider>
