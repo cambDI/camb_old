@@ -43,11 +43,7 @@ Install the camb package and it's dependencies. Then load the package.
 <<echo=FALSE,results='hide',warning=FALSE,message=FALSE>>=
 library(camb)
 library(ggplot2)
-<<<<<<< HEAD
-setwd("~/Dropbox/projects/camb/examples/LogS/Reference_2")
-=======
 setwd("~/Dropbox/projects/camb/examples/QSPR/LogS/Reference_2")
->>>>>>> e07b0708d708c3ba1fc1c5c2123bee363b2657a3
 @
 \section{Molecules}
 
@@ -77,17 +73,9 @@ We can have a look at the response variable:
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,fig.align='center',fig.cap="LogS Distribution",out.width='12cm'>>=
 properties <- read.table("properties.txt", header=TRUE, sep="\t")
 properties <- properties[properties$Kept==1, ]
-<<<<<<< HEAD
-=======
 head(properties)
-<<<<<<< HEAD
 targets <- data.frame(Name = properties$NAME, target = properties$EXPT)
 p <- DensityResponse(targets$target) + xlab("LogS Target Distribution")
-=======
->>>>>>> e07b0708d708c3ba1fc1c5c2123bee363b2657a3
-targets <- data.frame(Name = properties$Name, target = properties$EXPT)
-p <- DensityResponse(targets$target) + xlab("LogS")
->>>>>>> 77d78a011a9d4ac8dfda4635dd3b4d10639acf87
 p
 @
 
