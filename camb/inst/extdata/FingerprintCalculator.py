@@ -40,8 +40,8 @@ outname=args['output']
 sys.path.append(RDkitPath)
 
 
-if (formatFileEXT and not fileMolsEXT) or (fileMolsEXT and not formatFileEXT):
-	sys.exit("If molsEXT is defined, the argument extF also needs to be defined and vice versa.\nThe calculation has stopped here.")
+#if (formatFileEXT and not fileMolsEXT) or (fileMolsEXT and not formatFileEXT):
+#	sys.exit("If molsEXT is defined, the argument extF also needs to be defined and vice versa.\nThe calculation has stopped here.")
 
 
 if verbose:
@@ -448,9 +448,9 @@ if unhashed:
 # Write the smiles for the substructures
 ###############################
 
-filename = outname+"_smiles_substructures.csv"
+filename = outname+"_smiles_substructures.smi"
 f = open(filename,'w')
-dat = 'Substructure_ID\tSmiles'
+dat = 'Substructure_ID\tSmiles\n'
 f.write(dat)
 for i,m in enumerate(smiles_subs_kept):
 	dat = str(Atoms_subs[i])+'\t'+m+'\n'

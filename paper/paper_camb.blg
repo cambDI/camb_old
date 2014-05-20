@@ -1,0 +1,66 @@
+This is BibTeX, Version 0.99d (TeX Live 2012)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: paper_camb.aux
+The style file: natbib.bst
+Database file #1: biblio.bib
+I was expecting a `,' or a `}'---line 1480 of file biblio.bib
+ : keywords = "<!-- Tag Not Handled --><keyword id="
+ :                                                  k0055">Dengue virus",
+I'm skipping whatever remains of this entry
+Warning--entry type for "rdkit" isn't style-file defined
+--line 1608 of file biblio.bib
+You're missing a field part---line 1708 of file biblio.bib
+ : journal={http://github.com/cambDI/camb}#
+ :                                         # Manuscript in Preparation},
+I'm skipping whatever remains of this entry
+I was expecting a `,' or a `}'---line 1714 of file biblio.bib
+ : 
+ : author={Cortes-Ciriano, Isidro},
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+Warning--I didn't find a database entry for "indigo"
+Warning--empty journal in Rlanguage
+Warning--empty journal in ggplot2
+Warning--empty journal in protr
+You've used 19 entries,
+            2378 wiz_defined-function locations,
+            649 strings with 7472 characters,
+and the built_in function-call counts, 9100 in all, are:
+= -- 844
+> -- 569
+< -- 11
++ -- 171
+- -- 169
+* -- 848
+:= -- 1642
+add.period$ -- 82
+call.type$ -- 19
+change.case$ -- 118
+chr.to.int$ -- 19
+cite$ -- 22
+duplicate$ -- 343
+empty$ -- 554
+format.name$ -- 196
+if$ -- 1756
+int.to.chr$ -- 1
+int.to.str$ -- 0
+missing$ -- 18
+newline$ -- 100
+num.names$ -- 76
+pop$ -- 112
+preamble$ -- 1
+purify$ -- 118
+quote$ -- 0
+skip$ -- 236
+stack$ -- 0
+substring$ -- 522
+swap$ -- 55
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 171
+warning$ -- 3
+while$ -- 77
+width$ -- 0
+write$ -- 247
+(There were 3 error messages)

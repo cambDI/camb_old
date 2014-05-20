@@ -2,19 +2,34 @@
 ## Visualization
 #################################################################################
 
-#' Visualise the target distribution
+#' Plot Distribution of the Response Variable
 #' 
-#' TBD: add details here and complete the documentation for the rest of the method (which has another methods docs for now)
+#' This function creates plots the distribution of the response variable.
 #' 
-#' @param structures.file A character, vector, matrix or data.frame containing the amino acids in either one-letter or three-letter format. 
-#' Amino acids symbols are valid in capitals or in lower-case.
+#' @param Data A numeric vector. TBD: explain more
+#' @param xlab Title of the x axis.
+#' @param ylab Title of the y axis.
+#' @param main Title of the plot.
+#' @param alpha Alpha for the fill color of the distribution. Default value 0.2.
+#' @param binwidth Width of the histogram bins. Default value NULL.
+#' @param histFill Fill color of the histogram bars. Default value 'white'.
+#' @param histCol Color of the histogram lines. Default value 'black'.
+#' @param densityFill Fill color of the distribution. Default value "#FF6666".
+#' @param TitleSize Title font size. Default value 15.
+#' @param TextSize Text font size. Default value 15.
+#' @param XAxisSize Size of the text on the X axis. Default value 15.
+#' @param YAxisSize Size of the text on the Y axis. Default value 15.
+#' @param AngleLab Angle of the labels in the X axis. Default value 30. 
+#' @param LegendPosition Position of the legend. Default value 'right'.
+#' @param TitleAxisSize Font size of the axes lables. Default value 15.
+#' @param tmar Top margin size. Default values is 1.
+#' @param bmar ottom margin size. Default values is 1.
+#' @param rmar Right margin size. Default values is 1.
+#' @param lmar Left margin size. Default values is 1. 
+#' @details Additional ggplot2 layers can be added with "+".
 #' @export
-#' @return A data.frame with the properties of the molecules read from the original structure file.
-#' @references \url{http://www.ggasoftware.com/opensource/indigo}
-#' @examples
-#' test_mols <- system.file("test_structures", "structures_10.sdf", package = "camb")
-#' StandardiseMolecules(structures.file=test_mols, standardised.file="st.sdf", removed.file="removed.sdf", properties.file="properties.csv")
-#' @author Daniel Murrell <dsmurrell@@gmail.com> and Isidro Cortes <isidrolauscher@@gmail.com>
+#' @return Returns a ggplot object.
+#' @author Isidro Cortes <isidrolauscher@@gmail.com> and Daniel Murrell <dsmurrell@@gmail.com>
 DensityResponse <- function(Data,xlab="",ylab="",main="",alpha=0.2,
                             binwidth=NULL,histFill="white",histCol="black",
                             densityFill="#FF6666",TitleSize=15,TextSize=15,

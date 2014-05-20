@@ -1,0 +1,127 @@
+\begin{thebibliography}{}
+
+\bibitem[Andersson {\em et~al.}(2011)Andersson, Gustafsson, and
+  Strömbergsson]{andersson}
+Andersson, C.~R., Gustafsson, M.~G., and Strömbergsson, H. (2011).
+\newblock Quantitative chemogenomics: machine-learning models of protein-ligand
+  interaction.
+\newblock {\em Current topics in medicinal chemistry\/}, {\bf 11}(15),
+  1978--1993.
+\newblock {PMID:} 21470169.
+
+\bibitem[Bender(2010)Bender]{bender_databases}
+Bender, A. (2010).
+\newblock Databases: Compound bioactivities go public.
+\newblock {\em Nature Chemical Biology\/}, {\bf 6}(5), 309--309.
+
+\bibitem[Cao {\em et~al.}(2008)Cao, Charisi, Cheng, Jiang, and
+  Girke]{chemmineR}
+Cao, Y., Charisi, A., Cheng, L.~C., Jiang, T., and Girke, T. (2008).
+\newblock Chemminer: a compound mining framework for r.
+\newblock {\em Bioinformatics\/}, {\bf 24}(15), 1733--1734.
+
+\bibitem[Cortes-Ciriano {\em et~al.}(2014)Cortes-Ciriano, Murrell, van Westen,
+  Bender, and Malliavin]{cortesCOX}
+Cortes-Ciriano, I., Murrell, D.~S., van Westen, G.~J., Bender, A., and
+  Malliavin, T. (2014).
+\newblock Ensemble modeling of cyclooxygenase inhibitors.
+\newblock {\em Manuscript in Preparation\/}.
+
+\bibitem[Cortes~Ciriano {\em et~al.}(2014)Cortes~Ciriano, Ain, Subramanian,
+  Lenselink, Mendez~Lucio, IJzerman, Wohlfahrt, Prusis, Malli~avin, van Westen,
+  and Bender]{cortesReview}
+Cortes~Ciriano, I., Ain, Q.~U., Subramanian, V., Lenselink, E.~B.,
+  Mendez~Lucio, O., IJzerman, A.~P., Wohlfahrt, G., Prusis, P., Malli~avin, T.,
+  van Westen, G.~J., and Bender, A. (2014).
+\newblock Polypharmacology modelling using proteochemometrics: Recent
+  developments and future prospects.
+\newblock {\em About to be submitted to Med. Chem. Comm\/}.
+
+\bibitem[Gentleman {\em et~al.}(2004)Gentleman, Carey, Bates, and
+  {others}]{bioconductor}
+Gentleman, R.~C., Carey, V.~J., Bates, D.~M., and {others} (2004).
+\newblock Bioconductor: Open software development for computational biology and
+  bioinformatics.
+\newblock {\em Genome Biology\/}, {\bf 5}, R80.
+
+\bibitem[Golbraikh and Tropsha(2002)Golbraikh and Tropsha]{beware}
+Golbraikh, A. and Tropsha, A. (2002).
+\newblock {Beware of q2!}
+\newblock {\em Journal of molecular graphics \& modelling\/}, {\bf 20}(4),
+  269--276.
+\newblock {PMID:} 11858635.
+
+\bibitem[Guha(2007)Guha]{rcdk}
+Guha, R. (2007).
+\newblock Chemical informatics functionality in r.
+\newblock {\em Journal of Statistical Software\/}, {\bf 18}(6).
+
+\bibitem[Kuhn(2008)Kuhn]{caret}
+Kuhn, M. (2008).
+\newblock Building predictive models in r using the caret package.
+\newblock {\em Journal of Statistical Software\/}, {\bf 28}(5), 1--26.
+
+\bibitem[Landrum(2006)Landrum]{rdkit}
+Landrum, G. (2006).
+\newblock Rdkit: Open-source cheminformatics.
+
+\bibitem[Mente and Kuhn(2012)Mente and Kuhn]{mente}
+Mente, S. and Kuhn, M. (2012).
+\newblock The use of the r language for medicinal chemistry applications.
+\newblock {\em Current topics in medicinal chemistry\/}, {\bf 12}(18),
+  1957--1964.
+\newblock {PMID:} 23110531.
+
+\bibitem[{R Core Team}(2013){R Core Team}]{Rlanguage}
+{R Core Team} (2013).
+\newblock R: A language and environment for statistical computing.
+
+\bibitem[Rogers and Hahn(2010)Rogers and Hahn]{extended_fp}
+Rogers, D. and Hahn, M. (2010).
+\newblock {Extended-connectivity fingerprints}.
+\newblock {\em Journal of chemical information and modeling\/}, {\bf 50}(5),
+  742--754.
+\newblock {PMID:} 20426451.
+
+\bibitem[van Westen {\em et~al.}(2013)van Westen, Swier, Cortes-Ciriano,
+  Wegner, Overington, Ijzerman, van Vlijmen, and Bender]{AA_benchmark}
+van Westen, G.~J., Swier, R.~F., Cortes-Ciriano, I., Wegner, J.~K., Overington,
+  J.~P., Ijzerman, A.~P., van Vlijmen, H.~W., and Bender, A. (2013).
+\newblock Benchmarking of protein descriptor sets in proteochemometric modeling
+  (part 2): Modeling performance of 13 amino acid descriptor sets.
+\newblock {\em J. Cheminf\/}, {\bf 5}(1), 42.
+
+\bibitem[van Westen {\em et~al.}(2011)van Westen, Wegner, IJzerman, van
+  Vlijmen, and Bender]{review_pcm}
+van Westen, G. J.~P., Wegner, J.~K., IJzerman, A.~P., van Vlijmen, H. W.~T.,
+  and Bender, A. (2011).
+\newblock Proteochemometric modeling as a tool to design selective compounds
+  and for extrapolating to novel targets.
+\newblock {\em Med. Chem. Commun.}, {\bf 2}, 16--30.
+
+\bibitem[Wang {\em et~al.}(2012)Wang, Xiao, Suzek, Zhang, Wang, Zhou, Han,
+  Karapetyan, Dracheva, Shoemaker, Bolton, Gindulyte, and Bryant]{pubchem}
+Wang, Y., Xiao, J., Suzek, T.~O., Zhang, J., Wang, J., Zhou, Z., Han, L.,
+  Karapetyan, K., Dracheva, S., Shoemaker, B.~A., Bolton, E., Gindulyte, A.,
+  and Bryant, S.~H. (2012).
+\newblock {PubChem's} {BioAssay} database.
+\newblock {\em Nucleic acids research\/}, {\bf 40}(Database issue), D400--412.
+\newblock {PMID:} 22140110 {PMCID:} {PMC3245056}.
+
+\bibitem[Wickham(2009)Wickham]{ggplot2}
+Wickham, H. (2009).
+\newblock ggplot2: elegant graphics for data analysis.
+
+\bibitem[Xiao and Xu(2014)Xiao and Xu]{protr}
+Xiao, N. and Xu, Q. (2014).
+\newblock protr: Protein sequence descriptor calculation and similarity
+  computation with r.
+\newblock R package version 0.2-1.
+
+\bibitem[Yap(2011)Yap]{padel}
+Yap, C.~W. (2011).
+\newblock {PaDEL-descriptor:} an open source software to calculate molecular
+  descriptors and fingerprints.
+\newblock {\em Journal of Computational Chemistry\/}, {\bf 32}(7), 1466--1474.
+
+\end{thebibliography}

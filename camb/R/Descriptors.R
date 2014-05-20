@@ -2,6 +2,14 @@
 ## Standardization and Descriptor Calculation of Molecules and Peptides / Sequences
 #################################################################################
 
+<<<<<<< HEAD
+##############
+## Standardize Compounds
+StandardiseMolecules <- function(structures.file, 
+                                 standardised.file,
+                                 removed.file = "",
+                                 output="standardisation_info.csv",
+=======
 #' Convert molecules to a standard representation
 #' 
 #' Details about the standardisation procedure
@@ -19,6 +27,7 @@ StandardiseMolecules <- function(structures.file,
                                  standardised.file,
                                  removed.file = "",
                                  properties.file="standardisation_info.csv",
+>>>>>>> e07b0708d708c3ba1fc1c5c2123bee363b2657a3
                                  remove.inorganic = FALSE, 
                                  fluorine.limit = -1,
                                  chlorine.limit = -1,
@@ -43,7 +52,11 @@ StandardiseMolecules <- function(structures.file,
        structures.file, 
        standardised.file, 
        removed.file,
+<<<<<<< HEAD
+       output,
+=======
        properties.file,
+>>>>>>> e07b0708d708c3ba1fc1c5c2123bee363b2657a3
        as.integer(1), # process SDF
        as.integer(remove.inorganic), 
        as.integer(fluorine.limit),
@@ -62,7 +75,11 @@ StandardiseMolecules <- function(structures.file,
        structures.file, 
        standardised.file, 
        removed.file,
+<<<<<<< HEAD
+       output,
+=======
        properties.file,
+>>>>>>> e07b0708d708c3ba1fc1c5c2123bee363b2657a3
        as.integer(0), # process SMILES
        as.integer(remove.inorganic), 
        as.integer(fluorine.limit),
@@ -84,7 +101,11 @@ GetPropertiesSDF <- function(structures.file,number_processed=-1, type=1){ ## 1 
 if (!file.exists(structures.file)) {stop("File does not exist")}
 if (file.info(structures.file)$size  == 0) {stop("Input file is empty")}
 sink(file="getPropertiesSDF.log", append=FALSE, split=FALSE)
+<<<<<<< HEAD
+output <- tempfile("props_temp",fileext=".csv")
+=======
 properties.file <- tempfile("properties",fileext=".csv")
+>>>>>>> e07b0708d708c3ba1fc1c5c2123bee363b2657a3
 .C("R_GetPropertiesSDF",structures.file,as.integer(number_processed),as.integer(type),output)
 print("Reading..")
 properties <- read.table(output,sep="\t",header=TRUE)
@@ -222,6 +243,12 @@ convert31 <- function(AA) {
   return(res)
 }
 
+<<<<<<< HEAD
+##############
+# Calculate AA descriptors
+AA_descs <- function(Data, type="Z5",..){
+  if (!is.vector(Data) && !is.character(Data) && !is.data.frame(Data) && !is.matrix(Data)){
+=======
 #' Amino Acid Descriptor Calculation
 #' 
 #' The function calculates amino acid descriptors for natural amino acids.
@@ -250,6 +277,7 @@ convert31 <- function(AA) {
 #' @author Isidro Cortes <isidrolauscher@@gmail.com> and Daniel Murrell <dsmurrell@@gmail.com>
 AA_descs <- function(data, type="Z5", ..) {
   if (!is.vector(data) && !is.character(data) && !is.data.frame(data) && !is.matrix(data)){
+>>>>>>> e07b0708d708c3ba1fc1c5c2123bee363b2657a3
     stop("Input must be a character, vector, data frame or matrix")
   } else {    
     match_AA1 <- function(AA,sel.=sel){
@@ -297,7 +325,12 @@ AA_descs <- function(data, type="Z5", ..) {
       }
     }
     
+<<<<<<< HEAD
+    
+    if  (is.vector(Data)){
+=======
     if  (is.vector(data)){
+>>>>>>> e07b0708d708c3ba1fc1c5c2123bee363b2657a3
 	  descs_path <- system.file("extdata", "aa_descs.rds", package="camb")
 	  descs <- readRDS(descs_path)
       types <- c("ProtFP8","TScales","VHSE","STScales","BLOSUM","FASGAI","MSWHIM","Z5","Z3")
@@ -305,7 +338,11 @@ AA_descs <- function(data, type="Z5", ..) {
       root <- strsplit(names(descs)[3:ncol(descs)],"_")
       root <- unlist(root)[seq(1,length(unlist(root)),2)]
       sel <- which(root %in% type)
+<<<<<<< HEAD
+      return(match_AA1_vec(Data,sel))
+=======
       return(match_AA1_vec(data,sel))
+>>>>>>> e07b0708d708c3ba1fc1c5c2123bee363b2657a3
     } else {
 	  descs_path <- system.file("extdata", "aa_descs.rds", package="camb")
 	  descs <- readRDS(descs_path)
@@ -315,7 +352,11 @@ AA_descs <- function(data, type="Z5", ..) {
       root <- unlist(root)[seq(1,length(unlist(root)),2)]
       typeExt <- root[which(root %in% type)]
       sel <- which(root %in% type)
+<<<<<<< HEAD
+      return(match_AA1_df(Data,colNames=typeExt,sel=sel))
+=======
       return(match_AA1_df(data,colNames=typeExt,sel=sel))
+>>>>>>> e07b0708d708c3ba1fc1c5c2123bee363b2657a3
     }
   }
 }
@@ -324,6 +365,14 @@ AA_descs <- function(data, type="Z5", ..) {
 
 
 
+<<<<<<< HEAD
+##############
+# Calculate Protein Descriptors
+SeqDescs <- function(Data,UniProtID=TRUE,type="AAC",..){
+  if (UniProtID){
+    if (!is.vector(Data)) stop("The input UNIPROT identifiers must be in a vector")
+    d <- data.frame(unlist(lapply(Data,getUniProt)))
+=======
 #' Whole Protein Sequence Descriptor Calculation
 #' 
 #' Calculation of the following 12 whole sequence protein descriptors:
@@ -356,6 +405,7 @@ SeqDescs <- function(data,UniProtID=TRUE,type="AAC",..){
   if (UniProtID){
     if (!is.vector(data)) stop("The input UNIPROT identifiers must be in a vector")
     d <- data.frame(unlist(lapply(data,getUniProt)))
+>>>>>>> e07b0708d708c3ba1fc1c5c2123bee363b2657a3
     types <- c("AAC","DC","TC","MoreauBroto","Moran","Geary",
                "CTDC","CTDT","CTDD","CTriad","SOCN","QSO",
                "PACC","APAAC")
@@ -364,23 +414,42 @@ SeqDescs <- function(data,UniProtID=TRUE,type="AAC",..){
     type <- paste("c(",paste(type,collapse=","),")",sep="")
     t <- paste("t(apply(d,1,FUN=function(x)",type,"))",sep="") 
     des=eval(parse(text=t))
+<<<<<<< HEAD
+    row.names(des) <- Data
+    return(des) 
+  } else {
+    if (!is.data.frame(Data) && !is.matrix(Data)) stop("The input sequences must be a dataframe or a matrix")
+=======
     row.names(des) <- data
     return(des) 
   } else {
     if (!is.data.frame(data) && !is.matrix(data)) stop("The input sequences must be a dataframe or a matrix")
+>>>>>>> e07b0708d708c3ba1fc1c5c2123bee363b2657a3
     types <- c("AAC","DC","TC","MoreauBroto","Moran","Geary",
                "CTDC","CTDT","CTDD","CTriad","SOCN","QSO",
                "PACC","APAAC")
     type <- match.arg(type,types,several.ok=TRUE)
     type <- paste0("extract",type,"(x)")
     type <- paste("c(",paste(type,collapse=","),")",sep="")
+<<<<<<< HEAD
+    t <- paste("t(apply(Data,1,FUN=function(x)",type,"))",sep="") 
+    des=eval(parse(text=t))
+    row.names(des) <- rownames(Data)
+=======
     t <- paste("t(apply(data,1,FUN=function(x)",type,"))",sep="") 
     des=eval(parse(text=t))
     row.names(des) <- rownames(data)
+>>>>>>> e07b0708d708c3ba1fc1c5c2123bee363b2657a3
     return(des) 
   }
 }
 
+<<<<<<< HEAD
+
+##############
+## Circular Morgan Fingerprints as specified in RDkit
+############## 
+=======
 #' Circular Morgan Fingerprints as specified in RDkit
 #' 
 #' The function calculates circular Morgan fingerprints for chemical compounds
@@ -423,6 +492,7 @@ SeqDescs <- function(data,UniProtID=TRUE,type="AAC",..){
 #' test_mols <- system.file("test_structures", "structures_10.sdf", package = "camb")
 #' MorganFPs(bits=28,radius=4,type="sdf",mols=test_mols,output="test_mols")
 #' @author Isidro Cortes <isidrolauscher@@gmail.com> and Daniel Murrell <dsmurrell@@gmail.com>
+>>>>>>> e07b0708d708c3ba1fc1c5c2123bee363b2657a3
 MorganFPs <- function (bits=512,radius=2,type="smi",mols,output,keep="hashed_binary",images=FALSE,unhashed=FALSE,
                        verbose=FALSE,RDkitPath="/usr/local/share/RDKit",PythonPath="/usr/local/lib/python2.7/site-packages",
                        extFileExtension=FALSE,extMols=FALSE,unhashedExt=FALSE,logFile=FALSE) {
@@ -457,7 +527,10 @@ MorganFPs <- function (bits=512,radius=2,type="smi",mols,output,keep="hashed_bin
 }
 
 ##############
+<<<<<<< HEAD
+=======
 # TBD: not sure if this function is called externally... I don't think it's called from somewhere else in this package... should we remove it?
+>>>>>>> e07b0708d708c3ba1fc1c5c2123bee363b2657a3
 loadMorganFPs <- function (type="hashed_binary",output){
   types_keep <- c("hashed_binary","hashed_counts","unhashed_binary","unhashed_counts",
                   "hashed_binaryEXT","hashed_countsEXT","unhashed_binaryEXT","unhashed_countsEXT")
@@ -471,6 +544,9 @@ loadMorganFPs <- function (type="hashed_binary",output){
   return(p)
 }
 
+<<<<<<< HEAD
+##############
+=======
 #' Merge descriptors blocks.
 #' 
 #' The function merges blocks of descriptors by columns.
@@ -479,6 +555,7 @@ loadMorganFPs <- function (type="hashed_binary",output){
 #' @export
 #' @return The merged block of descriptors.
 #' @author Isidro Cortes <isidrolauscher@@gmail.com> and Daniel Murrell <dsmurrell@@gmail.com>
+>>>>>>> e07b0708d708c3ba1fc1c5c2123bee363b2657a3
 mergeData <- function(a1,a2,a3,a4=NULL,a5=NULL,a6=NULL){
   return(cbind(a1,a2,a3,a4,a5,a6,deparse.level=0))
 }

@@ -1,1 +1,3 @@
 Properties will be writtenReading SDF (C)
+scanner: readIntFix(2): invalid number representation: "  ", Readcount: 1
+scanner: readIntFix(2): invalid number representation: "  ", Readcount: 10

@@ -86,9 +86,12 @@
 
 \maketitle
 
-In the following sections, we present a pipeline to generate a Proteochemometric (PCM) model for mammal cyclooxigenase (COX) inhibitors. For futher details about PCM, the interested reader is referred to ref
-\cite{review_pcm} and \cite{cortesReview}.
-Firstly, we load the package and set the working directory:
+In the following sections, we present a pipeline to generate a Proteochemometric (PCM) model for mammal cyclooxigenase (COX) inhibitors. 
+Further details about this dataset are reserved for a future publication.
+Similarly, the interested reader is referred to ref
+\cite{review_pcm} and \cite{cortesReview} for futher details about PCM.
+
+Firstly, the package needs to be loaded and the working directory set:
 
 
 \begin{knitrout}
@@ -116,10 +119,10 @@ it is necessary to switch off the argument {\it comment.char} in order not to cl
 \end{knitrout}
 
 
-The function {\it StandardiseMolecules} enables the depiction of molecular structures in a similar way.
-Moreover, the different arguments allow to control the maximum number of (i) fluorines, (ii) chlorines,
-(iii) bromines, and (iv) iodines a molecules can exhibit in order to be kept. If using the default value, {\it i.e.} "-1",
-all molecules will be kept irrespective of the number of fluorines, chlorines, bromines, and iodines.
+The function {\it StandardiseMolecules} enables the depiction of molecular structures in the same (standardized) way.
+The different arguments of this function allow to control the maximum number of (i) fluorines, (ii) chlorines,
+(iii) bromines, and (iv) iodines the molecules can exhibit in order to be kept. If using the default value, {\it i.e.} "-1",
+all molecules will be kept irrespective of the exhibited number of fluorines, chlorines, bromines, and iodines.
 Inorgnaic molecules are removed if the argument "removed.inorganic" is set to "TRUE", which is the default value.
 Additionally, upper and lower limits for the molecular mass can be set with the arguments "min.mass.limit" and "max.mass.limit".
 The default value is "-1". Thus, all molecules will be kept irrespective of their molecular mass.
@@ -142,10 +145,11 @@ The name of the file containing the chemical structures is input to the argument
 \end{kframe}
 \end{knitrout}
 
-The properties of all molecules and an index, in the column "kept", indicating which molecules were deleted,
-are written to the file indicated in the argument "output". In this case the file is \verb|"standardisation_COX_info.csv"|.
-Those molecules that passed the filters are written to the file indicated in the argument "standardised.file".
-By contrast, molecules that did not pass these filters are written to the file indicated in the "removed.file" argument.
+The properties specified in the structure file of all molecules and an index, in the column "kept", indicating which molecules were deleted (0 and kept (1),
+are written to the file indicated in the argument "output". 
+In this case the file is \verb|"standardisation_COX_info.csv"|.
+Molecules that pass the filters are written to the file indicated in the argument "standardised.file".
+By contrast, molecules that do not pass these filters are written to the file indicated in the "removed.file" argument.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -158,41 +162,32 @@ By contrast, molecules that did not pass these filters are written to the file i
 
 
 Default values of the arguments of the function "StandardiseMolecules" are not stringent.
-In the present case, all molecules were kept, thus all values in the columns "kept"
+In the present case, all molecules are kept, thus all values in the columns "kept"
 are equal to "1".
 
 The properties of a ".sdf" file can be inspected witn the function:
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{ShowPropertiesSDF}\hlstd{(}\hlstr{"standardised.sdf"}\hlstd{)}
+\hlkwd{ShowPropertiesSDF}\hlstd{(}\hlstr{"test.sdf"}\hlstd{)}  \hlcom{# a mock .sdf file}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
 
-The values corresponding to an individual property can be accessed with the function "GetPropertySDF".
-Similarly, the function "GetPropertiesSDF" retrieves the information for all properties of a given ".sdf" file. A data.frame with all properties is returned.
+The values corresponding to an individual property in a ".sdf" file can be accessed with the function "GetPropertySDF".
+Similarly, the function "GetPropertiesSDF" retrieves the information for all properties of a given ".sdf" file.
+A data.frame with all properties is returned.
 The number of molecules from which the information has to be retrieved can be indicated with the argument \verb|"number_processed"|.
 The default value for this argument is \verb|"-1"|, which indicates that the properties will be extracted for all molecules in the input file.
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{GetPropertySDF}\hlstd{(}\hlstr{"standardised.sdf"}\hlstd{,} \hlkwc{property} \hlstd{=} \hlstr{"property_name"}\hlstd{,}
-    \hlkwc{number_processed} \hlstd{=} \hlnum{10}\hlstd{)}
+\hlkwd{GetPropertySDF}\hlstd{(}\hlstr{"test.sdf"}\hlstd{,}\hlkwc{property}\hlstd{=}\hlstr{"Name"}\hlstd{,}
+               \hlkwc{number_processed}\hlstd{=}\hlnum{10}\hlstd{)}
+
+\hlstd{all_properties} \hlkwb{<-} \hlkwd{GetPropertiesSDF}\hlstd{(}\hlstr{"test.sdf"}\hlstd{,}\hlkwc{number_processed}\hlstd{=}\hlnum{10}\hlstd{)}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: line 2 did not have 11 elements}}\begin{alltt}
-\hlstd{all_properties} \hlkwb{<-} \hlkwd{GetPropertiesSDF}\hlstd{(}\hlstr{"standardised.sdf"}\hlstd{,} \hlkwc{number_processed} \hlstd{=} \hlnum{10}\hlstd{)}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: no lines available in input}}\begin{alltt}
-\hlkwd{head}\hlstd{(all_properties)}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: error in evaluating the argument 'x' in selecting a method for function 'head': Error: object 'all\_properties' not found}}\end{kframe}
+\end{kframe}
 \end{knitrout}
 
 
@@ -215,7 +210,7 @@ descriptors <- \hlkwd{readRDS}(\hlstr{"Padel_COX.rds"})
 Sometimes, some descriptors are not calculated for all molecules, thus giving a "NA" or "Inf" as descriptor value.
 Instead of removing that descriptor for all molecules, the missing descriptor values can be imputed from the corresponding descriptor values of the rest of molecules.
 Descriptor values equal to "Inf" are converted to "NA".
-For the imputation of missing dscriptor values, the R package {\it impute} is required.
+For the imputation of missing descriptor values, the R package {\it impute} is required.
 Depending on the R version, it can be accessed from either {\it CRAN} or {\it Bioconductor}.
 
 \begin{knitrout}
@@ -230,6 +225,8 @@ Depending on the R version, it can be accessed from either {\it CRAN} or {\it Bi
 
 \subsection{Circular Morgan Fingerprints}
 The calculation of circular Morgan fingerprints requires the python library RDkit, given that the function "MorganFPs" calls a python script for the calculation of this type of fingerprints.
+The python code is available in the "extdata" folder of the package or at:\\
+https://github.com/isidroc/FingerprintCalculator.\\
 For a detailed discussion about circular Morgan fingerprints, we refer
 the interested reader to ref. \cite{morgan}.
 When using integrated development environments (IDE) such as RStudio,
@@ -241,15 +238,19 @@ For instance, the information of the latter is contained in the environment vari
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{Sys.setenv}\hlstd{(}\hlkwc{RDBASE} \hlstd{=} \hlstr{"/usr/local/share/RDKit"}\hlstd{)}
-\hlkwd{Sys.setenv}\hlstd{(}\hlkwc{PYTHONPATH} \hlstd{=} \hlstr{"/usr/local/lib/python2.7/site-packages"}\hlstd{)}
-\hlstd{fps_COX_512} \hlkwb{<-} \hlkwd{MorganFPs}\hlstd{(}\hlkwc{bits} \hlstd{=} \hlnum{512}\hlstd{,} \hlkwc{radius} \hlstd{=} \hlnum{2}\hlstd{,} \hlkwc{type} \hlstd{=} \hlstr{"smi"}\hlstd{,}
-    \hlkwc{mols} \hlstd{=} \hlstr{"smiles_COX.smi"}\hlstd{,} \hlkwc{output} \hlstd{=} \hlstr{"COX"}\hlstd{,} \hlkwc{keep} \hlstd{=} \hlstr{"hashed_counts"}\hlstd{,}
-    \hlkwc{RDkitPath} \hlstd{=} \hlstr{"/usr/local/share/RDKit"}\hlstd{,} \hlkwc{PythonPath} \hlstd{=} \hlstr{"/usr/local/lib/python2.7/site-packages"}\hlstd{,}
-    \hlkwc{verbose} \hlstd{=} \hlnum{TRUE}\hlstd{,} \hlkwc{images} \hlstd{=} \hlnum{FALSE}\hlstd{,} \hlkwc{unhashed} \hlstd{=} \hlnum{FALSE}\hlstd{,}
-    \hlkwc{extFileExtension} \hlstd{=} \hlnum{FALSE}\hlstd{,} \hlkwc{extMols} \hlstd{=} \hlnum{FALSE}\hlstd{,} \hlkwc{unhashedExt} \hlstd{=} \hlnum{FALSE}\hlstd{,}
-    \hlkwc{logFile} \hlstd{=} \hlnum{FALSE}\hlstd{)}
-\hlkwd{saveRDS}\hlstd{(fps_COX_512,} \hlkwc{file} \hlstd{=} \hlstr{"fps_COX_512.rds"}\hlstd{)}
+\hlkwd{Sys.setenv}\hlstd{(}\hlkwc{RDBASE}\hlstd{=}\hlstr{"/usr/local/share/RDKit"}\hlstd{)}
+\hlkwd{Sys.setenv}\hlstd{(}\hlkwc{PYTHONPATH}\hlstd{=}\hlstr{"/usr/local/lib/python2.7/site-packages"}\hlstd{)}
+
+\hlstd{fps_COX_512} \hlkwb{<-} \hlkwd{MorganFPs}\hlstd{(}\hlkwc{bits}\hlstd{=}\hlnum{512}\hlstd{,}\hlkwc{radius}\hlstd{=}\hlnum{2}\hlstd{,}\hlkwc{type}\hlstd{=}\hlstr{'smi'}\hlstd{,}\hlkwc{mols}\hlstd{=}\hlstr{'smiles_COX.smi'}\hlstd{,}
+                         \hlkwc{output}\hlstd{=}\hlstr{'COX'}\hlstd{,}\hlkwc{keep}\hlstd{=}\hlstr{'hashed_counts'}\hlstd{,}
+                         \hlkwc{RDkitPath}\hlstd{=}\hlstr{'/usr/local/share/RDKit'}\hlstd{,}
+                         \hlkwc{PythonPath}\hlstd{=}\hlstr{'/usr/local/lib/python2.7/site-packages'}\hlstd{,}
+                         \hlkwc{verbose}\hlstd{=}\hlnum{TRUE}\hlstd{,} \hlkwc{images} \hlstd{=} \hlnum{FALSE}\hlstd{,} \hlkwc{unhashed} \hlstd{=} \hlnum{FALSE}\hlstd{,}
+                         \hlkwc{extFileExtension} \hlstd{=} \hlnum{FALSE}\hlstd{,}
+                         \hlkwc{extMols} \hlstd{=} \hlnum{FALSE}\hlstd{,} \hlkwc{unhashedExt} \hlstd{=} \hlnum{FALSE}\hlstd{,}
+                         \hlkwc{logFile} \hlstd{=} \hlnum{FALSE}\hlstd{)}
+
+\hlkwd{saveRDS}\hlstd{(fps_COX_512,}\hlkwc{file}\hlstd{=}\hlstr{"fps_COX_512.rds"}\hlstd{)}
 \hlstd{fps_COX_512} \hlkwb{<-} \hlkwd{readRDS}\hlstd{(}\hlstr{"fps_COX_512.rds"}\hlstd{)}
 \end{alltt}
 \end{kframe}
@@ -276,13 +277,13 @@ Unhashed fingerprints in {\bf binary format} are dropped to the output file \ver
 calcualted for new molecules for which predictions are to be made by that model. 
 To this aim, the function "MorganFPs" enables the calculation of both hashed and unhashed fingerprints (in both binary and counts format) for the molecules present in a given file (hereinafter referred to as external file). The unhashed fingeprints will be calculated based on the pool of substructures present in the file indicated in the argument "mols".
 To enable the calculation of fingerprints for the external file, the arguments "extMols" (name of the external file) and "extFileExtension" (file extension of the external file) need to be set on. 
-The hashed fingerprints will be dropped to the following files:
+The hashed fingerprints will be dropped to the following files:\\
 (i) binary format: \verb|{\it output}_hashed_binary_EXT.csv|, and (ii) counts format: 
 \verb|{\it output}_hashed_counts_EXT.csv|.
 If the user also wants the calculation of unhashed fingerprints for the molecules present in the external file, the argument "unhashedExt" needs to be set to TRUE. 
-In this case the unhashed fingeprints will be dropped to the following files:
-(i) binary format: \verb|{\it output}_unhashed_binary_EXT.csv|, and (ii) counts format: 
-\verb|{\it output}_unhashed_counts_EXT.csv|.
+In this case the unhashed fingeprints will be dropped to the following files:\\
+(i) binary format: \verb|{\it output}_unhashed_binary_EXT.csv|,\\
+and (ii) counts format: \verb|{\it output}_unhashed_counts_EXT.csv|.
 
 \end{itemize}
 
@@ -292,21 +293,22 @@ In the following paragraph we describe in detail the arguments of the function "
 \begin{itemize}
 \item {\bf bits:} Number of bits of the hashed fingerprints. The default value is 512.
 \item {\bf radius:} Maximum radius of the substructures. A radius of 2 is equivalent to \verb|ECFP-4|, where 4 corresponds to the diameter. The default value is 2.
-More information on ECFP fingerprints can be found here: 
+More information on ECFP fingerprints can be found here:\\
 \verb|http://www.chemaxon.com/jchem/doc/user/ECFP.html|.
 \item {\bf type:} File format containing the input molecules. The default value is ".smi".
 \item {\bf mols:} File containing the input molecules.
 \item {\bf output:} Label that will be appended to all ouput files (see below).
 \item {\bf keep:} The fingeprints that will be kept after the calculation.
-Apart from calculating different types of fingerprints, the function returns a data.frame with the type of fingerprints specified with this argument.  Possible types are: \verb|hashed_binary|,\verb|hashed_counts|, \verb|unhashed_binary|, \verb|unhashed_counts|, and if applicable, 
-\verb|hashed_binaryEXT|, \verb|hashed_countsEXT|, \verb|unhashed_binaryEXT| and \verb|unhashed_countsEXT|.
+Apart from calculating different types of fingerprints, the function returns a data.frame with the type of fingerprints specified with this argument.  Possible types are: \verb|hashed_binary|,\verb|hashed_counts|, \verb|unhashed_binary|, \verb|unhashed_counts|, and if applicable,\\
+\verb|hashed_binaryEXT|, \verb|hashed_countsEXT|, \verb|unhashed_binaryEXT|,\\
+and \verb|unhashed_countsEXT|.
 The default value is \verb|"hashed_binary"|.
 \item {\bf images:} If TRUE, individual ".pdf" files containing (i) the image of each substructure in the context of a molecule presenting it, and (ii) each molecule correctly processed, are created.  Be aware that the number of substructures can be large depending on the number and diversity of the molecules present in the input file. Thus, allow for sufficient memory in those cases.
 The default value is FALSE.
 \item {\bf unhashed:} If TRUE, unhashed fingeprints, both in binary format and with counts, are calculated. The default value is FALSE.
 \item {\bf verbose:} If TRUE, information about the progression of the calculation is printed. The default value is FALSE.
 \item {\bf RDkitPath:} The path to the folder containing the RDkit library in your computer. On mac, the environment variable \verb|$RDBASE| contains this information. The default value is "/usr/local/share/RDKit".
-\item {\bf PythonPath:} Path to python (\verb|$PYTHONPATH|).
+\item {\bf PythonPath:} Path to python (\verb|$PYTHONPATH|).\\
 The default value is "/usr/local/lib/python2.7/site-packages".
 \item {\bf extFileExtension:} If not FALSE, file extension for the external file containing the molecules for which unhashed fingeprints are to be calculated with respect to the pool of substructures in the molecules present in the file specified in "mols". The default value is FALSE.
 \item {\bf extMols:} If not FALSE, external file containing the molecules for which unhashed fingeprints are to be calculated with respect to the pool of
@@ -346,6 +348,9 @@ The descriptors will be saved to a ".rds" file.
 \end{alltt}
 \end{kframe}
 \end{knitrout}
+
+
+
 
 The function \verb|"AA_descs"| permits the calculation of the following types of amino acid descriptors (futher details about these amino acid descriptors can be found in refs \cite{AAs1} and \cite{AAs2}):
 \begin{itemize}
@@ -465,11 +470,11 @@ The name of the molecule in the input file will be used as the title of the imag
 \end{kframe}\begin{figure}[]
 
 
-{\centering \includegraphics[width=12cm]{figure/unnamed-chunk-20} 
+{\centering \includegraphics[width=12cm]{figure/unnamed-chunk-21} 
 
 }
 
-\caption[Example of compoud depiction]{Example of compoud depiction.\label{fig:unnamed-chunk-20}}
+\caption[Example of compoud depiction]{Example of compoud depiction.\label{fig:unnamed-chunk-21}}
 \end{figure}
 
 
@@ -497,7 +502,7 @@ The function returns a list with following elements :
 \begin{itemize}
 \item Data : a dataframe containing the two first PCs and the row names if provided. 
 Rows are indexed as in the input data corresponds to a list.
-\item PCs_All : a dataframe containing all PCs.
+\item \verb|PCs_All| : a dataframe containing all PCs.
 \item Std : a vector containing the standard deviation of all PCs.
 \item Info : information about the PCA analysis, such as the proportion of variance explained by each PC.
 It is always advisable to verify that the two or three first PCs explain a large proportion of the variance in the data,
@@ -512,21 +517,18 @@ of mammal cyclooxygenases.
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{target_PCA} \hlkwb{<-} \hlkwd{PCA}\hlstd{(}\hlkwc{Data} \hlstd{= amino_acid_IDs_zscales,} \hlkwc{RowNames} \hlstd{= dataset}\hlopt{$}\hlstd{accession,}
-    \hlkwc{cor} \hlstd{=} \hlnum{TRUE}\hlstd{,} \hlkwc{scale} \hlstd{=} \hlnum{TRUE}\hlstd{,} \hlkwc{center} \hlstd{=} \hlnum{TRUE}\hlstd{)}
+\hlstd{target_PCA} \hlkwb{<-} \hlkwd{PCA}\hlstd{(}\hlkwc{Data}\hlstd{=amino_acid_IDs_zscales,}
+                  \hlkwc{RowNames}\hlstd{=dataset}\hlopt{$}\hlstd{accession,}
+                  \hlkwc{cor}\hlstd{=}\hlnum{TRUE}\hlstd{,}\hlkwc{scale} \hlstd{=} \hlnum{TRUE}\hlstd{,}
+                  \hlkwc{center} \hlstd{=} \hlnum{TRUE}\hlstd{)}
+
+\hlstd{plot_PCA_COX} \hlkwb{<-} \hlkwd{PCAPlot}\hlstd{(target_PCA}\hlopt{$}\hlstd{Data,}\hlkwc{PointSize}\hlstd{=}\hlnum{10}\hlstd{,}\hlkwc{main}\hlstd{=}\hlstr{""}\hlstd{,}
+                  \hlkwc{TitleSize}\hlstd{=}\hlnum{30}\hlstd{,}\hlkwc{XAxisSize}\hlstd{=}\hlnum{20}\hlstd{,}\hlkwc{YAxisSize}\hlstd{=}\hlnum{20}\hlstd{,}
+                  \hlkwc{TitleAxesSize}\hlstd{=}\hlnum{28}\hlstd{,}\hlkwc{LegendPosition}\hlstd{=}\hlstr{"bottom"}\hlstd{,}
+                  \hlkwc{RowLegend}\hlstd{=}\hlnum{3}\hlstd{,}\hlkwc{ColLegend}\hlstd{=}\hlnum{5}\hlstd{,}\hlkwc{LegendTitleSize}\hlstd{=}\hlnum{15}\hlstd{,}
+                  \hlkwc{LegendTextSize}\hlstd{=}\hlnum{15}\hlstd{)}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: could not find function "{}PCA"{}}}\begin{alltt}
-\hlstd{plot_PCA_COX} \hlkwb{<-} \hlkwd{PCAPlot}\hlstd{(target_PCA}\hlopt{$}\hlstd{Data,} \hlkwc{PointSize} \hlstd{=} \hlnum{10}\hlstd{,}
-    \hlkwc{main} \hlstd{=} \hlstr{""}\hlstd{,} \hlkwc{TitleSize} \hlstd{=} \hlnum{30}\hlstd{,} \hlkwc{XAxisSize} \hlstd{=} \hlnum{20}\hlstd{,} \hlkwc{YAxisSize} \hlstd{=} \hlnum{20}\hlstd{,}
-    \hlkwc{TitleAxesSize} \hlstd{=} \hlnum{28}\hlstd{,} \hlkwc{LegendPosition} \hlstd{=} \hlstr{"bottom"}\hlstd{,}
-    \hlkwc{RowLegend} \hlstd{=} \hlnum{3}\hlstd{,} \hlkwc{ColLegend} \hlstd{=} \hlnum{5}\hlstd{,} \hlkwc{LegendTitleSize} \hlstd{=} \hlnum{15}\hlstd{,}
-    \hlkwc{LegendTextSize} \hlstd{=} \hlnum{15}\hlstd{)}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: could not find function "{}PCAPlot"{}}}\end{kframe}
+\end{kframe}
 \end{knitrout}
 
 
@@ -569,11 +571,11 @@ The dissimilarity distribution can be depicted with the function "PairwiseDistPl
 \end{kframe}\begin{figure}[]
 
 
-{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-25} 
+{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-26} 
 
 }
 
-\caption[Density of the response variable (upper panel)]{Density of the response variable (upper panel). Pairwise Compound Jaccard Similarity (bottom pannel)\label{fig:unnamed-chunk-25}}
+\caption[Density of the response variable (upper panel)]{Density of the response variable (upper panel). Pairwise Compound Jaccard Similarity (bottom pannel)\label{fig:unnamed-chunk-26}}
 \end{figure}
 
 
@@ -590,21 +592,24 @@ With the function 'MaxPerf', we can calculate the maximum achievable performance
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{max_performance} \hlkwb{<-} \hlkwd{MaxPerf}\hlstd{(}\hlkwc{meanNoise} \hlstd{=} \hlnum{0}\hlstd{,} \hlkwc{sdNoise} \hlstd{=} \hlnum{0.6}\hlstd{,} \hlkwc{meanResp} \hlstd{=} \hlkwd{mean}\hlstd{(bioactivity),}
-    \hlkwc{sdResp} \hlstd{=} \hlkwd{sd}\hlstd{(bioactivity),} \hlkwc{lenPred} \hlstd{=} \hlnum{800}\hlstd{,} \hlkwc{tmar} \hlstd{=} \hlnum{0.2}\hlstd{,} \hlkwc{bmar} \hlstd{=} \hlnum{0.2}\hlstd{,}
-    \hlkwc{rmar} \hlstd{=} \hlnum{0.2}\hlstd{,} \hlkwc{lmar} \hlstd{=} \hlnum{0.2}\hlstd{)}
+\hlstd{max_performance} \hlkwb{<-} \hlkwd{MaxPerf}\hlstd{(}\hlkwc{meanNoise}\hlstd{=}\hlnum{0}\hlstd{,}\hlkwc{sdNoise}\hlstd{=}\hlnum{0.6}\hlstd{,}
+                           \hlkwc{meanResp}\hlstd{=}\hlkwd{mean}\hlstd{(bioactivity),}
+                           \hlkwc{sdResp}\hlstd{=}\hlkwd{sd}\hlstd{(bioactivity),}
+                           \hlkwc{lenPred}\hlstd{=}\hlnum{800}\hlstd{,}\hlkwc{tmar} \hlstd{=} \hlnum{0.2}\hlstd{,}
+                           \hlkwc{bmar} \hlstd{=} \hlnum{0.2}\hlstd{,} \hlkwc{rmar} \hlstd{=} \hlnum{0.2}\hlstd{,}
+                           \hlkwc{lmar} \hlstd{=} \hlnum{0.2}\hlstd{)}
 
-\hlkwd{grid.arrange}\hlstd{(max_performance}\hlopt{$}\hlstd{p1, max_performance}\hlopt{$}\hlstd{p2, max_performance}\hlopt{$}\hlstd{p3,}
-    \hlstd{max_performance}\hlopt{$}\hlstd{p4,} \hlkwc{nrow} \hlstd{=} \hlnum{2}\hlstd{)}
+\hlkwd{grid.arrange}\hlstd{(max_performance}\hlopt{$}\hlstd{p1,max_performance}\hlopt{$}\hlstd{p2,}
+             \hlstd{max_performance}\hlopt{$}\hlstd{p3,max_performance}\hlopt{$}\hlstd{p4,}\hlkwc{nrow}\hlstd{=}\hlnum{2}\hlstd{)}
 \end{alltt}
 \end{kframe}\begin{figure}[]
 
 
-{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-26} 
+{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-27} 
 
 }
 
-\caption[Maximum achievable model performance]{Maximum achievable model performance\label{fig:unnamed-chunk-26}}
+\caption[Maximum achievable model performance]{Maximum achievable model performance\label{fig:unnamed-chunk-27}}
 \end{figure}
 
 
@@ -630,10 +635,10 @@ In order to remove duplicate values, we run the file \verb|"remove_duplicates.R"
 \end{kframe}
 \end{knitrout}
 
-The dataset without repeated repetitions will be saved to the file "Whole_dataset.rds".
+The dataset without repeated repetitions will be saved to the file \verb|"Whole_dataset.rds".|
 The dataset with only (i) compound descriptors, PaDEL and Morgan fingerprints, and (ii) amino acid descriptors
 will be saved to the files \verb|"Whole_dataset_compound_descriptors.rds"| and \verb|"Whole_dataset_aa_descriptors.rds"|
-respectively. All variables created while running the file \verb|"remove_duplicates.R"| will be saved to the file
+respectively. All variables created while running the file \verb|"remove_duplicates.R"| will be saved to the file\\
 \verb|"data_processing_repetitions_COX.RData"|.
 
 In cases where no repeated bioactivities are present for the same datapoint, 
@@ -646,12 +651,6 @@ In addition, we remove those columns not containing descriptors (e.g. compound n
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{dataset} \hlkwb{<-} \hlkwd{readRDS}\hlstd{(}\hlstr{"Whole_dataset.rds"}\hlstd{)}
-\end{alltt}
-
-
-{\ttfamily\noindent\color{warningcolor}{\#\# Warning: cannot open compressed file 'Whole\_dataset.rds', probable reason 'No such file or directory'}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: cannot open the connection}}\begin{alltt}
 \hlstd{killset} \hlkwb{<-} \hlkwd{expression}\hlstd{(}\hlkwd{c}\hlstd{(tid, pref_name, accession,}
     \hlstd{organism, chembl_id, standard_value, standard_units,}
     \hlstd{standard_type, chembl_id.1, Name, Name.1, Name.2,}
@@ -660,9 +659,7 @@ In addition, we remove those columns not containing descriptors (e.g. compound n
 \hlstd{compound_IDs} \hlkwb{<-} \hlstd{dataset}\hlopt{$}\hlstd{chembl_id.1}
 \hlstd{dataset} \hlkwb{<-} \hlkwd{subset}\hlstd{(dataset,} \hlkwc{select} \hlstd{=} \hlopt{-}\hlkwd{eval}\hlstd{(killset))}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'Name' not found}}\end{kframe}
+\end{kframe}
 \end{knitrout}
 
 
@@ -803,7 +800,7 @@ We proceed similarly in the case of a gradient boosting machine (GBM) model\cite
 
 Once the models are trained, the cross validated metrics can be calculated:
 We assume that the metric used for the choice of the best combination of hyperparameters is 'RMSE',
-which is normally considered as the aim of bioactivity modeling, {\it i.e.| how far (on average) are our 
+which is normally considered as the aim of bioactivity modeling, {\it i.e.} how far (on average) are our 
 predictions from the real the bioactivity values?.
 In the following we focus on the RF model, though the same steps can be applied to the GBM and SVM models.
 
@@ -842,7 +839,7 @@ we proceed to predict the values for the external (hold-out) set:
 The predictive ability of the models is evaluated by calculation the following statistical metrics:
 
 {\bf Internal validation:}
-\\
+
 \begin{equation}
 q_{{\it int}}^{2} \ or \  R_{tr}^{2}  = 1 - \frac {\sum_{i=1}^{N_{tr}} (y_{i} - \widetilde{y}_{i})^{2}} {\sum_{i=1}^{N_{int}} (y_{i} - \bar{y}_{tr})^{2}}
 \end{equation}
@@ -852,11 +849,11 @@ q_{{\it int}}^{2} \ or \  R_{tr}^{2}  = 1 - \frac {\sum_{i=1}^{N_{tr}} (y_{i} - 
 RMSE_{int} = \frac {\sqrt {(y_i - \widetilde{y}_i)^{2}}} {N}
 \end{equation}
 
-where $N$, $y_i$, $\widetilde{y}_i$ and $\bar{y}_{tr}$ represent the size of the training set, the observed, the predicted and the averaged values of the response variable for those datapoints included in the training set. The {\it i}th position within the training set is defined by {\it i}.  
+where $N$, $y_i$, $\widetilde{y}_i$ and $\bar{y}_{tr}$ represent the size of the training set, the observed, the predicted and the averaged values of the response variable for those datapoints included in the training set. The {\it i}th position within the training set is defined by {\it i}.\\  
 
-\\
+
 {\bf External validation:}
-\\
+
 
 \begin{equation}
 Q_{1\ {\it ext}}^{2} = 1 - \frac {\sum_{j=1}^{N_{ext}} (y_j-\widetilde{y}_j)^{2}}  {\sum_{j=1}^{N_{ext}} (y_j - \bar{y}_{tr})^{2}}
@@ -883,7 +880,7 @@ R_{ext}^{2} = \frac {{\sum_{i=1}^{N_{ext}} (y_{i} - \bar{y}_{ext})}  (\widetilde
 R_{0\:ext}^2 = 1 - \frac {\sum_{j=1}^{N_{ext}} (y_{j} - \widetilde{y}_{j}^{ r0})^{2}} {\sum_{j=1}^{N_{ext}} (y_{j} - \bar{y}_{ext})^{2}} 
 \end{equation}
 
-where $N$, $y_j$, $\widetilde{y}_j$, and $\bar{y}_{ext}$ represent the size of the training set, the observed, the predicted, and the averaged values of the response variable for those datapoints comprising the external set. The {\it j}th position within the external set is defined by {\it j}. $R_{0\:ext}^2$ is the square of the coefficient of determination through the origin, being $\widetilde{y}_{j}^{ r0} = k \widetilde{y}_j$ the regression through the origin (observed versus predicted) and $k$ its slope.\\
+where $N$, $y_j$, $\widetilde{y}_j$, and $\bar{y}_{ext}$ represent the size of the training set, the observed, the predicted, and the averaged values of the response variable for those datapoints comprising the external set.  $R_{0\:ext}^2$ is the square of the coefficient of determination through the origin, being $\widetilde{y}_{j}^{ r0} = k \widetilde{y}_j$ the regression through the origin (observed versus predicted) and $k$ its slope.\\
 For a detailed discussion of both the evaluation of the predictive ability through the external set and about the three different formulations for $Q^{2}_{ext}$, namely $Q_{1\ {\it ext}}^{2}$, $Q_{2\ {\it ext}}^{2}$, and $Q_{3\ {\it ext}}^{2}$, see ref.\cite{consonni}. 
 To be considered as predictive, a model must satisfy the following criteria:\cite{beware,earnest}
 \\
@@ -904,7 +901,7 @@ The metrics for the external validation are given by:
 \end{kframe}
 \end{knitrout}
 
-The argument "resp_tr", requires the bioactivity values of the datapoints present in the training set.
+The argument \verb|"resp_tr"|, requires the bioactivity values of the datapoints present in the training set.
 These values are required by the metrics $Q_{1}$ and $Q_{3}$ (see above).
 
 To visualize the correlation between predicted and observed values, we can use the 'CorrelationPlot' function:
@@ -925,11 +922,11 @@ To visualize the correlation between predicted and observed values, we can use t
 \end{kframe}\begin{figure}[]
 
 
-{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-42} 
+{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-43} 
 
 }
 
-\caption[Observed vs Predicted]{Observed vs Predicted\label{fig:unnamed-chunk-42}}
+\caption[Observed vs Predicted]{Observed vs Predicted\label{fig:unnamed-chunk-43}}
 \end{figure}
 
 
@@ -937,12 +934,12 @@ To visualize the correlation between predicted and observed values, we can use t
 
 
 \section{Ensemble Modeling}
-In the following section, we applied two ensemble modeling techniques, namely greedy optimization and model stacking, to create ensembles of models.
+In the following section, two ensemble modeling techniques will be applied, namely greedy optimization and model stacking.
 Further information can be found in ref \cite{caretEnsemble} and \cite{caruana}.
 
 
 
-To get (i) the training set, (ii) the external set, (iii) the transformation applied to center and scale the descriptors before model training, and (iv) the model training options, we run the following lines:
+To get (i) the training set, (ii) the external set, (iii) the transformation applied to center and scale the descriptors before model training, and (iv) the model training options, we run the following lines of code:
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -1048,14 +1045,16 @@ preds$ENS_SVMlin <- \hlkwd{predict}(linear_svm, newdata=x.test)
 \end{knitrout}
 
 
-and we calculate the metrics:
+and we calculate the values of the statistical metrics:
   
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlcom{# Calculate metrics (We could also have applied}
 \hlcom{# Validation instead.)}
-\hlstd{Q2s} \hlkwb{<-} \hlkwd{apply}\hlstd{(preds,} \hlnum{2}\hlstd{,} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)} \hlkwd{Qsquared}\hlstd{(x, dataa}\hlopt{$}\hlstd{y.test))}
+\hlstd{Q2_1s} \hlkwb{<-} \hlkwd{apply}\hlstd{(preds,} \hlnum{2}\hlstd{,} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)} \hlkwd{Qsquared1}\hlstd{(x, dataa}\hlopt{$}\hlstd{y.test))}
+\hlstd{Q2_2s} \hlkwb{<-} \hlkwd{apply}\hlstd{(preds,} \hlnum{2}\hlstd{,} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)} \hlkwd{Qsquared2}\hlstd{(x, dataa}\hlopt{$}\hlstd{y.test))}
+\hlstd{Q2_3s} \hlkwb{<-} \hlkwd{apply}\hlstd{(preds,} \hlnum{2}\hlstd{,} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)} \hlkwd{Qsquared3}\hlstd{(x, dataa}\hlopt{$}\hlstd{y.test))}
 \hlstd{R2s} \hlkwb{<-} \hlkwd{apply}\hlstd{(preds,} \hlnum{2}\hlstd{,} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)} \hlkwd{Rsquared}\hlstd{(x, dataa}\hlopt{$}\hlstd{y.test))}
 \hlstd{R20s} \hlkwb{<-} \hlkwd{apply}\hlstd{(preds,} \hlnum{2}\hlstd{,} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)} \hlkwd{Rsquared0}\hlstd{(x, dataa}\hlopt{$}\hlstd{y.test))}
 \hlstd{RMSEs} \hlkwb{<-} \hlkwd{apply}\hlstd{(preds,} \hlnum{2}\hlstd{,} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)} \hlkwd{RMSE}\hlstd{(x, dataa}\hlopt{$}\hlstd{y.test))}
