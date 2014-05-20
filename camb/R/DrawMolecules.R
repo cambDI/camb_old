@@ -1,19 +1,15 @@
-<<<<<<< HEAD
 
-=======
-# This function isn't working right now... moving on.
->>>>>>> e07b0708d708c3ba1fc1c5c2123bee363b2657a3
-DrawMoleculeInSDF <- function(structures.file, structure.number, file.name, useNameAsTitle) {
-  if (file.info(structures.file)$size  == 0) {stop("Input file is empty")}
-  print(structure.number)
-  .C("R_drawMoleculeInSDF", structures.file, as.integer(structure.number), file.name, useNameAsTitle)
-}
 
-<<<<<<< HEAD
-=======
+#DrawMoleculeInSDF <- function(structures.file, structure.number, file.name, useNameAsTitle) {
+#  if (file.info(structures.file)$size  == 0) {stop("Input file is empty")}
+#  print(structure.number)
+#  .C("R_drawMoleculeInSDF", structures.file, as.integer(structure.number), file.name, useNameAsTitle)
+#}
+
+
 #.C("R_drawMoleculeInSDF", system.file("test_structures", "structures_10.sdf", package = "camb"), 1, "output.png", FALSE)
 
->>>>>>> e07b0708d708c3ba1fc1c5c2123bee363b2657a3
+
 PlotMolecules <- function(sdf.file, IDs,pdf.file=NULL,PDFMain=NULL,useNameAsTitle=TRUE) {
 isnot.vector <- function(x) ! is.vector(x) 
 isnot.null <- function(x) ! is.null(x)
