@@ -46,9 +46,12 @@ library(ggplot2,quietly=TRUE)
 @
 \maketitle
 
-In the following sections, we present a pipeline to generate a Proteochemometric (PCM) model for mammal cyclooxigenase (COX) inhibitors. For futher details about PCM, the interested reader is referred to ref
-\cite{review_pcm} and \cite{cortesReview}.
-Firstly, we load the package and set the working directory:
+In the following sections, we present a pipeline to generate a Proteochemometric (PCM) model for mammal cyclooxigenase (COX) inhibitors. 
+Further details about this dataset are reserved for a future publication.
+Similarly, the interested reader is referred to ref
+\cite{review_pcm} and \cite{cortesReview} for futher details about PCM.
+
+Firstly, the package needs to be loaded and the working directory set:
 <<echo=FALSE,results='hide',warning=FALSE,message=FALSE>>=
 library(camb)
 setwd('/Users/icortes/Desktop/camb_final/camb/examples/PCM/COX')
@@ -67,10 +70,10 @@ it is necessary to switch off the argument {\it comment.char} in order not to cl
 smiles <- read.table("smiles_COX.smi", header=FALSE,comment.char=c(""))
 @
 
-The function {\it StandardiseMolecules} enables the depiction of molecular structures in a similar way.
-Moreover, the different arguments allow to control the maximum number of (i) fluorines, (ii) chlorines,
-(iii) bromines, and (iv) iodines a molecules can exhibit in order to be kept. If using the default value, {\it i.e.} "-1",
-all molecules will be kept irrespective of the number of fluorines, chlorines, bromines, and iodines.
+The function {\it StandardiseMolecules} enables the depiction of molecular structures in the same (standardized) way.
+The different arguments of this function allow to control the maximum number of (i) fluorines, (ii) chlorines,
+(iii) bromines, and (iv) iodines the molecules can exhibit in order to be kept. If using the default value, {\it i.e.} "-1",
+all molecules will be kept irrespective of the exhibited number of fluorines, chlorines, bromines, and iodines.
 Inorgnaic molecules are removed if the argument "removed.inorganic" is set to "TRUE", which is the default value.
 Additionally, upper and lower limits for the molecular mass can be set with the arguments "min.mass.limit" and "max.mass.limit".
 The default value is "-1". Thus, all molecules will be kept irrespective of their molecular mass.
@@ -88,31 +91,34 @@ iodine.limit=-1,
 min.mass.limit=-1, #suggested value 20
 max.mass.limit=-1) #suggested value  900
 @
-The properties of all molecules and an index, in the column "kept", indicating which molecules were deleted,
-are written to the file indicated in the argument "output". In this case the file is \verb|"standardisation_COX_info.csv"|.
-Those molecules that passed the filters are written to the file indicated in the argument "standardised.file".
-By contrast, molecules that did not pass these filters are written to the file indicated in the "removed.file" argument.
+The properties specified in the structure file of all molecules and an index, in the column "kept", indicating which molecules were deleted (0 and kept (1),
+are written to the file indicated in the argument "output". 
+In this case the file is \verb|"standardisation_COX_info.csv"|.
+Molecules that pass the filters are written to the file indicated in the argument "standardised.file".
+By contrast, molecules that do not pass these filters are written to the file indicated in the "removed.file" argument.
 
 <<echo=TRUE,results='hide',warning=FALSE,message=FALSE,eval=FALSE>>=
 standardised_info <- read.table("standardisation_COX_info.csv",header=TRUE,sep="\t")
 @
 
 Default values of the arguments of the function "StandardiseMolecules" are not stringent.
-In the present case, all molecules were kept, thus all values in the columns "kept"
+In the present case, all molecules are kept, thus all values in the columns "kept"
 are equal to "1".
 
 The properties of a ".sdf" file can be inspected witn the function:
 <<echo=TRUE,results='hide',warning=FALSE,message=FALSE,eval=FALSE>>=
-ShowPropertiesSDF("standardised.sdf")
+ShowPropertiesSDF("test.sdf") # a mock .sdf file
 @
-The values corresponding to an individual property can be accessed with the function "GetPropertySDF".
-Similarly, the function "GetPropertiesSDF" retrieves the information for all properties of a given ".sdf" file. A data.frame with all properties is returned.
+The values corresponding to an individual property in a ".sdf" file can be accessed with the function "GetPropertySDF".
+Similarly, the function "GetPropertiesSDF" retrieves the information for all properties of a given ".sdf" file.
+A data.frame with all properties is returned.
 The number of molecules from which the information has to be retrieved can be indicated with the argument \verb|"number_processed"|.
 The default value for this argument is \verb|"-1"|, which indicates that the properties will be extracted for all molecules in the input file.
-<<echo=TRUE,results='hide',warning=FALSE,message=FALSE,eval=TRUE>>=
-GetPropertySDF("standardised.sdf",property="property_name",number_processed=10)
-all_properties <- GetPropertiesSDF("standardised.sdf",number_processed=10)
-head(all_properties)
+<<echo=TRUE,results='hide',warning=FALSE,message=FALSE,eval=TRUE,tidy=FALSE>>=
+GetPropertySDF("test.sdf",property="Name",
+               number_processed=10)
+
+all_properties <- GetPropertiesSDF("test.sdf",number_processed=10)
 @
 
 \subsection{PaDEL Descriptors}
@@ -129,7 +135,7 @@ descriptors <- readRDS("Padel_COX.rds")
 Sometimes, some descriptors are not calculated for all molecules, thus giving a "NA" or "Inf" as descriptor value.
 Instead of removing that descriptor for all molecules, the missing descriptor values can be imputed from the corresponding descriptor values of the rest of molecules.
 Descriptor values equal to "Inf" are converted to "NA".
-For the imputation of missing dscriptor values, the R package {\it impute} is required.
+For the imputation of missing descriptor values, the R package {\it impute} is required.
 Depending on the R version, it can be accessed from either {\it CRAN} or {\it Bioconductor}.
 
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),eval=FALSE>>=
@@ -139,6 +145,8 @@ descriptors <- ImputeFeatures(descriptors)
 
 \subsection{Circular Morgan Fingerprints}
 The calculation of circular Morgan fingerprints requires the python library RDkit, given that the function "MorganFPs" calls a python script for the calculation of this type of fingerprints.
+The python code is available in the "extdata" folder of the package or at:\\
+https://github.com/isidroc/FingerprintCalculator.\\
 For a detailed discussion about circular Morgan fingerprints, we refer
 the interested reader to ref. \cite{morgan}.
 When using integrated development environments (IDE) such as RStudio,
@@ -147,16 +155,19 @@ However, they can be redefined with the R function "Sys.setenv".
 In any case, the function "MorganFPs" requires this information in the arguments "PythonPath", path to python in the system, and "RDkitPath", the path to the RDkit library. 
 For instance, the information of the latter is contained in the environment variable \verb|$RDBASE| in Mac OS.
 
-<<highlight=TRUE,tidy.opts=list(width.cutoff=50),eval=FALSE,tidy=TRUE>>=
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),eval=FALSE,tidy=FALSE>>=
 Sys.setenv(RDBASE="/usr/local/share/RDKit")
 Sys.setenv(PYTHONPATH="/usr/local/lib/python2.7/site-packages")
+
 fps_COX_512 <- MorganFPs(bits=512,radius=2,type='smi',mols='smiles_COX.smi', 
                          output='COX',keep='hashed_counts',
                          RDkitPath='/usr/local/share/RDKit',
                          PythonPath='/usr/local/lib/python2.7/site-packages',
                          verbose=TRUE, images = FALSE, unhashed = FALSE, 
-                         extFileExtension = FALSE, extMols = FALSE, unhashedExt = FALSE, 
+                         extFileExtension = FALSE, 
+                         extMols = FALSE, unhashedExt = FALSE, 
                          logFile = FALSE)
+
 saveRDS(fps_COX_512,file="fps_COX_512.rds")
 fps_COX_512 <- readRDS("fps_COX_512.rds")
 @
@@ -181,13 +192,13 @@ Unhashed fingerprints in {\bf binary format} are dropped to the output file \ver
 calcualted for new molecules for which predictions are to be made by that model. 
 To this aim, the function "MorganFPs" enables the calculation of both hashed and unhashed fingerprints (in both binary and counts format) for the molecules present in a given file (hereinafter referred to as external file). The unhashed fingeprints will be calculated based on the pool of substructures present in the file indicated in the argument "mols".
 To enable the calculation of fingerprints for the external file, the arguments "extMols" (name of the external file) and "extFileExtension" (file extension of the external file) need to be set on. 
-The hashed fingerprints will be dropped to the following files:
+The hashed fingerprints will be dropped to the following files:\\
 (i) binary format: \verb|{\it output}_hashed_binary_EXT.csv|, and (ii) counts format: 
 \verb|{\it output}_hashed_counts_EXT.csv|.
 If the user also wants the calculation of unhashed fingerprints for the molecules present in the external file, the argument "unhashedExt" needs to be set to TRUE. 
-In this case the unhashed fingeprints will be dropped to the following files:
-(i) binary format: \verb|{\it output}_unhashed_binary_EXT.csv|, and (ii) counts format: 
-\verb|{\it output}_unhashed_counts_EXT.csv|.
+In this case the unhashed fingeprints will be dropped to the following files:\\
+(i) binary format: \verb|{\it output}_unhashed_binary_EXT.csv|,\\
+and (ii) counts format: \verb|{\it output}_unhashed_counts_EXT.csv|.
 
 \end{itemize}
 
@@ -197,21 +208,22 @@ In the following paragraph we describe in detail the arguments of the function "
 \begin{itemize}
 \item {\bf bits:} Number of bits of the hashed fingerprints. The default value is 512.
 \item {\bf radius:} Maximum radius of the substructures. A radius of 2 is equivalent to \verb|ECFP-4|, where 4 corresponds to the diameter. The default value is 2.
-More information on ECFP fingerprints can be found here: 
+More information on ECFP fingerprints can be found here:\\
 \verb|http://www.chemaxon.com/jchem/doc/user/ECFP.html|.
 \item {\bf type:} File format containing the input molecules. The default value is ".smi".
 \item {\bf mols:} File containing the input molecules.
 \item {\bf output:} Label that will be appended to all ouput files (see below).
 \item {\bf keep:} The fingeprints that will be kept after the calculation.
-Apart from calculating different types of fingerprints, the function returns a data.frame with the type of fingerprints specified with this argument.  Possible types are: \verb|hashed_binary|,\verb|hashed_counts|, \verb|unhashed_binary|, \verb|unhashed_counts|, and if applicable, 
-\verb|hashed_binaryEXT|, \verb|hashed_countsEXT|, \verb|unhashed_binaryEXT| and \verb|unhashed_countsEXT|.
+Apart from calculating different types of fingerprints, the function returns a data.frame with the type of fingerprints specified with this argument.  Possible types are: \verb|hashed_binary|,\verb|hashed_counts|, \verb|unhashed_binary|, \verb|unhashed_counts|, and if applicable,\\
+\verb|hashed_binaryEXT|, \verb|hashed_countsEXT|, \verb|unhashed_binaryEXT|,\\
+and \verb|unhashed_countsEXT|.
 The default value is \verb|"hashed_binary"|.
 \item {\bf images:} If TRUE, individual ".pdf" files containing (i) the image of each substructure in the context of a molecule presenting it, and (ii) each molecule correctly processed, are created.  Be aware that the number of substructures can be large depending on the number and diversity of the molecules present in the input file. Thus, allow for sufficient memory in those cases.
 The default value is FALSE.
 \item {\bf unhashed:} If TRUE, unhashed fingeprints, both in binary format and with counts, are calculated. The default value is FALSE.
 \item {\bf verbose:} If TRUE, information about the progression of the calculation is printed. The default value is FALSE.
 \item {\bf RDkitPath:} The path to the folder containing the RDkit library in your computer. On mac, the environment variable \verb|$RDBASE| contains this information. The default value is "/usr/local/share/RDKit".
-\item {\bf PythonPath:} Path to python (\verb|$PYTHONPATH|).
+\item {\bf PythonPath:} Path to python (\verb|$PYTHONPATH|).\\
 The default value is "/usr/local/lib/python2.7/site-packages".
 \item {\bf extFileExtension:} If not FALSE, file extension for the external file containing the molecules for which unhashed fingeprints are to be calculated with respect to the pool of substructures in the molecules present in the file specified in "mols". The default value is FALSE.
 \item {\bf extMols:} If not FALSE, external file containing the molecules for which unhashed fingeprints are to be calculated with respect to the pool of
@@ -240,6 +252,10 @@ The descriptors will be saved to a ".rds" file.
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),eval=FALSE,tidy=TRUE>>=
 amino_acid_IDs_zscales <- AA_descs(Data=amino_acid_IDs,type="Z5")
 saveRDS(amino_acid_IDs_zscales,file="Z5_COX.rds")
+amino_acid_IDs_zscales <-readRDS("Z5_COX.rds")
+@
+
+<<echo=FALSE,results='hide',warning=FALSE,message=FALSE>>=
 amino_acid_IDs_zscales <-readRDS("Z5_COX.rds")
 @
 The function \verb|"AA_descs"| permits the calculation of the following types of amino acid descriptors (futher details about these amino acid descriptors can be found in refs \cite{AAs1} and \cite{AAs2}):
@@ -330,7 +346,7 @@ The function returns a list with following elements :
 \begin{itemize}
 \item Data : a dataframe containing the two first PCs and the row names if provided. 
 Rows are indexed as in the input data corresponds to a list.
-\item PCs_All : a dataframe containing all PCs.
+\item \verb|PCs_All| : a dataframe containing all PCs.
 \item Std : a vector containing the standard deviation of all PCs.
 \item Info : information about the PCA analysis, such as the proportion of variance explained by each PC.
 It is always advisable to verify that the two or three first PCs explain a large proportion of the variance in the data,
@@ -342,7 +358,7 @@ As all the plotting function provided with {\it camb}, it is based on
 Below is an example of how to use these two function to do a PCA analysis of the target space, 
 which in this case is quantified by the amino acid descriptors of the amino acids present in the binding site
 of mammal cyclooxygenases.
-<<highlight=TRUE,results='hide',tidy.opts=list(width.cutoff=50),tidy=TRUE,fig.align='center',fig.cap="PCA Analysis on the\nAmino Acid Descriptors",eval=TRUE>>=
+<<highlight=TRUE,results='hide',tidy.opts=list(width.cutoff=50),tidy=FALSE,fig.align='center',fig.cap="PCA Analysis on the\nAmino Acid Descriptors",eval=TRUE>>=
 target_PCA <- PCA(Data=amino_acid_IDs_zscales,
                   RowNames=dataset$accession,
                   cor=TRUE,scale = TRUE, 
@@ -388,7 +404,7 @@ In this case, a Gaussian Process (GP) model was trained in Matlab (data not show
 This value is in accordance with the recently published value of 0.68 pIC50 units for public IC50 data.\cite{kramerIC50}
 With the function 'MaxPerf', we can calculate the maximum achievable performance:
 
-<<highlight=TRUE,tidy=TRUE,fig.align='center',fig.cap="Maximum achievable model performance",fig.width='10cm',fig.height='25cm',eval=TRUE>>=
+<<highlight=TRUE,tidy=FALSE,fig.align='center',fig.cap="Maximum achievable model performance",fig.width='10cm',fig.height='25cm',eval=TRUE>>=
 max_performance <- MaxPerf(meanNoise=0,sdNoise=0.6,
                            meanResp=mean(bioactivity),
                            sdResp=sd(bioactivity),
@@ -414,10 +430,10 @@ In order to remove duplicate values, we run the file \verb|"remove_duplicates.R"
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
 source("remove_duplicates.R")
 @
-The dataset without repeated repetitions will be saved to the file "Whole_dataset.rds".
+The dataset without repeated repetitions will be saved to the file \verb|"Whole_dataset.rds".|
 The dataset with only (i) compound descriptors, PaDEL and Morgan fingerprints, and (ii) amino acid descriptors
 will be saved to the files \verb|"Whole_dataset_compound_descriptors.rds"| and \verb|"Whole_dataset_aa_descriptors.rds"|
-respectively. All variables created while running the file \verb|"remove_duplicates.R"| will be saved to the file
+respectively. All variables created while running the file \verb|"remove_duplicates.R"| will be saved to the file\\
 \verb|"data_processing_repetitions_COX.RData"|.
 
 In cases where no repeated bioactivities are present for the same datapoint, 
@@ -546,7 +562,7 @@ holdout.predictions <- as.vector(predict(modelCoxRF$finalModel, newdata = datase
 The predictive ability of the models is evaluated by calculation the following statistical metrics:
 
 {\bf Internal validation:}
-\\
+
 \begin{equation}
 q_{{\it int}}^{2} \ or \  R_{tr}^{2}  = 1 - \frac {\sum_{i=1}^{N_{tr}} (y_{i} - \widetilde{y}_{i})^{2}} {\sum_{i=1}^{N_{int}} (y_{i} - \bar{y}_{tr})^{2}}
 \end{equation}
@@ -556,11 +572,11 @@ q_{{\it int}}^{2} \ or \  R_{tr}^{2}  = 1 - \frac {\sum_{i=1}^{N_{tr}} (y_{i} - 
 RMSE_{int} = \frac {\sqrt {(y_i - \widetilde{y}_i)^{2}}} {N}
 \end{equation}
 
-where $N$, $y_i$, $\widetilde{y}_i$ and $\bar{y}_{tr}$ represent the size of the training set, the observed, the predicted and the averaged values of the response variable for those datapoints included in the training set. The {\it i}th position within the training set is defined by {\it i}.  
+where $N$, $y_i$, $\widetilde{y}_i$ and $\bar{y}_{tr}$ represent the size of the training set, the observed, the predicted and the averaged values of the response variable for those datapoints included in the training set. The {\it i}th position within the training set is defined by {\it i}.\\  
 
-\\
+
 {\bf External validation:}
-\\
+
 
 \begin{equation}
 Q_{1\ {\it ext}}^{2} = 1 - \frac {\sum_{j=1}^{N_{ext}} (y_j-\widetilde{y}_j)^{2}}  {\sum_{j=1}^{N_{ext}} (y_j - \bar{y}_{tr})^{2}}
@@ -602,7 +618,7 @@ The metrics for the external validation are given by:
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
 MetricsRf <- Validation(predholdout.predictions,dataset$y.holdout, resp_tr=bioactivities)
 @
-The argument "resp_tr", requires the bioactivity values of the datapoints present in the training set.
+The argument \verb|"resp_tr"|, requires the bioactivity values of the datapoints present in the training set.
 These values are required by the metrics $Q_{1}$ and $Q_{3}$ (see above).
 
 To visualize the correlation between predicted and observed values, we can use the 'CorrelationPlot' function:
