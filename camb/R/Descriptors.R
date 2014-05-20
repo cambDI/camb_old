@@ -224,7 +224,7 @@ convert31 <- function(AA) {
   return(res)
 }
 
-<<<<<<< HEAD
+
 ##############
 # Calculate AA descriptors
 
@@ -373,32 +373,20 @@ SeqDescs <- function(data,UniProtID=TRUE,type="AAC",..){
     type <- paste("c(",paste(type,collapse=","),")",sep="")
     t <- paste("t(apply(d,1,FUN=function(x)",type,"))",sep="") 
     des=eval(parse(text=t))
-<<<<<<< HEAD
-    row.names(des) <- Data
-    return(des) 
-  } else {
-    if (!is.data.frame(Data) && !is.matrix(Data)) stop("The input sequences must be a dataframe or a matrix")
-=======
+   
     row.names(des) <- data
     return(des) 
   } else {
     if (!is.data.frame(data) && !is.matrix(data)) stop("The input sequences must be a dataframe or a matrix")
->>>>>>> e07b0708d708c3ba1fc1c5c2123bee363b2657a3
     types <- c("AAC","DC","TC","MoreauBroto","Moran","Geary",
                "CTDC","CTDT","CTDD","CTriad","SOCN","QSO",
                "PACC","APAAC")
     type <- match.arg(type,types,several.ok=TRUE)
     type <- paste0("extract",type,"(x)")
     type <- paste("c(",paste(type,collapse=","),")",sep="")
-<<<<<<< HEAD
-    t <- paste("t(apply(Data,1,FUN=function(x)",type,"))",sep="") 
-    des=eval(parse(text=t))
-    row.names(des) <- rownames(Data)
-=======
     t <- paste("t(apply(data,1,FUN=function(x)",type,"))",sep="") 
     des=eval(parse(text=t))
     row.names(des) <- rownames(data)
->>>>>>> e07b0708d708c3ba1fc1c5c2123bee363b2657a3
     return(des) 
   }
 }
