@@ -22,56 +22,7 @@
     <favorites_list name="camb" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="LogS_report.Rnw" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/examples/QSPR/LogS/Reference_2/LogS_report.Rnw">
-          <provider editor-type-id="com.intellij.persistence.database.editor.CsvTableFileEditorProvider">
-            <state />
-          </provider>
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="78" column="0" selection-start="3006" selection-end="3006" vertical-scroll-proportion="-10.111111" vertical-offset="897" max-vertical-offset="3540">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="indigo_version.h" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/camb/src/api/src/indigo_version.h">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="18" column="0" selection-start="751" selection-end="751" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="390">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="standardise.cpp" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/camb/src/standardise.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="219" column="17" selection-start="8593" selection-end="8593" vertical-scroll-proportion="0.0" vertical-offset="1710" max-vertical-offset="5640">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Descriptors.R" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/camb/R/Descriptors.R">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="385" column="0" selection-start="16266" selection-end="16266" vertical-scroll-proportion="0.36158192" vertical-offset="5583" max-vertical-offset="7605">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="NAMESPACE" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/camb/NAMESPACE">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="570">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf />
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -94,8 +45,8 @@
   </component>
   <component name="ProjectFrameBounds">
     <option name="y" value="22" />
-    <option name="width" value="1436" />
-    <option name="height" value="878" />
+    <option name="width" value="1916" />
+    <option name="height" value="1058" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -152,6 +103,7 @@
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$USER_HOME$/bitcoin/coinduit" />
   </component>
   <component name="RunManager">
     <list size="0" />
@@ -166,16 +118,16 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="22" width="1436" height="878" extended-state="6" />
-    <editor active="true" />
+    <frame x="0" y="22" width="1916" height="1058" extended-state="6" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.29295427" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23963599" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18736953" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
@@ -206,23 +158,30 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/camb/src/api/src/indigo_version.h">
+    <entry file="file://$PROJECT_DIR$/camb/NAMESPACE">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="0" selection-start="751" selection-end="751" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="390">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="570">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/camb/R/Descriptors.R">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="385" column="0" selection-start="16266" selection-end="16266" vertical-scroll-proportion="0.26519337" vertical-offset="5583" max-vertical-offset="7605">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/camb/src/standardise.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="219" column="17" selection-start="8593" selection-end="8593" vertical-scroll-proportion="0.0" vertical-offset="1710" max-vertical-offset="5640">
+        <state line="219" column="17" selection-start="8593" selection-end="8593" vertical-scroll-proportion="2.1754143" vertical-offset="1710" max-vertical-offset="5640">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/camb/NAMESPACE">
+    <entry file="file://$PROJECT_DIR$/camb/src/api/src/indigo_version.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="570">
+        <state line="18" column="0" selection-start="751" selection-end="751" vertical-scroll-proportion="0.37292817" vertical-offset="0" max-vertical-offset="724">
           <folding />
         </state>
       </provider>
@@ -232,14 +191,7 @@
         <state />
       </provider>
       <provider selected="true" editor-type-id="text-editor">
-        <state line="78" column="0" selection-start="3006" selection-end="3006" vertical-scroll-proportion="-10.111111" vertical-offset="897" max-vertical-offset="3540">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/camb/R/Descriptors.R">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="385" column="0" selection-start="16266" selection-end="16266" vertical-scroll-proportion="0.36158192" vertical-offset="5583" max-vertical-offset="7605">
+        <state line="78" column="0" selection-start="3006" selection-end="3006" vertical-scroll-proportion="0.3991228" vertical-offset="897" max-vertical-offset="3540">
           <folding />
         </state>
       </provider>

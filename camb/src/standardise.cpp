@@ -311,7 +311,7 @@ extern "C" {
                         continue;
                     } else {
                         
-                        property_stream << "1" << endl;
+                        property_stream << "1" << endl; 
                         property_stream2 << "1" << endl;
                     }
                 }

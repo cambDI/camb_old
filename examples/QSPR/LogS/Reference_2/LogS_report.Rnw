@@ -98,6 +98,7 @@ Split the dataset into a training (80\%) and a holdout (20\%) set that will be u
 x.finite <- ReplaceInfinitesWithNA(x)
 x.imputed <- ImputeFeatures(x.finite)
 
+
 # split the dataset into a training and holdout set
 dataset <- SplitSet(ids, x.imputed, y, percentage=20)
 

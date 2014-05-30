@@ -2,33 +2,27 @@
 ## Modeling 
 #################################################################################
 
-##############
-## The following functions assume that you already have features calculated and that
-## the features are seperate from the target values
-#ViewTargets <- function(y, bw) {
-#  plot(density(y, bw = bw), main="Targets")
-#}
 
-# TBD write function to view a feature by name in the same way as the targets above
-##############
+asNumeric <- function(x) as.numeric(as.character(x))
+factorsNumeric <- function(d) modifyList(d, lapply(d[, sapply(d, is.factor)],   
+                                                   asNumeric))
+
+#' Remove infinite values from the descriptor data.frame
+#' 
+#' Any infinites found in the descriptor data.frame are replaced with NA.
+#' 
+#' @param d A data.frame
+#' @export
+#' @return A data.frame with infinite values replaced by NA.
+#' @author Daniel Murrell <dsmurrell@@gmail.com> and Isidro Cortes <isidrolauscher@@gmail.com>
 ReplaceInfinitesWithNA <- function(d) {
-  do.call(data.frame,lapply(d, function(x) replace(x, is.infinite(x),NA)))
-}
-
-RemoveColumnsWithMoreThanHalfNA <- function(d) {
-  indexes <- which(apply(d, 2, function(x) {length(which(is.na(x)))>(0.5*length(x))}))
-  if(length(indexes)==0) {
-    return(d)
-  } 
-  else {
-    return(d[,-indexes])
-  }
+  do.call(data.frame,lapply(d, function(x) replace(x, is.infinite(x), NA)))
 }
                          
 ##############
 ImputeFeatures <- function(d, k=10,...) {
   suppressWarnings(require(impute)) || stop("Package impute is required. Install from CRAN or Bioconductor -depending on the R version you are using-.")
-  as.data.frame(impute.knn(as.matrix(d), k = k,...)$data)
+  as.data.frame(impute.knn(as.matrix(factorsNumeric(d)), k = k, ...)$data)
 }
 
 ##############

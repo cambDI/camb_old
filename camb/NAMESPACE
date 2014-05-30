@@ -2,7 +2,10 @@
 
 export(AA_descs)
 export(DensityResponse)
+export(GeneratePadelDescriptors)
 export(MorganFPs)
+export(RemoveStandardisedPrefix)
+export(ReplaceInfinitesWithNA)
 export(SeqDescs)
 export(StandardiseMolecules)
 export(caretEnsemble)

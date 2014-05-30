@@ -2,17 +2,33 @@
 ## Standardization and Descriptor Calculation of Molecules and Peptides / Sequences
 #################################################################################
 
-##
-## Standardize Compounds
 #' Convert molecules to a standard representation
 #' 
-#' Details about the standardisation procedure
+#' Molecules are converted to a standard representation using Indigo's C API. Molecules can be read in either SMILES or SDF format. Hydrogens are made implicit. 
+#' Molecules are excluded if they don't pass Indigo's checks for correctness which include incorrect valence representations and ambiguous Hydrogen representations.
+#' Atomic isotopes are converted to their common forms. Molecules are dearomatized and then converted to InChI format using Indigo's InChI plugin. 
+#' Molecules are then converted back to a SMILES representation. 
+#' Passing them through the InChI format essentially convert all tautomeric forms of the same molecule to a single representation.  
+#' Various parameters are available to control which molecule get kept in the standardised set.
 #' 
-#' @param structures.file A character, vector, matrix or data.frame containing the amino acids in either one-letter or three-letter format. 
-#' Amino acids symbols are valid in capitals or in lower-case.
+#' @param structures.file The name of the file containing the chemical structures. SMILES and SDF are currently supported formats.
+#' @param standardised.file The name of the file to which the standardised molecules are written to. This file is saved in the SDF format.
+#' @param removed.file The name of the file to which the standardised molecules that were removed by the filters are written to. This file is saved in SDF format.
+#' If left out, this file is not created.
+#' @param properties.file The name of the file to which the molecular properties contained in the \code{structures.file} are written to. This file is saved in CSV format.
+#' @param remove.inorganic If set \code{TRUE}, molecules that contain any atoms not in {H, C, N, O, P, S, F, Cl, Br, I} are excluded.
+#' @param flourine.limit If specified, molecules with more than \code{flourine.limit} Flourine atoms are excluded.
+#' @param chlorine.limit If specified, molecules with more than \code{chlorine.limit} Chlorine atoms are excluded.
+#' @param bromine.limit If specified, molecules with more than \code{bromine.limit} Bromine atoms are excluded.
+#' @param iodine.limit If specified, molecules with more than \code{iodine.limit} Iodine atoms are excluded. 
+#' @param min.mass.limit If specified, molecules with a molecular mass smaller than \code{min.mass.limit} are excluded.
+#' @param max.mass.limit If specified, molecules with a molecule mass greater than \code{max.mass.limit} are excluded.
+#' @param number.processed If specified, only the first \code{number.processed} molecules will be processed by this function. 
+#' This is used mainly for testing purposed on files that contain a lot of molecules.
 #' @export
-#' @return A data.frame with the properties of the molecules read from the original structure file.
+#' @return Does not return anything.
 #' @references \url{http://www.ggasoftware.com/opensource/indigo}
+#' @references \url{http://www.iupac.org/home/publications/e-resources/inchi.html}
 #' @examples
 #' test_mols <- system.file("test_structures", "structures_10.sdf", package = "camb")
 #' StandardiseMolecules(structures.file=test_mols, standardised.file="st.sdf", removed.file="removed.sdf", properties.file="properties.csv")
@@ -120,11 +136,20 @@ return(prop)
 }
 ##############
 ## Compound Descriptors
+
+#' RemoveStandardisedPrefix
+#' 
+#' TBD: fill in description and the rest
+#' @export
 RemoveStandardisedPrefix <- function(descriptors) {
   descriptors$Name <- sapply(descriptors$Name, function(x) {strsplit(as.character(x), "Standardised_")[[1]][2]})
   descriptors
 }
 
+#' GeneratePadelDescriptors
+#' 
+#' TBD: fill in description and the rest
+#' @export
 GeneratePadelDescriptors <- function(standardised.file, types = c("2D"), threads = -1, limit = -1) {
   if (file.info(standardised.file)$size  == 0) {stop("Input file is empty")}
   descriptors.file <- tempfile("descriptors", fileext=".csv")
@@ -223,9 +248,6 @@ convert31 <- function(AA) {
   res <- names(threeL[which(threeL==toupper(AA))])
   return(res)
 }
-
-##############
-# Calculate AA descriptors
 
 #' Amino Acid Descriptor Calculation
 #' 

@@ -70,13 +70,11 @@ it is necessary to switch off the argument {\it comment.char} in order not to cl
 smiles <- read.table("smiles_COX.smi", header=FALSE,comment.char=c(""))
 @
 
-The function {\it StandardiseMolecules} enables the depiction of molecular structures in the same (standardized) way.
-The different arguments of this function allow to control the maximum number of (i) fluorines, (ii) chlorines,
-(iii) bromines, and (iv) iodines the molecules can exhibit in order to be kept. If using the default value, {\it i.e.} "-1",
-all molecules will be kept irrespective of the exhibited number of fluorines, chlorines, bromines, and iodines.
-Inorgnaic molecules are removed if the argument "removed.inorganic" is set to "TRUE", which is the default value.
+The function {\it StandardiseMolecules} enables the depiction of molecular structures in the same (standardised) form.
+The different arguments of this function allow control over the maximum number of (i) fluorines, (ii) chlorines,
+(iii) bromines, and (iv) iodines the molecules contains in order to be retained for training.
+Inorgnaic molecules (those containing atoms not in {H, C, N, O, P, S, F, Cl, Br, I}) are removed if the argument "remove.inorganic" is set to "TRUE", which is the default value.
 Additionally, upper and lower limits for the molecular mass can be set with the arguments "min.mass.limit" and "max.mass.limit".
-The default value is "-1". Thus, all molecules will be kept irrespective of their molecular mass.
 The name of the file containing the chemical structures is input to the argument "structures.file".
 <<echo=TRUE,results='hide',warning=FALSE,message=FALSE,eval=FALSE>>=
 StandardiseMolecules(structures.file="smiles_COX.smi",
@@ -91,11 +89,11 @@ iodine.limit=-1,
 min.mass.limit=-1, #suggested value 20
 max.mass.limit=-1) #suggested value  900
 @
-The properties specified in the structure file of all molecules and an index, in the column "kept", indicating which molecules were deleted (0 and kept (1),
-are written to the file indicated in the argument "output". 
+The properties specified in the structure file of all molecules and an index, in the column "kept", indicating which molecules were deleted (0) and kept (1),
+are written to the file indicated in the argument "properties.file" which is in CSV format.
 In this case the file is \verb|"standardisation_COX_info.csv"|.
-Molecules that pass the filters are written to the file indicated in the argument "standardised.file".
-By contrast, molecules that do not pass these filters are written to the file indicated in the "removed.file" argument.
+Molecules that Indigo manages to parse and that pass the filters are written to the file indicated in the argument "standardised.file".
+By contrast, molecules that are discarded for training purposes are written to the file indicated in the "removed.file" argument.
 
 <<echo=TRUE,results='hide',warning=FALSE,message=FALSE,eval=FALSE>>=
 standardised_info <- read.table("standardisation_COX_info.csv",header=TRUE,sep="\t")
