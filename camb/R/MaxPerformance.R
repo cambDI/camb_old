@@ -8,7 +8,7 @@ MaxPerf <- function (meanNoise = 0, sdNoise, resp, lenPred, stds=NULL,
   isnot.vector <- function(x) ! is.vector(x)
   isnot.null <- function(x) ! is.null(x)
   vplayout <- function(x, y) viewport(layout.pos.row = x, layout.pos.col = y)
-  if is.null(stds){stds=rnorm(length(resp),mean=meanNoise,sd=sdNoise)}
+  if (is.null(stds)){stds=rnorm(length(resp),mean=meanNoise,sd=sdNoise)}
   R2 <- c()
   R02 <- c()
   Q2 <- c()
