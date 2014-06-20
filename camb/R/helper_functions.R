@@ -1,10 +1,14 @@
 #TODO: Move ensembling functions to their own document
 #TODO: Move predictions functions to their own document
-
+ 
 #' Check that a list of models are all train objects and are ready to be ensembled together
 #' 
-#' @param list_of_models a list of caret models to check
+#' TBD description
+#' 
+#' @param tbd tbd
 #' @export
+#' @return something
+#' @author Daniel Murrell <dsmurrell@@gmail.com> and Isidro Cortes <isidrolauscher@@gmail.com>
 checkModels_extractTypes <- function(list_of_models){
   require('caret') || stop("Pacakge 'caret' is required")
   

@@ -29,6 +29,14 @@
 \maketitle
 \onehalfspacing
 
+<<echo=FALSE,results='hide'>>=
+options(width=60)
+#suppressWarnings(library(png,quietly=TRUE,warn.conflicts=FALSE))
+#suppressWarnings(library(caret,quietly=TRUE,warn.conflicts=FALSE))
+suppressWarnings(library(doMC,quietly=TRUE,warn.conflicts=FALSE))
+#library(ggplot2,quietly=TRUE)
+@
+
 \maketitle
 
 In the following sections, we demonstrate the utility of the \texttt{camb} package by presenting a pipeline which generates various aqueous solubility models using 2D molecular descriptors calculated by the PaDEL-Descriptor package as input features. These models are then ensembled to create a single model with a greater predictive accuracy.

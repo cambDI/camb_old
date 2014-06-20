@@ -79,6 +79,8 @@
 \maketitle
 \onehalfspacing
 
+
+
 \maketitle
 
 In the following sections, we demonstrate the utility of the \texttt{camb} package by presenting a pipeline which generates various aqueous solubility models using 2D molecular descriptors calculated by the PaDEL-Descriptor package as input features. These models are then ensembled to create a single model with a greater predictive accuracy.
@@ -142,11 +144,11 @@ In this case the file is \verb|"properties.csv"|.
 \end{kframe}\begin{figure}[]
 
 
-{\centering \includegraphics[width=8cm]{figure/unnamed-chunk-4} 
+{\centering \includegraphics[width=8cm]{figure/unnamed-chunk-5} 
 
 }
 
-\caption[LogS Target Distribution]{LogS Target Distribution\label{fig:unnamed-chunk-4}}
+\caption[LogS Target Distribution]{LogS Target Distribution\label{fig:unnamed-chunk-5}}
 \end{figure}
 
 
@@ -225,9 +227,7 @@ Convert the descriptors to z-scores by centering them to have a mean of zero and
 \begin{alltt}
 \hlstd{dataset} \hlkwb{<-} \hlkwd{PreProcess}\hlstd{(dataset)}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: could not find function "{}PreProcess"{}}}\end{kframe}
+\end{kframe}
 \end{knitrout}
 
 Given that cross-validation (CV) will be used to optimize the hyperparameters of the models, we divide the training set in 5 folds:
@@ -235,10 +235,6 @@ Given that cross-validation (CV) will be used to optimize the hyperparameters of
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{dataset} \hlkwb{<-} \hlkwd{GetCVTrainControl}\hlstd{(dataset)}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: could not find function "{}GetCVTrainControl"{}}}\begin{alltt}
 \hlkwd{saveRDS}\hlstd{(dataset,} \hlkwc{file} \hlstd{=} \hlstr{"dataset_logS_preprocessed.rds"}\hlstd{)}
 \end{alltt}
 \end{kframe}
@@ -268,9 +264,7 @@ In the following section we will present the different steps required to train a
 \hlcom{# register the number of cores to use in training}
 \hlkwd{registerDoMC}\hlstd{(}\hlkwc{cores} \hlstd{=} \hlnum{10}\hlstd{)}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: could not find function "{}registerDoMC"{}}}\end{kframe}
+\end{kframe}
 \end{knitrout}
 
 \subsection{Support Vector Machines (SVM)}
@@ -331,11 +325,11 @@ Determine if your hyper-parameter search needs to be altered. In the following w
 \end{kframe}\begin{figure}[]
 
 
-{\centering \includegraphics[width=8cm]{figure/unnamed-chunk-16} 
+{\centering \includegraphics[width=8cm]{figure/unnamed-chunk-17} 
 
 }
 
-\caption[CV RMSE over the hyperparameters]{CV RMSE over the hyperparameters\label{fig:unnamed-chunk-16}}
+\caption[CV RMSE over the hyperparameters]{CV RMSE over the hyperparameters\label{fig:unnamed-chunk-17}}
 \end{figure}
 
 

@@ -30,7 +30,14 @@ ImputeFeatures <- function(d, k=10,...) {
   as.data.frame(impute.knn(as.matrix(factorsNumeric(d)), k = k, ...)$data)
 }
 
-##############
+#' Split into training and hold out data TBD
+#' 
+#' description
+#' 
+#' @param ids the ids
+#' @export
+#' @return something
+#' @author Daniel Murrell <dsmurrell@@gmail.com> and Isidro Cortes <isidrolauscher@@gmail.com>
 SplitSet <- function(ids, x, y, percentage = 20, seed = 1) {
   holdout.size <- round(nrow(x) * (percentage/100))
   set.seed(seed)
@@ -51,7 +58,14 @@ SplitSet <- function(ids, x, y, percentage = 20, seed = 1) {
   l
 }
 
-##############
+#' TBD
+#' 
+#' TBD description
+#' 
+#' @param ss the ss
+#' @export
+#' @return something
+#' @author Daniel Murrell <dsmurrell@@gmail.com> and Isidro Cortes <isidrolauscher@@gmail.com>
 RemoveNearZeroVarianceFeatures <- function(ss, frequencyCutoff = 30/1,...) {
   nzv.columns <- nearZeroVar(ss$x.train, freqCut = frequencyCutoff,...)
   if (length(nzv.columns) != 0) {
@@ -65,7 +79,14 @@ RemoveNearZeroVarianceFeatures <- function(ss, frequencyCutoff = 30/1,...) {
   ss
 }
 
-##############
+#' TBD
+#' 
+#' TBD description
+#' 
+#' @param ss the ss
+#' @export
+#' @return something
+#' @author Daniel Murrell <dsmurrell@@gmail.com> and Isidro Cortes <isidrolauscher@@gmail.com>
 RemoveHighlyCorrelatedFeatures <- function(ss, correlationCutoff = 0.95,...) {
   hc.columns <- findCorrelation(cor(ss$x.train), correlationCutoff,...)
   if (length(hc.columns) != 0) {
@@ -79,7 +100,14 @@ RemoveHighlyCorrelatedFeatures <- function(ss, correlationCutoff = 0.95,...) {
   ss
 }
 
-##############
+#' TBD
+#' 
+#' TBD description
+#' 
+#' @param ss the ss
+#' @export
+#' @return something
+#' @author Daniel Murrell <dsmurrell@@gmail.com> and Isidro Cortes <isidrolauscher@@gmail.com>
 PreProcess <- function(ss, steps = c("center", "scale"),...) {
   transformation <- preProcess(ss$x.train, method = steps,...)
   ss$x.train <- predict(transformation, ss$x.train)
@@ -88,7 +116,14 @@ PreProcess <- function(ss, steps = c("center", "scale"),...) {
   ss
 }
 
-##############
+#' GetCVTrainControl
+#' 
+#' TBD description
+#' 
+#' @param ss the ss
+#' @export
+#' @return something
+#' @author Daniel Murrell <dsmurrell@@gmail.com> and Isidro Cortes <isidrolauscher@@gmail.com>
 GetCVTrainControl <- function(ss, seed = 1, folds = 5, repeats = 1,method='cv',returnResamp='none',returnData=TRUE, savePredictions=TRUE,verboseIter=TRUE, allowParallel=TRUE,...) {
   set.seed(seed)
   ss$trControl <- trainControl(method='cv', number=folds, repeats=repeats, returnResamp='none',
@@ -98,7 +133,14 @@ GetCVTrainControl <- function(ss, seed = 1, folds = 5, repeats = 1,method='cv',r
   ss
 }
 
-##############
+#' TBD
+#' 
+#' TBD description
+#' 
+#' @param power.from the from power
+#' @export
+#' @return something
+#' @author Daniel Murrell <dsmurrell@@gmail.com> and Isidro Cortes <isidrolauscher@@gmail.com>
 expGrid <- function(power.from, power.to, power.by, base){
   grid <- c()
   for (i in seq(power.from, power.to, power.by)){
@@ -107,7 +149,14 @@ expGrid <- function(power.from, power.to, power.by, base){
   return(grid)
 }
 
-##############
+#' TBD
+#' 
+#' TBD description
+#' 
+#' @param power.from the from power
+#' @export
+#' @return something
+#' @author Daniel Murrell <dsmurrell@@gmail.com> and Isidro Cortes <isidrolauscher@@gmail.com>
 YScrambling <- function(y,percent){
 if (percent < 0 || percent > 1){stop("The percent value needs to be between 0 and 1")}
 inds_to_resamp <- sample.int(length(y), length(y)*percent)

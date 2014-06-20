@@ -12,7 +12,7 @@ ReplaceInfinitesWithNA(d)
 A data.frame with infinite values replaced by NA.
 }
 \description{
-Any infinite values found in the descriptor data.frame are replaced with NA.
+Any infinites found in the descriptor data.frame are replaced with NA.
 }
 \author{
 Daniel Murrell <dsmurrell@gmail.com> and Isidro Cortes <isidrolauscher@gmail.com>
