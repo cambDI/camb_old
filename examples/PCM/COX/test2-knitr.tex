@@ -91,7 +91,7 @@ Further details about this dataset are reserved for a future publication.
 Similarly, the interested reader is referred to ref
 \cite{review_pcm} and \cite{cortesReview} for futher details about PCM.
 
-Firstly, the package needs to be loaded and the working directory set:
+Firstly, the package needs to be loaded and the working directory specified:
 
 
 \begin{knitrout}
@@ -122,7 +122,7 @@ it is necessary to switch off the argument {\it comment.char} in order not to cl
 The function {\it StandardiseMolecules} enables the depiction of molecular structures in the same (standardised) form.
 The different arguments of this function allow control over the maximum number of (i) fluorines, (ii) chlorines,
 (iii) bromines, and (iv) iodines the molecules contains in order to be retained for training.
-Inorgnaic molecules (those containing atoms not in {H, C, N, O, P, S, F, Cl, Br, I}) are removed if the argument "remove.inorganic" is set to "TRUE", which is the default value.
+Inorgnaic molecules (those containing atoms not in: \{H, C, N, O, P, S, F, Cl, Br, I\}) are removed if the argument "remove.inorganic" is set to "TRUE", which is the default value.
 Additionally, upper and lower limits for the molecular mass can be set with the arguments "min.mass.limit" and "max.mass.limit".
 The name of the file containing the chemical structures is input to the argument "structures.file".
 \begin{knitrout}
@@ -144,10 +144,10 @@ The name of the file containing the chemical structures is input to the argument
 \end{knitrout}
 
 The properties specified in the structure file of all molecules and an index, in the column "kept", indicating which molecules were deleted (0) and kept (1),
-are written to the file indicated in the argument "properties.file" which is in CSV format.
+are written to the file indicated in the argument "properties.file", which is in CSV format.
 In this case the file is \verb|"standardisation_COX_info.csv"|.
 Molecules that Indigo manages to parse and that pass the filters are written to the file indicated in the argument "standardised.file".
-By contrast, molecules that are discarded for training purposes are written to the file indicated in the "removed.file" argument.
+By contrast, molecules that are discarded for training purposes are written to the file indicated in the argument "removed.file".
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -163,15 +163,6 @@ Default values of the arguments of the function "StandardiseMolecules" are not s
 In the present case, all molecules are kept, thus all values in the columns "kept"
 are equal to "1".
 
-The properties of a ".sdf" file can be inspected witn the function:
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hlkwd{ShowPropertiesSDF}\hlstd{(}\hlstr{"test.sdf"}\hlstd{)}  \hlcom{# a mock .sdf file}
-\end{alltt}
-\end{kframe}
-\end{knitrout}
-
 The values corresponding to an individual property in a ".sdf" file can be accessed with the function "GetPropertySDF".
 Similarly, the function "GetPropertiesSDF" retrieves the information for all properties of a given ".sdf" file.
 A data.frame with all properties is returned.
@@ -180,6 +171,7 @@ The default value for this argument is \verb|"-1"|, which indicates that the pro
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
+\hlkwd{ShowPropertiesSDF}\hlstd{(}\hlstr{"test.sdf"}\hlstd{)} \hlcom{# a mock .sdf file}
 \hlkwd{GetPropertySDF}\hlstd{(}\hlstr{"test.sdf"}\hlstd{,}\hlkwc{property}\hlstd{=}\hlstr{"Name"}\hlstd{,}
                \hlkwc{number_processed}\hlstd{=}\hlnum{10}\hlstd{)}
 
@@ -258,25 +250,25 @@ For instance, the information of the latter is contained in the environment vari
 The function 'MorganFPs" enables the calculation of the following types of fingerprints:
 \begin{itemize}
 
-\item Hashed fingerprints in {\bf binary format} of a given number of bits (argument 'bits') considering substructures with a maximum radius, defined with the argument 'radius' for the molecules specified in the argument 'mols'. These fingerprints are dropped to the output file \verb|COX_hashed_binary.csv|, where output corresponds to the value of the argument 'output'. In the example above: 'COX'. 
-In hashed fingerprint several substructures can be mapped to the same bit position.
+\item Hashed fingerprints in {\bf binary format} of a given number of bits (argument 'bits') considering substructures with a maximum radius, defined with the argument 'radius', for the molecules specified in the argument 'mols'. These fingerprints are dropped to the output file \verb|COX_hashed_binary.csv|, where output corresponds to the value of the argument 'output' ("COX" in the example presented above). 
+In the calculation of hashed fingerprints, several substructures can be mapped to the same bit position.
 Therefore, it might be important for the sake of interpretability to know which substructures are mapped to which bit in the fingerprint. This information is given in the file \verb|COX_features_per_bit_hashed_fp.csv|.
 The first column of the file corresponds to the bit index, whereas the remaining columns correspond to substructure ids.
 This file is created automatically every time the function is run.
 
-\item Hashed fingerprints in {\bf counts format} of a given number of bits (argument 'bits') considering substructures with a maximum radius, defined with the argument 'radius' for the molecules specified in the argument 'mols'. These fingerprints are dropped to the output file \verb|COX_hashed_counts.csv|.
+\item Hashed fingerprints in {\bf counts format} of a given number of bits (argument 'bits') considering substructures with a maximum radius, defined with the argument 'radius', for the molecules specified in the argument 'mols'. These fingerprints are dropped to the output file \verb|COX_hashed_counts.csv|.
 
-\item Unhashed fingerprints in {\bf binary format}. All substructures present in the input molecules (argument 'mols') will be considered. Each position in the unhashed fingerprint corresponds to a given substructures. Thus, the resulting fingeprints are keyed. The smiles for each substructure and the number of atoms thereof is given in the output file \verb|COX_smiles_substructures.csv|. This file is created automatically every time the function is run. 
+\item Unhashed fingerprints in {\bf binary format}. All substructures present in the input molecules (argument 'mols') are considered. Each position in the unhashed fingerprint corresponds to a given substructure. Thus, the resulting fingeprints are keyed. The smiles for each substructure and the number of atoms thereof is given in the output file \verb|COX_smiles_substructures.csv|. This file is created automatically every time the function is run. 
 Unhashed fingerprints in {\bf binary format} are dropped to the output file \verb|COX_unhashed_binary.csv|.
 
-\item Unhashed fingerprints in {\bf counts format}. All substructures present in the input molecules (argument 'mols') will be considered. Each position in the unhashed fingerprint corresponds to a given substructures. Thus, the resulting fingeprints are keyed. In contrast to binary format, where a given bit is set on if a substructure appears in a molecule irrespective of the number of times the substructure is present therein, the number of occurrences of each substructure is accounted. The smiles for each substructure and the number of atoms thereof is given in the output file \verb|COX_smiles_substructures.csv|. These fingerprints are dropped to the output file \verb|COX_unhashed_counts.csv|.
+\item Unhashed fingerprints in {\bf counts format}. All substructures present in the input molecules (argument 'mols') will be considered. Each position in the unhashed fingerprint corresponds to a given substructure. Thus, the resulting fingeprints are keyed. In contrast to binary format, where a given bit is set on if a substructure appears in a molecule irrespective of the number of times the substructure is present therein, the number of occurrences of each substructure is accounted. The smiles for each substructure and the number of atoms thereof is given in the output file \verb|COX_smiles_substructures.csv|,  whereas the fingerprints are dropped to the output file \verb|COX_unhashed_counts.csv|.
 
 \item In those cases where a given predictive model has been built on unhashed fingeprints, the same fingerprints should be 
 calcualted for new molecules for which predictions are to be made by that model. 
 To this aim, the function "MorganFPs" enables the calculation of both hashed and unhashed fingerprints (in both binary and counts format) for the molecules present in a given file (hereinafter referred to as external file). The unhashed fingeprints will be calculated based on the pool of substructures present in the file indicated in the argument "mols".
-To enable the calculation of fingerprints for the external file, the arguments "extMols" (name of the external file) and "extFileExtension" (file extension of the external file) need to be set on. 
+To enable the calculation of fingerprints for the external file, the arguments "extMols" (name of the external file) and "extFileExtension" (file extension of the external file) need to be set. 
 The hashed fingerprints will be dropped to the following files:\\
-(i) binary format: \verb|{\it output}_hashed_binary_EXT.csv|, and (ii) counts format: 
+(i) binary format: \verb|{{\it output}}_hashed_binary_EXT.csv|, and (ii) counts format: 
 \verb|{\it output}_hashed_counts_EXT.csv|.
 If the user also wants the calculation of unhashed fingerprints for the molecules present in the external file, the argument "unhashedExt" needs to be set to TRUE. 
 In this case the unhashed fingeprints will be dropped to the following files:\\
@@ -549,11 +541,11 @@ The dissimilarity distribution can be depicted with the function "PairwiseDistPl
 \end{kframe}\begin{figure}[]
 
 
-{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-26} 
+{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-25} 
 
 }
 
-\caption[Density of the response variable (upper panel)]{Density of the response variable (upper panel). Pairwise Compound Jaccard Similarity (bottom pannel)\label{fig:unnamed-chunk-26}}
+\caption[Density of the response variable (upper panel)]{Density of the response variable (upper panel). Pairwise Compound Jaccard Similarity (bottom pannel)\label{fig:unnamed-chunk-25}}
 \end{figure}
 
 
