@@ -1,6 +1,6 @@
 # Function to calculate the maximum model performance
 
-MaxPerf <- function (meanNoise = 0, sdNoise, resp, lenPred, stds,
+MaxPerf <- function (meanNoise = 0, sdNoise, resp, lenPred, stds=NULL,
                              iters = 1000, filename = NULL, pdfW = 10, pdfH = 10, TextSize = 15, 
                              TitleSize = 15, XAxisSize = 15, YAxisSize = 15, TitleAxesSize = 15, 
                              tmar = 1, bmar = 1, rmar = 1, lmar = 1, AngleLab = 30, LegendPosition = "right") 
@@ -8,6 +8,7 @@ MaxPerf <- function (meanNoise = 0, sdNoise, resp, lenPred, stds,
   isnot.vector <- function(x) ! is.vector(x)
   isnot.null <- function(x) ! is.null(x)
   vplayout <- function(x, y) viewport(layout.pos.row = x, layout.pos.col = y)
+  if is.null(stds){stds=rnorm(length(resp),mean=meanNoise,sd=sdNoise)}
   R2 <- c()
   R02 <- c()
   Q2 <- c()

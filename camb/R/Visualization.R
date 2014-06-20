@@ -77,8 +77,8 @@ PCA <- function (Data, RowNames = NULL,cor=TRUE, scale = TRUE, center = TRUE,...
 
 ##############
 # Plot the towo first PC of the sequence descriptors
-PCAPlot <- function (Data,main="",ylab="PC2",xlab="PC1",Seqs=NULL,PointSize=4,
-                         LegendPosition="right",LegendName="Sequences",ColLegend=1,RowLegend=NULL,
+PCAPlot <- function (Data,main="",ylab="PC2",xlab="PC1",labels=NULL,PointSize=4,
+                         LegendPosition="right",LegendName="",ColLegend=1,RowLegend=NULL,
                          TitleSize=15,TextSize=15,XAxisSize=15,YAxisSize=15,AngleLab=30,
                          TitleAxesSize=15,LegendTitleSize=15,LegendTextSize=15,tmar=1,bmar=1,rmar=1,lmar=1) 
 {
@@ -88,7 +88,7 @@ PCAPlot <- function (Data,main="",ylab="PC2",xlab="PC1",Seqs=NULL,PointSize=4,
     stop("Two PCs required. The Data.frame provided has less than two columns (PCs) or more than 3")
   } else if (names(Data)[1] != "PC1" || names(Data)[2] != "PC2"){
     stop("Column names have to be {PC1, PC2}")
-  } else if (length(names(Data)) == 2 && is.null(Seqs)){
+  } else if (length(names(Data)) == 2 && is.null(labels)){
     print("No names provided")
     p <- ggplot(Data, aes(x=PC1, y=PC2)) +
       geom_point(size=PointSize) + theme_bw() + ggtitle(main) + ylab(ylab) + xlab(xlab) +
@@ -100,14 +100,14 @@ PCAPlot <- function (Data,main="",ylab="PC2",xlab="PC1",Seqs=NULL,PointSize=4,
             plot.margin=unit(c(tmar,rmar,bmar,lmar),"cm")) +
       guides(colour = guide_legend(LegendName,ncol=ColLegend,nrow=RowLegend),
              shape = guide_legend(LegendName,ncol=ColLegend,nrow=RowLegend))
-  } else if (length(names(Data)) == 2 && isnot.null(Seqs)){
-    if (length(Seqs) != nrow(Data) || isnot.vector(Seqs)) {
+  } else if (length(names(Data)) == 2 && isnot.null(labels)){
+    if (length(labels) != nrow(Data) || isnot.vector(labels)) {
       stop("Either the names are not in a vector, or its length is not equal to the number of datapoints (rows of the input data)")
     } else {
       print("Names provided")
-      Data <- data.frame(Data,Seqs=Seqs)
-      a <- length(unique(Seqs))
-      p <- ggplot(Data, aes(x=PC1, y=PC2, color=Seqs,shape=Seqs)) +
+      Data <- data.frame(Data,labels=labels)
+      a <- length(unique(labels))
+      p <- ggplot(Data, aes(x=PC1, y=PC2, color=labels,shape=labels)) +
         geom_point(size=PointSize)  + scale_shape_manual(values=1:a) + theme_bw() + ggtitle(main) + ylab(ylab) + xlab(xlab) +
         theme(text = element_text(size=TextSize),axis.text.x = element_text(size=XAxisSize,angle = AngleLab, hjust = 1),
               axis.title.x=element_text(size=TitleAxesSize),axis.title.y=element_text(size=TitleAxesSize),
@@ -119,8 +119,8 @@ PCAPlot <- function (Data,main="",ylab="PC2",xlab="PC1",Seqs=NULL,PointSize=4,
     } 
   } else {
     print("Names provided in the third column of the data.frame")
-    Seqs <- unlist(Data[names(Data)[3]])
-    a <- length(unique(Seqs))
+    labels <- unlist(Data[names(Data)[3]])
+    a <- length(unique(labels))
     namee <- names(Data)[3]
     p <- ggplot(Data, aes_string(x="PC1", y="PC2",colour=namee,shape=namee)) +
       geom_point(size=PointSize) +scale_shape_manual(values=1:a) + theme_bw() + ggtitle(main) + ylab(ylab) + xlab(xlab) +
