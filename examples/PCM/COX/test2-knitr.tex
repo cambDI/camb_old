@@ -268,18 +268,18 @@ calcualted for new molecules for which predictions are to be made by that model.
 To this aim, the function "MorganFPs" enables the calculation of both hashed and unhashed fingerprints (in both binary and counts format) for the molecules present in a given file (hereinafter referred to as external file). The unhashed fingeprints will be calculated based on the pool of substructures present in the file indicated in the argument "mols".
 To enable the calculation of fingerprints for the external file, the arguments "extMols" (name of the external file) and "extFileExtension" (file extension of the external file) need to be set. 
 The hashed fingerprints will be dropped to the following files:\\
-(i) binary format: \verb|{{\it output}}_hashed_binary_EXT.csv|, and (ii) counts format: 
-\verb|{\it output}_hashed_counts_EXT.csv|.
+(i) binary format: \verb|COX_hashed_binary_EXT.csv|, and (ii) counts format: 
+\verb|COX_hashed_counts_EXT.csv|.
 If the user also wants the calculation of unhashed fingerprints for the molecules present in the external file, the argument "unhashedExt" needs to be set to TRUE. 
 In this case the unhashed fingeprints will be dropped to the following files:\\
-(i) binary format: \verb|{\it output}_unhashed_binary_EXT.csv|,\\
-and (ii) counts format: \verb|{\it output}_unhashed_counts_EXT.csv|.
+(i) binary format: \verb|COX_unhashed_binary_EXT.csv|,\\
+and (ii) counts format: \verb|COX_unhashed_counts_EXT.csv|.
 
 \end{itemize}
 
 The indexes of the molecules that could not be handled during the calculation are dropped to the file \verb|incorrect_molecules_COX.csv|. Similarly, the indexes of the molecules from the external file that could not be processed are given in the file \verb|incorrect_molecules_EXT_COX.csv.|
 
-In the following paragraph we describe in detail the arguments of the function "MorganFPs":
+In the following paragraphs we describe in detail the arguments of the function "MorganFPs":
 \begin{itemize}
 \item {\bf bits:} Number of bits of the hashed fingerprints. The default value is 512.
 \item {\bf radius:} Maximum radius of the substructures. A radius of 2 is equivalent to \verb|ECFP-4|, where 4 corresponds to the diameter. The default value is 2.
@@ -304,7 +304,7 @@ The default value is "/usr/local/lib/python2.7/site-packages".
 \item {\bf extMols:} If not FALSE, external file containing the molecules for which unhashed fingeprints are to be calculated with respect to the pool of
 substructures in the molecules present in the file specified in "mols". The default value is FALSE.
 \item {\bf unhashedExt:} If TRUE, unhashed fingerprints are calcualted for the molecules specified in "extMols". The default value is FALSE.
-\item {\bf logFile:} If not FALSE, file where the log messages will be dropped. The default value is FALSE.
+\item {\bf logFile:} If not FALSE, file to which the log messages will be dropped. The default value is FALSE.
 \end{itemize}
 
 
@@ -312,7 +312,7 @@ substructures in the molecules present in the file specified in "mols". The defa
 
 In the following section the tools provided by {\it camb} to calculate amino acid and whole protein descriptors will be presented.
 
-\subsection{Reading and Preprocessing the Amino Acid Descriptors}
+\subsection{Reading and Preprocessing Amino Acid Descriptors}
 In the current example, the amino acids implicated in ligand binding were extracted from the binding site of the ovine cyclooxygenase 1 (PDB ID: 3KK6). The corresponding amino acids for the rest of mammal cyclooxygenases were defined by sequence alignment.
 The amino acids corresponding to the target part of each compound-target combination in the dataset are given in the file \verb|"AAs_COX.csv"|. Thus, the number of rows of this file corresponds to the number of datapoints in the dataset.
 We proceed to read the amino acids from the ".csv" file:
@@ -342,7 +342,7 @@ The descriptors will be saved to a ".rds" file.
 
 
 
-The function \verb|"AA_descs"| permits the calculation of the following types of amino acid descriptors (futher details about these amino acid descriptors can be found in refs \cite{AAs1} and \cite{AAs2}):
+The function \verb|"AADescs"| permits the calculation of the following types of amino acid descriptors (futher details about these amino acid descriptors can be found in refs \cite{AAs1} and \cite{AAs2}):
 \begin{itemize}
 \item ProtFP8
 \item T-Scales
@@ -360,11 +360,13 @@ For instance:
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{AA_descs}\hlstd{(}\hlkwc{Data} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{"Ala"}\hlstd{),} \hlkwc{type} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{"Z5"}\hlstd{,} \hlstr{"BLOSUM"}\hlstd{))}
+\hlkwd{AADescs}\hlstd{(}\hlkwc{Data} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{"Ala"}\hlstd{),} \hlkwc{type} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{"Z5"}\hlstd{,} \hlstr{"BLOSUM"}\hlstd{))}
 \end{alltt}
 
 
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: could not find function "{}AA\_descs"{}}}\end{kframe}
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning: cannot open compressed file '', probable reason 'No such file or directory'}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: cannot open the connection}}\end{kframe}
 \end{knitrout}
 
 Column names indicate the amino acid position in the original input data, and the type of descriptor.
@@ -398,7 +400,7 @@ The available types of whole sequence descriptors are:\cite{protr}
 \item Amphiphilic Pseudo Amino Acid Composition ("APAAC")
 \end{itemize}
 
-\subsection{Reading the Dataset Information}
+\subsection{Reading Dataset Information}
 In the following subsection, 
 the file containing the information about the dataset, namely: target names, bioctivities, etc.., wil be read.
 Note that when reading molecules in smiles format from a ".csv" file into an R dataframe, the smiles are clipped after a hash ("\#") symbol.
@@ -463,9 +465,9 @@ The distribution of the response variable can be explored with the function "Den
 \end{kframe}
 \end{knitrout}
 
-Given that the output of the function "DensityResponse" is a ggplot2 object, additional layers can be added to further customize the image.
-A common analysis in bio- and chemoinformatics is to run a Pricipal Component Analysis (PCA) of either compound or target descriptors. 
-The function "PCAProt" enables the calculation of the Principal Components (PCs) for a given set of descriptors.
+Given that the output of the function "DensityResponse" is a ggplot2 object, additional layers can be added to further customize the image.\\
+A common analysis in bio- and chemoinformatics is to run a Pricipal Component Analysis (PCA) on either compound or target descriptors. 
+The function "PCA" enables the calculation of the Principal Components (PCs) for a given set of descriptors.
 The function takes as arguments the descriptors and, optionally, the names of the rows, {\it i.e.} datapoints.
 Further arguments of the function {\it prcomp} from the package {\it stats}, use to run the PCA analysis, can be additionally set.
 The function returns a list with following elements :
@@ -556,39 +558,53 @@ The dissimilarity distribution can be depicted with the function "PairwiseDistPl
 Before any modeling attempt, it is interesting to know which is the maximum performance achievable {\it on the basis} of the uncertainty of the available data.\cite{cortesGP}
 To this aim, we consider the experimental uncertainty and the size of our dataset. 
 In this case, a Gaussian Process (GP) model was trained in Matlab (data not shown) where the experimental uncertainty was optimized as a hyperparameter. The obtained value was 0.60 pIC50 units.
-This value is in accordance with the recently published value of 0.68 pIC50 units for public IC50 data.\cite{kramerIC50}
-With the function 'MaxPerf', we can calculate the maximum achievable performance:
+This value is in accordance with the recently published value of 0.68 pIC50 units for public IC50 data.\cite{Kalliokoski2013}
+With the function 'MaxPerf', we can calculate the maximum achievable performance, whereas with the function "MinPerf",
+we can calculate the minimum achievable performance.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{max_performance} \hlkwb{<-} \hlkwd{MaxPerf}\hlstd{(}\hlkwc{meanNoise}\hlstd{=}\hlnum{0}\hlstd{,}\hlkwc{sdNoise}\hlstd{=}\hlnum{0.6}\hlstd{,}
-                           \hlkwc{meanResp}\hlstd{=}\hlkwd{mean}\hlstd{(bioactivity),}
-                           \hlkwc{sdResp}\hlstd{=}\hlkwd{sd}\hlstd{(bioactivity),}
+                           \hlkwc{resp}\hlstd{=}\hlkwd{seq}\hlstd{(}\hlnum{1}\hlstd{,}\hlnum{1000}\hlstd{),} \hlkwc{stds}\hlstd{=}\hlkwa{NULL}\hlstd{,}
                            \hlkwc{lenPred}\hlstd{=}\hlnum{800}\hlstd{,}\hlkwc{tmar} \hlstd{=} \hlnum{0.2}\hlstd{,}
                            \hlkwc{bmar} \hlstd{=} \hlnum{0.2}\hlstd{,} \hlkwc{rmar} \hlstd{=} \hlnum{0.2}\hlstd{,}
                            \hlkwc{lmar} \hlstd{=} \hlnum{0.2}\hlstd{)}
-\end{alltt}
 
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: unused arguments (meanResp = mean(bioactivity), sdResp = sd(bioactivity))}}\begin{alltt}
 \hlkwd{grid.arrange}\hlstd{(max_performance}\hlopt{$}\hlstd{p1,max_performance}\hlopt{$}\hlstd{p2,}
              \hlstd{max_performance}\hlopt{$}\hlstd{p3,max_performance}\hlopt{$}\hlstd{p4,}\hlkwc{nrow}\hlstd{=}\hlnum{2}\hlstd{)}
 \end{alltt}
+\end{kframe}\begin{figure}[]
 
 
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'max\_performance' not found}}\end{kframe}
+{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-26} 
+
+}
+
+\caption[Maximum achievable model performance]{Maximum achievable model performance\label{fig:unnamed-chunk-26}}
+\end{figure}
+
+
 \end{knitrout}
 
+In cases where the experimental uncertainty of the bioactivity values is not known, 
+a sample from a Gaussian distribution,
+with mean equal to "meanNoise" and standard deviation equal to "sdNoise",
+is drawn. 
+This sample will be considered as the experimental uncertainty of the bioactivity values.
+On the other hand, if the experimental uncertainties are known, they can be input to the function via the argument 
+"stds". 
+The same applies to the function "MinPerf".
 The function returns a list of four plots, to which further layers can be added given that they are {\it ggplot} objects.
 Some graphical arguments are already available in the function "MaxPerf".
 In the example given above, the margin of the plots is controlled with the arguments "tmar", "bmar", "rmar", and "lmar",
 which respectively correspond to the top, bottom, right and left margins.
 As we can see from Figure 3, the maxima achievable values for the correlation metrics are far from one.
-Hence the importance of assessing the theoretical maximum performance the models can avhieve on the basis of the uncertainty of the experimental measurements.
+Hence the importance of assessing the theoretical maximum performance the models can achieve on the basis of the uncertainty of the experimental measurements.
+
 \section{Statistical Pre-processing}
 Bioactivity annotations in ChEMBL are sometimes redundant, 
-meaning that for a given target-compound combination there are more than one annotated values.
+meaning that for a given target-compound combination there are more than one bioactivity values.
 To avoid this issue, we will remove redundant pairs and will keep the mean bioactivity value for those repeated compound-target combinations.
 Further information in this respect will appear in a future publication.
 In order to remove duplicate values, we run the file \verb|"remove_duplicates.R":|
@@ -669,7 +685,7 @@ Given that cross-validation (CV) will be used to optimize the hyperparameters of
 \end{kframe}
 \end{knitrout}
 
-All models are trained with the same CV options, {\it i.e.} hte arguments of the function 'GetCVTrainControl' to allow ensemble modeling (see below).
+All models are trained with the same CV options, {\it i.e.} the arguments of the function 'GetCVTrainControl' to allow ensemble modeling (see below).
 It is important to mention that the functions presented in the previous code blocks depend on functions from the {\it caret} package, namely: 
 \begin{itemize}
 \item RemoveNearZeroVarianceFeatures : nearZeroVar
@@ -678,9 +694,8 @@ It is important to mention that the functions presented in the previous code blo
 \item GetCVTrainControl : trainControl
 \end{itemize}
 Experienced users might want to control more arguments of the underlying {\it caret} functions.
-This is certainly possible as the arguments given to the {\it camb} functions will be subsequently given to the {\it caret} counterparts.
-The default values of these function however permit the less experienced user to fo throught the statistical preprocessing
-steps with ease, though guaranteeing that the choice of the argument values is reasonable.
+This is certainly possible as the arguments given to the {\it camb} functions will be subsequently given to their {\it caret} counterparts.
+The default values of these function however permit the less experienced user to go through the statistical preprocessing steps with ease, though guaranteeing that the choice of the argument values is reasonable.
 
 
 \section{Model Training}
@@ -713,7 +728,7 @@ We define an exponential grid (base 2) to optimize the hyperparameters:
 \end{knitrout}
 
 
-Training (based on the {\it caret} function "train":
+Training (based on the {\it caret} function "train"):
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -764,9 +779,9 @@ We proceed similarly in the case of a gradient boosting machine (GBM) model\cite
 \section{Model Evaluation}
 
 Once the models are trained, the cross validated metrics can be calculated:
-We assume that the metric used for the choice of the best combination of hyperparameters is 'RMSE',
+we assume that the metric used for the choice of the best combination of hyperparameters is 'RMSE',
 which is normally considered as the aim of bioactivity modeling, {\it i.e.} how far (on average) are our 
-predictions from the real the bioactivity values?.
+predictions from the real bioactivity values?.
 In the following we focus on the RF model, though the same steps can be applied to the GBM and SVM models.
 
 \begin{knitrout}
@@ -801,7 +816,7 @@ we proceed to predict the values for the external (hold-out) set:
 \end{knitrout}
 
 
-The predictive ability of the models is evaluated by calculation the following statistical metrics:
+The predictive ability of the models is evaluated by the calculation of the following statistical metrics:
 
 {\bf Internal validation:}
 
@@ -837,7 +852,7 @@ RMSE_{ext} = \frac {\sqrt {(y_i - \widetilde{y}_i)^{2}}} {N}
 \end{equation}
 
 \begin{equation}
-R_{ext}^{2} = \frac {{\sum_{i=1}^{N_{ext}} (y_{i} - \bar{y}_{ext})}  (\widetilde{y}_{i} - \overset{-}{\widetilde{y}_{ext}})} 
+R_{ext} = \frac {{\sum_{i=1}^{N_{ext}} (y_{i} - \bar{y}_{ext})}  (\widetilde{y}_{i} - \overset{-}{\widetilde{y}_{ext}})} 
 {\sqrt{\sum_{i=1}^{N_{ext}} (y_{i} - \bar{y}_{ext})^{2} \sum{ (\widetilde{y}_{i} - \overset{-}{\widetilde{y}_{ext}})^{2}}}}
 \end{equation}
 
@@ -868,7 +883,7 @@ The metrics for the external validation are given by:
 
 The argument \verb|"resp_tr"|, requires the bioactivity values of the datapoints present in the training set.
 These values are required by the metrics $Q_{1}$ and $Q_{3}$ (see above).
-
+Individual functions for all metrics presented above are also available in {\it camb}.\\
 To visualize the correlation between predicted and observed values, we can use the 'CorrelationPlot' function:
 
 
@@ -884,9 +899,17 @@ To visualize the correlation between predicted and observed values, we can use t
     \hlkwc{MarginWidth} \hlstd{=} \hlnum{1}\hlstd{,} \hlkwc{AngleLab} \hlstd{=} \hlnum{0}\hlstd{,} \hlkwc{xlab} \hlstd{=} \hlstr{"Observed"}\hlstd{,}
     \hlkwc{ylab} \hlstd{=} \hlstr{"Predicted"}\hlstd{)}
 \end{alltt}
+\end{kframe}\begin{figure}[]
 
 
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: could not find function "{}CorrelationPlot"{}}}\end{kframe}
+{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-42} 
+
+}
+
+\caption[Observed vs Predicted]{Observed vs Predicted\label{fig:unnamed-chunk-42}}
+\end{figure}
+
+
 \end{knitrout}
 
 
@@ -915,7 +938,7 @@ To get (i) the training set, (ii) the external set, (iii) the transformation app
 \end{knitrout}
 
 Subsequently, we load the models previously trained.
-The list of models is in the file modelsEnsemble.
+The list of models is in the file {\it modelsEnsemble}.
 Once all models have been loaded, we create the following ensemble:
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
