@@ -29,39 +29,24 @@
 \maketitle
 \onehalfspacing
 
-<<include=FALSE>>=
-opts_chunk$set(concordance=TRUE)
-opts_chunk$set(dev='pdf')
-Sys.setenv(TEXINPUTS=getwd(),
-           BIBINPUTS=getwd(),
-           BSTINPUTS=getwd())
-@
-
-<<echo=FALSE,results='hide'>>=
-options(width=60)
-suppressWarnings(library(png,quietly=TRUE,warn.conflicts=FALSE))
-suppressWarnings(library(caret,quietly=TRUE,warn.conflicts=FALSE))
-suppressWarnings(library(doMC,quietly=TRUE,warn.conflicts=FALSE))
-library(ggplot2,quietly=TRUE)
-@
 \maketitle
 
-In the following sections, we demonstrate the utility of the \texttt{camb} package by presenting a pipeline to generate various aqueous solubility models using 2D molecular descriptors calculated by the PaDEL-Descriptor package as input features. These models are then ensembled to create a single model with a greater predictive accuracy.
+In the following sections, we demonstrate the utility of the \texttt{camb} package by presenting a pipeline which generates various aqueous solubility models using 2D molecular descriptors calculated by the PaDEL-Descriptor package as input features. These models are then ensembled to create a single model with a greater predictive accuracy.
 
 Firstly, the package needs to be loaded and the working directory set:
 <<echo=FALSE,results='hide',warning=FALSE,message=FALSE>>=
 library(camb)
 setwd('~/Dropbox/projects/camb/examples/QSPR/LogS/Reference_2')
 @
-<<echo=TRUE,results='hide',warning=FALSE,message=FALSE>>=
+<<echo=TRUE,results='hide',warning=FALSE,message=FALSE,eval=FALSE>>=
 library(camb)
-#setwd('path_to_working_directory')
+setwd('path_to_working_directory')
 @
 
 \section{Compounds}
 
 \subsection{Reading and Preprocessing}
-The compounds are read in and standardised. Internally, the Indigo C API \cite{TBD}, which is incorporated into the \texttt{camb} package, is use to perform this task.
+The compounds are read in and standardised. Internally, the Indigo C API \cite{Indigo}, which is incorporated into the \texttt{camb} package, is use to perform this task.
 Molecules are represented with implicit hydrogens, dearomatized, and passed through the InChI format to ensure that tautomers are represented by the same SMILES.
 
 The \texttt{StandardiseMolecules} function enables the representation of molecular structures in a similarly processed form.
@@ -83,14 +68,13 @@ StandardiseMolecules(structures.file="solubility_2007_ref2.sdf",
                      min.mass.limit=20, 
                      max.mass.limit=900)
 @
-Molecules that Indigo manages to parse and that pass the filters are written to the file indicated in the argument "standardised.file".
-By contrast, molecules that are discarded for training purposes are written to the file indicated in the "removed.file" argument.
+Molecules that Indigo manages to parse and that pass the filters are written to the file indicated in the argument "standardised.file". Molecules that are discarded for training purposes are written to the file indicated in the "removed.file" argument.
 
 \section{Target Visualisation}
 The properties specified in the structure file of all molecules and an index, in the column "kept", indicating which molecules were deleted (0) and kept (1),
 are written to the file indicated in the argument "properties.file" which is in CSV format.
 In this case the file is \verb|"properties.csv"|.
-<<echo=TRUE,results='hide',warning=FALSE,message=FALSE,eval=FALSE>>=
+<<echo=TRUE, fig.align='center',fig.cap="LogS Target Distribution",out.width='8cm',results='hide',warning=FALSE,message=FALSE,eval=TRUE>>=
 properties <- read.table("properties.csv", header=TRUE, sep="\t")
 properties <- properties[properties$Kept==1, ]
 head(properties)
@@ -105,87 +89,121 @@ One and two-dimensional PaDEL\cite{padel} descriptors and fingerprints can be ca
 descriptors <- GeneratePadelDescriptors(standardised.file = "standardised.sdf", types=c("2D"), threads = 1)
 descriptors <- RemoveStandardisedPrefix(descriptors)
 saveRDS(descriptors, file="descriptors.rds")
+@
+<<echo=FALSE>>=
 descriptors <- readRDS("descriptors.rds")
 @
 
 \section{Statistical Pre-processing}
 Merge the calculated descriptors and the target values by name into a single data.frame. Check that the number of rows of the merged and original data.frames are the same. Split the data.frame into \textit{ids}, \textit{x} and \textit{y} where \textit{ids} are the molecule names, \textit{x} are the descriptor values and \textit{y} is the target values.  
-<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=TRUE>>=
 all <- merge(x=targets, y=descriptors, by="Name")
-# check the number of rows are the same
-dim(all)
-dim(targets)
-dim(descriptors)
 ids <- all$Name
 x <- all[3:ncol(all)]
 y <- all$target
 @
 
-<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
-# replace the infinite values with NA and impute the remaining NA values
-x.finite <- ReplaceInfinitesWithNA(x)
-x.imputed <- ImputeFeatures(x.finite)
-@
 Sometimes, some descriptors are not calculated for all molecules, thus giving a "NA" or "Inf" as descriptor value.
 Instead of removing that descriptor for all molecules, the missing descriptor values can be imputed from the corresponding descriptor values of the rest of molecules.
 Descriptor values equal to "Inf" are converted to "NA".
 For the imputation of missing descriptor values, the R package {\it impute} is required.
 Depending on the R version, it can be accessed from either {\it CRAN} or {\it Bioconductor}.
-
-Split the dataset into a training (80\%) and a holdout (20\%) set that will be used to assess the predictive ability of the models. Remove the following descriptors: (i) those with a variance close to zero (near-zero variance), and (ii) those highly correlated:
-<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
-dataset <- SplitSet(ids, x.imputed, y, percentage=20)
-dataset <- RemoveNearZeroVarianceFeatures(dataset)
-dataset <- RemoveHighlyCorrelatedFeatures(dataset)
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=TRUE>>=
+x.finite <- ReplaceInfinitesWithNA(x)
+x.imputed <- ImputeFeatures(x.finite)
 @
 
-Center and scale the descriptors:
-<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
+Split the dataset into a training (80\%) and a holdout (20\%) set that will be used to assess the predictive ability of the models. Remove the following descriptors: (i) those with a variance close to zero (near-zero variance), and (ii) those highly correlated:
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=TRUE>>=
+dataset <- SplitSet(ids, x.imputed, y, percentage=20)
+dataset <- RemoveNearZeroVarianceFeatures(dataset, frequencyCutoff=30)
+dataset <- RemoveHighlyCorrelatedFeatures(dataset, correlationCutoff=0.95)
+@
+
+Convert the descriptors to z-scores by centering them to have a mean of zero and scaling them to have unit variance:
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=TRUE>>=
 dataset <- PreProcess(dataset)
 @
 
-Given that cross-validation (CV) will be used to optimize the hyperparameters of the models, we divide the training setin 5 folds:
-<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
+Given that cross-validation (CV) will be used to optimize the hyperparameters of the models, we divide the training set in 5 folds:
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=TRUE>>=
 dataset <- GetCVTrainControl(dataset)
-saveRDS(dataset, file="dataset.rds")
+saveRDS(dataset, file="dataset_logS_preprocessed.rds")
 @
+
+All models are trained with the same CV options, {\it i.e.} the arguments of the function 'GetCVTrainControl' to allow ensemble modeling (see below).
+It is important to mention that the functions presented in the previous code blocks depend on functions from the {\it caret} package, namely: 
+\begin{itemize}
+\item RemoveNearZeroVarianceFeatures : nearZeroVar
+\item RemoveHighlyCorrelatedFeatures : findCorrelation
+\item PreProcess : preProcess
+\item GetCVTrainControl : trainControl
+\end{itemize}
+Experienced users might want to control more arguments of the underlying {\it caret} functions.
+This is certainly possible as the arguments given to the {\it camb} functions will be subsequently given to the {\it caret} counterparts.
+The default values of these function however permit the less experienced user to fo throught the statistical preprocessing
+steps with ease, though guaranteeing that the choice of the argument values is reasonable.
 
 \section{Model Training}
 
-<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE, eval=FALSE>>=
-# register the number of cores to use in training
-registerDoMC(cores=1)
+In the following section we will present the different steps required to train a QSPR model with {\it camb}. It should be noted that the above steps can be run locally on a low powered computer such as a laptop and the preprocessed dataset saved to disk. This can then be copied to a high powered machine with multiple cores for model training and the resulting models saved back to the local machine. Pro tip: Dropbox can be used to sync this proceedure so that manual transfer is not required.
 
-# train and save a support vector machine model
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE>>=
+dataset <- readRDS("dataset_logS_preprocessed.rds")
+# register the number of cores to use in training
+registerDoMC(cores=10)
+@
+
+\subsection{Support Vector Machines (SVM)}
+Firstly, a SVM will be trained\cite{svmreview}.
+We define an exponential grid (base 2) to optimize the hyperparameters. The \texttt{train} function from the \texttt{caret} package is used directly for model training.
+
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
 method <- "svmRadial"
 tune.grid <- expand.grid(.sigma = expGrid(-8, 4, 2, 2), .C = c(0.0001, 0.001, 0.01, 0.1, 1, 10, 100))
 model <- train(dataset$x.train, dataset$y.train, method, tuneGrid=tune.grid, trControl=dataset$trControl)
 saveRDS(model, file=paste(method,".rds",sep=""))
+@
 
-model <- readRDS("svmRadial.rds")
-plot(model, metric = "RMSE")
+\subsection{Random Forest}
+We proceed similarly in the case of a random forest (RF) model\cite{rf}.
 
-# train and save a random forest model
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
 method <- "rf"
 tune.grid <- expand.grid(.mtry = seq(5,100,5))
 model <- train(dataset$x.train, dataset$y.train, method, tuneGrid=tune.grid, trControl=dataset$trControl)
 saveRDS(model, file=paste(method,".rds",sep=""))
+@
 
-# train and save a generalised boosted regression model
+\subsection{Gradient Boosting Machine}
+We proceed similarly in the case of a gradient boosting machine (GBM) model\cite{gbm}.
+
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
 method <- "gbm"
-tune.grid <- expand.grid(.n.trees=c(500,1000), .interaction.depth=c(25), .shrinkage = c(0.04, 0.08, 0.16))
+tune.grid <- expand.grid(.n.trees=c(500,1000), .interaction.depth=c(25), .shrinkage = c(0.01, 0.02, 0.04, 0.08))
 model <- train(dataset$x.train, dataset$y.train, method, tuneGrid=tune.grid, trControl=dataset$trControl)
 saveRDS(model, file=paste(method,".rds",sep=""))
 @
 
-Determine if your hyper-parameter search needs to be altered.
-
-<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,fig.align='center',fig.cap="CV RMSE over the hyperparameters",out.width='12cm'>>=
-model <- readRDS("svmRadial.rds")
+Determine if your hyper-parameter search needs to be altered. In the following we focus on the RF model, though the same steps can be applied to the GBM and SVM models. If your hyper-parameters lead you to what looks like a global minimum then you can stop scanning the space of hyper-parameters, otherwise you need to adjust the grid and retrain your model.
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,fig.align='center',fig.cap="CV RMSE over the hyperparameters",out.width='8cm'>>=
+model <- readRDS("rf.rds")
 plot(model, metric = "RMSE")
 @
 
-%\section{Bibliography}
-%\printbibliography
+\section{Model Evaluation}
+
+Once the models are trained, the cross validated metrics can be calculated:
+We assume that the metric used for the choice of the best combination of hyperparameters is 'RMSE',
+which is normally considered as the aim of bioactivity modeling, {\it i.e.} how far (on average) are our 
+predictions from the real the bioactivity values?.
+
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE>>=
+print(RMSE_CV(model, digits=3))
+print(Rsquared_CV(model,digits=3))
+@
+
+\section{Bibliography}
+\printbibliography
 
 \end{document}

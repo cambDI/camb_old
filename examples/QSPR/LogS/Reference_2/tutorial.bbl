@@ -16,6 +16,29 @@
   {}
 \endgroup
 
+\entry{Indigo}{article}{}
+  \name{author}{1}{}{%
+    {{}%
+     {{Indigo}}{I.}%
+     {}{}%
+     {}{}%
+     {}{}}%
+  }
+  \list{organization}{1}{%
+    {GGA Software Services}%
+  }
+  \strng{namehash}{I1}
+  \strng{fullhash}{I1}
+  \field{title}{Indigo Cheminformatics Library}
+  \verb{url}
+  \verb http://ggasoftware.com/opensource/indigo/
+  \endverb
+  \list{location}{1}{%
+    {Cambridge MA, USA}%
+  }
+  \field{year}{2013}
+\endentry
+
 \lossort
 \endlossort
 

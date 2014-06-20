@@ -79,12 +79,9 @@
 \maketitle
 \onehalfspacing
 
-
-
-
 \maketitle
 
-In the following sections, we demonstrate the utility of the \textit{camb} package by presenting a pipeline to generate various aqueous solubility models using 2D molecular descriptors calculated by the PaDEL-Descriptor package as input features. These models are then ensembled to create a single model with a greater predictive accuracy.
+In the following sections, we demonstrate the utility of the \texttt{camb} package by presenting a pipeline which generates various aqueous solubility models using 2D molecular descriptors calculated by the PaDEL-Descriptor package as input features. These models are then ensembled to create a single model with a greater predictive accuracy.
 
 Firstly, the package needs to be loaded and the working directory set:
 
@@ -92,7 +89,7 @@ Firstly, the package needs to be loaded and the working directory set:
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlkwd{library}\hlstd{(camb)}
-\hlcom{#setwd('path_to_working_directory')}
+\hlkwd{setwd}\hlstd{(}\hlstr{'path_to_working_directory'}\hlstd{)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
@@ -100,7 +97,7 @@ Firstly, the package needs to be loaded and the working directory set:
 \section{Compounds}
 
 \subsection{Reading and Preprocessing}
-The compounds are read in and standardised. Internally, the Indigo C API \cite{TBD}, which is incorporated into the \texttt{camb} package, is use to perform this task.
+The compounds are read in and standardised. Internally, the Indigo C API \cite{Indigo}, which is incorporated into the \texttt{camb} package, is use to perform this task.
 Molecules are represented with implicit hydrogens, dearomatized, and passed through the InChI format to ensure that tautomers are represented by the same SMILES.
 
 The \texttt{StandardiseMolecules} function enables the representation of molecular structures in a similarly processed form.
@@ -126,8 +123,7 @@ The name of the file containing the chemical structures is input to the argument
 \end{alltt}
 \end{kframe}
 \end{knitrout}
-Molecules that Indigo manages to parse and that pass the filters are written to the file indicated in the argument "standardised.file".
-By contrast, molecules that are discarded for training purposes are written to the file indicated in the "removed.file" argument.
+Molecules that Indigo manages to parse and that pass the filters are written to the file indicated in the argument "standardised.file". Molecules that are discarded for training purposes are written to the file indicated in the "removed.file" argument.
 
 \section{Target Visualisation}
 The properties specified in the structure file of all molecules and an index, in the column "kept", indicating which molecules were deleted (0) and kept (1),
@@ -143,7 +139,17 @@ In this case the file is \verb|"properties.csv"|.
 \hlstd{p} \hlkwb{<-} \hlkwd{DensityResponse}\hlstd{(targets}\hlopt{$}\hlstd{target)} \hlopt{+} \hlkwd{xlab}\hlstd{(}\hlstr{"LogS Target Distribution"}\hlstd{)}
 \hlstd{p}
 \end{alltt}
-\end{kframe}
+\end{kframe}\begin{figure}[]
+
+
+{\centering \includegraphics[width=8cm]{figure/unnamed-chunk-4} 
+
+}
+
+\caption[LogS Target Distribution]{LogS Target Distribution\label{fig:unnamed-chunk-4}}
+\end{figure}
+
+
 \end{knitrout}
 
 \subsection{PaDEL Descriptors}
@@ -155,10 +161,10 @@ One and two-dimensional PaDEL\cite{padel} descriptors and fingerprints can be ca
     \hlkwc{types} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{"2D"}\hlstd{),} \hlkwc{threads} \hlstd{=} \hlnum{1}\hlstd{)}
 \hlstd{descriptors} \hlkwb{<-} \hlkwd{RemoveStandardisedPrefix}\hlstd{(descriptors)}
 \hlkwd{saveRDS}\hlstd{(descriptors,} \hlkwc{file} \hlstd{=} \hlstr{"descriptors.rds"}\hlstd{)}
-\hlstd{descriptors} \hlkwb{<-} \hlkwd{readRDS}\hlstd{(}\hlstr{"descriptors.rds"}\hlstd{)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
+
 
 \section{Statistical Pre-processing}
 Merge the calculated descriptors and the target values by name into a single data.frame. Check that the number of rows of the merged and original data.frames are the same. Split the data.frame into \textit{ids}, \textit{x} and \textit{y} where \textit{ids} are the molecule names, \textit{x} are the descriptor values and \textit{y} is the target values.  
@@ -166,10 +172,6 @@ Merge the calculated descriptors and the target values by name into a single dat
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{all} \hlkwb{<-} \hlkwd{merge}\hlstd{(}\hlkwc{x} \hlstd{= targets,} \hlkwc{y} \hlstd{= descriptors,} \hlkwc{by} \hlstd{=} \hlstr{"Name"}\hlstd{)}
-\hlcom{# check the number of rows are the same}
-\hlkwd{dim}\hlstd{(all)}
-\hlkwd{dim}\hlstd{(targets)}
-\hlkwd{dim}\hlstd{(descriptors)}
 \hlstd{ids} \hlkwb{<-} \hlstd{all}\hlopt{$}\hlstd{Name}
 \hlstd{x} \hlkwb{<-} \hlstd{all[}\hlnum{3}\hlopt{:}\hlkwd{ncol}\hlstd{(all)]}
 \hlstd{y} \hlkwb{<-} \hlstd{all}\hlopt{$}\hlstd{target}
@@ -177,83 +179,125 @@ Merge the calculated descriptors and the target values by name into a single dat
 \end{kframe}
 \end{knitrout}
 
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hlcom{# replace the infinite values with NA and impute}
-\hlcom{# the remaining NA values}
-\hlstd{x.finite} \hlkwb{<-} \hlkwd{ReplaceInfinitesWithNA}\hlstd{(x)}
-\hlstd{x.imputed} \hlkwb{<-} \hlkwd{ImputeFeatures}\hlstd{(x.finite)}
-\end{alltt}
-\end{kframe}
-\end{knitrout}
 Sometimes, some descriptors are not calculated for all molecules, thus giving a "NA" or "Inf" as descriptor value.
 Instead of removing that descriptor for all molecules, the missing descriptor values can be imputed from the corresponding descriptor values of the rest of molecules.
 Descriptor values equal to "Inf" are converted to "NA".
 For the imputation of missing descriptor values, the R package {\it impute} is required.
 Depending on the R version, it can be accessed from either {\it CRAN} or {\it Bioconductor}.
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{x.finite} \hlkwb{<-} \hlkwd{ReplaceInfinitesWithNA}\hlstd{(x)}
+\hlstd{x.imputed} \hlkwb{<-} \hlkwd{ImputeFeatures}\hlstd{(x.finite)}
+\end{alltt}
+
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Loading required package: impute}}\begin{verbatim}
+## Cluster size 1606 broken into 375 1231 
+## Done cluster 375 
+## Done cluster 1231
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
 
 Split the dataset into a training (80\%) and a holdout (20\%) set that will be used to assess the predictive ability of the models. Remove the following descriptors: (i) those with a variance close to zero (near-zero variance), and (ii) those highly correlated:
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{dataset} \hlkwb{<-} \hlkwd{SplitSet}\hlstd{(ids, x.imputed, y,} \hlkwc{percentage} \hlstd{=} \hlnum{20}\hlstd{)}
-\hlstd{dataset} \hlkwb{<-} \hlkwd{RemoveNearZeroVarianceFeatures}\hlstd{(dataset)}
-\hlstd{dataset} \hlkwb{<-} \hlkwd{RemoveHighlyCorrelatedFeatures}\hlstd{(dataset)}
+\hlstd{dataset} \hlkwb{<-} \hlkwd{RemoveNearZeroVarianceFeatures}\hlstd{(dataset,}
+    \hlkwc{frequencyCutoff} \hlstd{=} \hlnum{30}\hlstd{)}
 \end{alltt}
-\end{kframe}
+
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# 397 features removed with variance below cutoff}}\begin{alltt}
+\hlstd{dataset} \hlkwb{<-} \hlkwd{RemoveHighlyCorrelatedFeatures}\hlstd{(dataset,}
+    \hlkwc{correlationCutoff} \hlstd{=} \hlnum{0.95}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# 121 features removed with correlation above cutoff}}\end{kframe}
 \end{knitrout}
 
-Center and scale the descriptors:
+Convert the descriptors to z-scores by centering them to have a mean of zero and scaling them to have unit variance:
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{dataset} \hlkwb{<-} \hlkwd{PreProcess}\hlstd{(dataset)}
 \end{alltt}
-\end{kframe}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: could not find function "{}PreProcess"{}}}\end{kframe}
 \end{knitrout}
 
-Given that cross-validation (CV) will be used to optimize the hyperparameters of the models, we divide the training setin 5 folds:
+Given that cross-validation (CV) will be used to optimize the hyperparameters of the models, we divide the training set in 5 folds:
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{dataset} \hlkwb{<-} \hlkwd{GetCVTrainControl}\hlstd{(dataset)}
-\hlkwd{saveRDS}\hlstd{(dataset,} \hlkwc{file} \hlstd{=} \hlstr{"dataset.rds"}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: could not find function "{}GetCVTrainControl"{}}}\begin{alltt}
+\hlkwd{saveRDS}\hlstd{(dataset,} \hlkwc{file} \hlstd{=} \hlstr{"dataset_logS_preprocessed.rds"}\hlstd{)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
 
+All models are trained with the same CV options, {\it i.e.} the arguments of the function 'GetCVTrainControl' to allow ensemble modeling (see below).
+It is important to mention that the functions presented in the previous code blocks depend on functions from the {\it caret} package, namely: 
+\begin{itemize}
+\item RemoveNearZeroVarianceFeatures : nearZeroVar
+\item RemoveHighlyCorrelatedFeatures : findCorrelation
+\item PreProcess : preProcess
+\item GetCVTrainControl : trainControl
+\end{itemize}
+Experienced users might want to control more arguments of the underlying {\it caret} functions.
+This is certainly possible as the arguments given to the {\it camb} functions will be subsequently given to the {\it caret} counterparts.
+The default values of these function however permit the less experienced user to fo throught the statistical preprocessing
+steps with ease, though guaranteeing that the choice of the argument values is reasonable.
+
 \section{Model Training}
+
+In the following section we will present the different steps required to train a QSPR model with {\it camb}. It should be noted that the above steps can be run locally on a low powered computer such as a laptop and the preprocessed dataset saved to disk. This can then be copied to a high powered machine with multiple cores for model training and the resulting models saved back to the local machine. Pro tip: Dropbox can be used to sync this proceedure so that manual transfer is not required.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
+\hlstd{dataset} \hlkwb{<-} \hlkwd{readRDS}\hlstd{(}\hlstr{"dataset_logS_preprocessed.rds"}\hlstd{)}
 \hlcom{# register the number of cores to use in training}
-\hlkwd{registerDoMC}\hlstd{(}\hlkwc{cores} \hlstd{=} \hlnum{1}\hlstd{)}
+\hlkwd{registerDoMC}\hlstd{(}\hlkwc{cores} \hlstd{=} \hlnum{10}\hlstd{)}
+\end{alltt}
 
-\hlcom{# train and save a support vector machine model}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: could not find function "{}registerDoMC"{}}}\end{kframe}
+\end{knitrout}
+
+\subsection{Support Vector Machines (SVM)}
+Firstly, a SVM will be trained\cite{svmreview}.
+We define an exponential grid (base 2) to optimize the hyperparameters. The \texttt{train} function from the \texttt{caret} package is used directly for model training.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
 \hlstd{method} \hlkwb{<-} \hlstr{"svmRadial"}
 \hlstd{tune.grid} \hlkwb{<-} \hlkwd{expand.grid}\hlstd{(}\hlkwc{.sigma} \hlstd{=} \hlkwd{expGrid}\hlstd{(}\hlopt{-}\hlnum{8}\hlstd{,} \hlnum{4}\hlstd{,} \hlnum{2}\hlstd{,}
     \hlnum{2}\hlstd{),} \hlkwc{.C} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{1e-04}\hlstd{,} \hlnum{0.001}\hlstd{,} \hlnum{0.01}\hlstd{,} \hlnum{0.1}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{10}\hlstd{,} \hlnum{100}\hlstd{))}
 \hlstd{model} \hlkwb{<-} \hlkwd{train}\hlstd{(dataset}\hlopt{$}\hlstd{x.train, dataset}\hlopt{$}\hlstd{y.train, method,}
     \hlkwc{tuneGrid} \hlstd{= tune.grid,} \hlkwc{trControl} \hlstd{= dataset}\hlopt{$}\hlstd{trControl)}
 \hlkwd{saveRDS}\hlstd{(model,} \hlkwc{file} \hlstd{=} \hlkwd{paste}\hlstd{(method,} \hlstr{".rds"}\hlstd{,} \hlkwc{sep} \hlstd{=} \hlstr{""}\hlstd{))}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
 
-\hlstd{model} \hlkwb{<-} \hlkwd{readRDS}\hlstd{(}\hlstr{"svmRadial.rds"}\hlstd{)}
-\hlkwd{plot}\hlstd{(model,} \hlkwc{metric} \hlstd{=} \hlstr{"RMSE"}\hlstd{)}
+\subsection{Random Forest}
+We proceed similarly in the case of a random forest (RF) model\cite{rf}.
 
-\hlcom{# train and save a random forest model}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
 \hlstd{method} \hlkwb{<-} \hlstr{"rf"}
 \hlstd{tune.grid} \hlkwb{<-} \hlkwd{expand.grid}\hlstd{(}\hlkwc{.mtry} \hlstd{=} \hlkwd{seq}\hlstd{(}\hlnum{5}\hlstd{,} \hlnum{100}\hlstd{,} \hlnum{5}\hlstd{))}
-\hlstd{model} \hlkwb{<-} \hlkwd{train}\hlstd{(dataset}\hlopt{$}\hlstd{x.train, dataset}\hlopt{$}\hlstd{y.train, method,}
-    \hlkwc{tuneGrid} \hlstd{= tune.grid,} \hlkwc{trControl} \hlstd{= dataset}\hlopt{$}\hlstd{trControl)}
-\hlkwd{saveRDS}\hlstd{(model,} \hlkwc{file} \hlstd{=} \hlkwd{paste}\hlstd{(method,} \hlstr{".rds"}\hlstd{,} \hlkwc{sep} \hlstd{=} \hlstr{""}\hlstd{))}
-
-\hlcom{# train and save a generalised boosted regression}
-\hlcom{# model}
-\hlstd{method} \hlkwb{<-} \hlstr{"gbm"}
-\hlstd{tune.grid} \hlkwb{<-} \hlkwd{expand.grid}\hlstd{(}\hlkwc{.n.trees} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{500}\hlstd{,} \hlnum{1000}\hlstd{),} \hlkwc{.interaction.depth} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{25}\hlstd{),}
-    \hlkwc{.shrinkage} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{0.04}\hlstd{,} \hlnum{0.08}\hlstd{,} \hlnum{0.16}\hlstd{))}
 \hlstd{model} \hlkwb{<-} \hlkwd{train}\hlstd{(dataset}\hlopt{$}\hlstd{x.train, dataset}\hlopt{$}\hlstd{y.train, method,}
     \hlkwc{tuneGrid} \hlstd{= tune.grid,} \hlkwc{trControl} \hlstd{= dataset}\hlopt{$}\hlstd{trControl)}
 \hlkwd{saveRDS}\hlstd{(model,} \hlkwc{file} \hlstd{=} \hlkwd{paste}\hlstd{(method,} \hlstr{".rds"}\hlstd{,} \hlkwc{sep} \hlstd{=} \hlstr{""}\hlstd{))}
@@ -261,20 +305,65 @@ Given that cross-validation (CV) will be used to optimize the hyperparameters of
 \end{kframe}
 \end{knitrout}
 
-Determine if your hyper-parameter search needs to be altered.
+\subsection{Gradient Boosting Machine}
+We proceed similarly in the case of a gradient boosting machine (GBM) model\cite{gbm}.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{model} \hlkwb{<-} \hlkwd{readRDS}\hlstd{(}\hlstr{"svmRadial.rds"}\hlstd{)}
+\hlstd{method} \hlkwb{<-} \hlstr{"gbm"}
+\hlstd{tune.grid} \hlkwb{<-} \hlkwd{expand.grid}\hlstd{(}\hlkwc{.n.trees} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{500}\hlstd{,} \hlnum{1000}\hlstd{),} \hlkwc{.interaction.depth} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{25}\hlstd{),}
+    \hlkwc{.shrinkage} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{0.01}\hlstd{,} \hlnum{0.02}\hlstd{,} \hlnum{0.04}\hlstd{,} \hlnum{0.08}\hlstd{))}
+\hlstd{model} \hlkwb{<-} \hlkwd{train}\hlstd{(dataset}\hlopt{$}\hlstd{x.train, dataset}\hlopt{$}\hlstd{y.train, method,}
+    \hlkwc{tuneGrid} \hlstd{= tune.grid,} \hlkwc{trControl} \hlstd{= dataset}\hlopt{$}\hlstd{trControl)}
+\hlkwd{saveRDS}\hlstd{(model,} \hlkwc{file} \hlstd{=} \hlkwd{paste}\hlstd{(method,} \hlstr{".rds"}\hlstd{,} \hlkwc{sep} \hlstd{=} \hlstr{""}\hlstd{))}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+Determine if your hyper-parameter search needs to be altered. In the following we focus on the RF model, though the same steps can be applied to the GBM and SVM models. If your hyper-parameters lead you to what looks like a global minimum then you can stop scanning the space of hyper-parameters, otherwise you need to adjust the grid and retrain your model.
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{model} \hlkwb{<-} \hlkwd{readRDS}\hlstd{(}\hlstr{"rf.rds"}\hlstd{)}
 \hlkwd{plot}\hlstd{(model,} \hlkwc{metric} \hlstd{=} \hlstr{"RMSE"}\hlstd{)}
+\end{alltt}
+\end{kframe}\begin{figure}[]
+
+
+{\centering \includegraphics[width=8cm]{figure/unnamed-chunk-16} 
+
+}
+
+\caption[CV RMSE over the hyperparameters]{CV RMSE over the hyperparameters\label{fig:unnamed-chunk-16}}
+\end{figure}
+
+
+\end{knitrout}
+
+\section{Model Evaluation}
+
+Once the models are trained, the cross validated metrics can be calculated:
+We assume that the metric used for the choice of the best combination of hyperparameters is 'RMSE',
+which is normally considered as the aim of bioactivity modeling, {\it i.e.} how far (on average) are our 
+predictions from the real the bioactivity values?.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{print}\hlstd{(}\hlkwd{RMSE_CV}\hlstd{(model,} \hlkwc{digits} \hlstd{=} \hlnum{3}\hlstd{))}
 \end{alltt}
 
 
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: There are no tuning parameters for this model.}}\end{kframe}
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: could not find function "{}RMSE\_CV"{}}}\begin{alltt}
+\hlkwd{print}\hlstd{(}\hlkwd{Rsquared_CV}\hlstd{(model,} \hlkwc{digits} \hlstd{=} \hlnum{3}\hlstd{))}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: could not find function "{}Rsquared\_CV"{}}}\end{kframe}
 \end{knitrout}
 
-%\section{Bibliography}
-%\printbibliography
+\section{Bibliography}
+\printbibliography
 
 \end{document}

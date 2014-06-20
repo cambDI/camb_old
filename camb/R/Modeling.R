@@ -1,8 +1,6 @@
 #################################################################################
 ## Modeling 
 #################################################################################
-
-
 asNumeric <- function(x) as.numeric(as.character(x))
 factorsNumeric <- function(d) modifyList(d, lapply(d[, sapply(d, is.factor)],   
                                                    asNumeric))
@@ -19,7 +17,14 @@ ReplaceInfinitesWithNA <- function(d) {
   do.call(data.frame,lapply(d, function(x) replace(x, is.infinite(x), NA)))
 }
                          
-##############
+#' Impute missing descriptor values using knn.impute
+#' 
+#' A nearest neighbour based 
+#' 
+#' @param d A data.frame
+#' @export
+#' @return A data.frame with infinite values replaced by NA.
+#' @author Daniel Murrell <dsmurrell@@gmail.com> and Isidro Cortes <isidrolauscher@@gmail.com>
 ImputeFeatures <- function(d, k=10,...) {
   suppressWarnings(require(impute)) || stop("Package impute is required. Install from CRAN or Bioconductor -depending on the R version you are using-.")
   as.data.frame(impute.knn(as.matrix(factorsNumeric(d)), k = k, ...)$data)
