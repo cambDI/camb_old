@@ -1,10 +1,10 @@
 
 
-#DrawMoleculeInSDF <- function(structures.file, structure.number, file.name, useNameAsTitle) {
-#  if (file.info(structures.file)$size  == 0) {stop("Input file is empty")}
-#  print(structure.number)
-#  .C("R_drawMoleculeInSDF", structures.file, as.integer(structure.number), file.name, useNameAsTitle)
-#}
+DrawMoleculeInSDF <- function(structures.file, structure.number, file.name, useNameAsTitle) {
+  if (file.info(structures.file)$size  == 0) {stop("Input file is empty")}
+  print(structure.number)
+  .C("R_drawMoleculeInSDF", structures.file, as.integer(structure.number), file.name, useNameAsTitle)
+}
 
 
 #.C("R_drawMoleculeInSDF", system.file("test_structures", "structures_10.sdf", package = "camb"), 1, "output.png", FALSE)
