@@ -248,7 +248,7 @@ amino_acid_IDs <- amino_acid_IDs[,2:ncol(amino_acid_IDs)]
 Subsequently, 5 \verb|Z-scales| will be calculated, which will serve to describe the target space in the PCM models.
 The descriptors will be saved to a ".rds" file.
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),eval=FALSE,tidy=TRUE>>=
-amino_acid_IDs_zscales <- AA_descs(Data=amino_acid_IDs,type="Z5")
+amino_acid_IDs_zscales <- AADescs(Data=amino_acid_IDs,type="Z5")
 saveRDS(amino_acid_IDs_zscales,file="Z5_COX.rds")
 amino_acid_IDs_zscales <-readRDS("Z5_COX.rds")
 @

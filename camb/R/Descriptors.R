@@ -273,9 +273,9 @@ convert31 <- function(AA) {
 #' @references \url{http://www.jcheminf.com/content/5/1/41}
 #' @references \url{http://www.jcheminf.com/content/5/1/42}
 #' @examples
-#' AA_descs(c("A","A"))
+#' AADescs(c("A","A"))
 #' @author Isidro Cortes <isidrolauscher@@gmail.com> and Daniel Murrell <dsmurrell@@gmail.com>
-AA_descs <- function(Data, type="Z5",..){
+AADescs <- function(Data, type="Z5",..){
   if (!is.vector(Data) && !is.character(Data) && !is.data.frame(Data) && !is.matrix(Data)){
     stop("Input must be a character, vector, data frame or matrix")
   } else {    
@@ -326,7 +326,7 @@ AA_descs <- function(Data, type="Z5",..){
     
 
     if  (is.vector(Data)){
-	  descs_path <- system.file("extdata", "aa_descs.rds", package="camb")
+	  descs_path <- system.file("extdata", "AADescs.rds", package="camb")
 	  descs <- readRDS(descs_path)
       types <- c("ProtFP8","TScales","VHSE","STScales","BLOSUM","FASGAI","MSWHIM","Z5","Z3")
       type <- match.arg(type,types,several.ok=TRUE)
@@ -336,7 +336,7 @@ AA_descs <- function(Data, type="Z5",..){
       return(match_AA1_vec(Data,sel))
 
     } else {
-	  descs_path <- system.file("extdata", "aa_descs.rds", package="camb")
+	  descs_path <- system.file("extdata", "AADescs.rds", package="camb")
 	  descs <- readRDS(descs_path)
 	  types <- c("ProtFP8","TScales","Tscales","VHSE","STScales","BLOSUM","FASGAI","MSWHIM","Z5","Z3")
       type <- match.arg(type,types,several.ok=TRUE)
