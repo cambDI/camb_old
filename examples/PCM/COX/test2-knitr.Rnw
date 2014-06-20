@@ -112,7 +112,7 @@ Similarly, the function "GetPropertiesSDF" retrieves the information for all pro
 A data.frame with all properties is returned.
 The number of molecules from which the information has to be retrieved can be indicated with the argument \verb|"number_processed"|.
 The default value for this argument is \verb|"-1"|, which indicates that the properties will be extracted for all molecules in the input file.
-<<echo=TRUE,results='hide',warning=FALSE,message=FALSE,eval=TRUE,tidy=FALSE>>=
+<<echo=TRUE,results='hide',warning=FALSE,message=FALSE,eval=FALSE,tidy=FALSE>>=
 GetPropertySDF("test.sdf",property="Name",
                number_processed=10)
 
