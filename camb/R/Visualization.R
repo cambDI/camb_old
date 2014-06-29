@@ -51,10 +51,14 @@ return(p)
 #################################################################################
 ## PCA analysis 
 
+#' TBD: fill in description and the rest
+#' @export
 isnot.null <- function(x) ! is.null(x)
 isnot.vector <- function(x) ! is.vector(x)
 
 ##############
+#' TBD: fill in description and the rest
+#' @export
 PCA <- function (Data, RowNames = NULL,cor=TRUE, scale = TRUE, center = TRUE,...) {
   if (is.matrix(Data) || is.data.frame(Data)) {
       ana <- prcomp(t(Data), cor = cor, scale = scale, center = center,...)
@@ -77,6 +81,8 @@ PCA <- function (Data, RowNames = NULL,cor=TRUE, scale = TRUE, center = TRUE,...
 
 ##############
 # Plot the towo first PC of the sequence descriptors
+#' TBD: fill in description and the rest
+#' @export
 PCAPlot <- function (Data,main="",ylab="PC2",xlab="PC1",labels=NULL,PointSize=4,
                          LegendPosition="right",LegendName="",ColLegend=1,RowLegend=NULL,
                          TitleSize=15,TextSize=15,XAxisSize=15,YAxisSize=15,AngleLab=30,
@@ -135,6 +141,8 @@ PCAPlot <- function (Data,main="",ylab="PC2",xlab="PC1",labels=NULL,PointSize=4,
 }
 
 ##############
+#' TBD: fill in description and the rest
+#' @export
 PairwiseDist <- function(Data,method="jaccard",...){
   if (is.matrix(Data) || is.data.frame(Data)){
     Data <- unique(Data)
@@ -152,6 +160,8 @@ PairwiseDist <- function(Data,method="jaccard",...){
 }
 
 ##############
+#' TBD: fill in description and the rest
+#' @export
 PairwiseDistPlot <- function(Data,xlab="",ylab="",main="",TextSize=15,TitleSize=15,XAxisSize=15,YAxisSize=15,
                              TitleAxesSize=15,tmar=1,bmar=1,rmar=1,lmar=1,AngleLab=30,
                              binwidth=NULL,fillCol="white",Colour="black",DensityFill="#FF6666",DensityAlpha=.2){
@@ -265,6 +275,8 @@ PairwiseDistPlot <- function(Data,xlab="",ylab="",main="",TextSize=15,TitleSize=
 #
 ##########
 # Get Legend
+#' TBD: fill in description and the rest
+#' @export
 GetLegend <- function(a.gplot){
   tmp <- ggplot_gtable(ggplot_build(a.gplot))
   leg <- which(sapply(tmp$grobs, function(x) x$name) == "guide-box")

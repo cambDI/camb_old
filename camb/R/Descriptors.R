@@ -97,6 +97,7 @@ StandardiseMolecules <- function(structures.file,
   }
 }
 
+#' @export
 GetPropertiesSDF <- function(structures.file,number_processed=-1, type=1){ ## 1 refers to not smiles
 ##print("Get properties from SDF")
 if (!file.exists(structures.file)) {stop("File does not exist")}
@@ -111,6 +112,7 @@ sink()
 return(properties)
 }
 
+#' @export
 ShowPropertiesSDF <- function(structures.file,type=1){ ## 1 refers to not smiles
 if (!file.exists(structures.file)) {stop("File does not exist")}
 if (file.info(structures.file)$size  == 0) {stop("Input file is empty")}
@@ -121,6 +123,7 @@ props <- as.vector(read.table(output,header=FALSE)$V1)
 return(props)
 }
 
+#' @export
 GetPropertySDF <- function(structures.file, property="", number_processed=-1, type=1 ){ ## 1 refers to not smiles
 ##print("Get properties from SDF")
 if (!file.exists(structures.file)) {stop("File does not exist")}
@@ -228,6 +231,8 @@ GeneratePadelDescriptors.internal <- function(structures.file, descriptors.file,
 
 ##############
 # Check if an AA is natural
+#' TBD: fill in description and the rest
+#' @export
 checkAA <- function(x) {
   AADict = c("A", "R", "N", "D", "C", "E", "Q", "G", "H", "I", 
              "L", "K", "M", "F", "P", "S", "T", "W", "Y", "V",
@@ -239,6 +244,8 @@ checkAA <- function(x) {
 
 ##############
 ## Three letter to one letter AA code
+#' TBD: fill in description and the rest
+#' @export
 convert31 <- function(AA) {  
   threeL <- c("ALA", "ARG", "ASN", "ASP", "CYS", "GLU", "GLN",
               "GLY", "HIS", "ILE", "LEU", "LYS", "MET", "PHE",

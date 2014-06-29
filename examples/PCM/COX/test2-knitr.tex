@@ -65,11 +65,18 @@
 {\bf C}hemistry {\bf A}ware {\bf M}odel {\bf B}uilder\\
 }
 
-\author[1,3]{\rm Isidro Cortes-Ciriano\thanks{isidrolauscher@gmail.com}} 
-\author[2,3]{\rm Daniel Murrell\thanks{dsmurrell@gmail.com}}
+\author[1,5]{\rm Isidro Cortes-Ciriano\thanks{isidrolauscher@gmail.com}} 
+\author[2,5]{\rm Daniel S. Murrell\thanks{dsmurrell@gmail.com}}
+\author[3]{\rm Gerard J. P. van Westen}
+\author[4]{\rm Ian P. Stott}
+\author[2]{\rm Andreas Bender}
+\author[1]{\rm Therese E. Malliavin}
+\author[2]{\rm Robert C. Glen}
 \affil[1]{Unite de Bioinformatique Structurale, Institut Pasteur and CNRS UMR 3825, Structural Biology and Chemistry Department, 25-28, rue Dr. Roux, 75 724 Paris, France.}
 \affil[2]{Unilever Centre for Molecular Science Informatics, Department of Chemistry, University of Cambridge, Cambridge, United Kingdom.}
-\affil[3]{Equal contributors}
+\affil[3]{ChEMBL Group, European Molecular Biology Laboratory European Bioinformatics Institute, Wellcome Trust Genome Campus, CB10 1SD, Hinxton, Cambridge, UK.}
+\affil[4]{Unilever Research, Bebington, UK.}
+\affil[5]{Equal contributors}
 \setlength{\parindent}{0pt}
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 
@@ -362,11 +369,17 @@ For instance:
 \begin{alltt}
 \hlkwd{AADescs}\hlstd{(}\hlkwc{Data} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{"Ala"}\hlstd{),} \hlkwc{type} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{"Z5"}\hlstd{,} \hlstr{"BLOSUM"}\hlstd{))}
 \end{alltt}
-
-
-{\ttfamily\noindent\color{warningcolor}{\#\# Warning: cannot open compressed file '', probable reason 'No such file or directory'}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: cannot open the connection}}\end{kframe}
+\begin{verbatim}
+##  BLOSUM_1_Ala1  BLOSUM_2_Ala1  BLOSUM_3_Ala1  BLOSUM_4_Ala1 
+##           0.08          -0.92           0.53           0.00 
+##  BLOSUM_5_Ala1  BLOSUM_6_Ala1  BLOSUM_7_Ala1  BLOSUM_8_Ala1 
+##           0.24           0.19           0.66          -0.05 
+##  BLOSUM_9_Ala1 BLOSUM_10_Ala1      Z5_1_Ala1      Z5_2_Ala1 
+##           1.36           0.33           0.24          -2.32 
+##      Z5_3_Ala1      Z5_4_Ala1      Z5_5_Ala1 
+##           0.60          -0.14           1.30
+\end{verbatim}
+\end{kframe}
 \end{knitrout}
 
 Column names indicate the amino acid position in the original input data, and the type of descriptor.
@@ -442,14 +455,26 @@ The name of the molecule in the input file will be used as the title of the imag
     \hlkwc{IDs} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{1}\hlstd{,} \hlnum{2}\hlstd{,} \hlnum{3}\hlstd{,} \hlnum{4}\hlstd{),} \hlkwc{pdf.file} \hlstd{=} \hlkwa{NULL}\hlstd{,} \hlkwc{useNameAsTitle} \hlstd{=} \hlnum{TRUE}\hlstd{,}
     \hlkwc{PDFMain} \hlstd{=} \hlkwa{NULL}\hlstd{)}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: could not find function "{}DrawMoleculeInSDF"{}}}\begin{alltt}
+\begin{verbatim}
+## [1] 1
+## [1] 2
+## [1] 3
+## [1] 4
+\end{verbatim}
+\begin{alltt}
 \hlkwd{print}\hlstd{(plot_molecules[[}\hlnum{1}\hlstd{]])}
 \end{alltt}
+\end{kframe}\begin{figure}[]
 
 
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'plot\_molecules' not found}}\end{kframe}
+{\centering \includegraphics[width=12cm]{figure/unnamed-chunk-20} 
+
+}
+
+\caption[Example of compoud depiction]{Example of compoud depiction.\label{fig:unnamed-chunk-20}}
+\end{figure}
+
+
 \end{knitrout}
 
 
@@ -566,8 +591,8 @@ we can calculate the minimum achievable performance.
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{max_performance} \hlkwb{<-} \hlkwd{MaxPerf}\hlstd{(}\hlkwc{meanNoise}\hlstd{=}\hlnum{0}\hlstd{,}\hlkwc{sdNoise}\hlstd{=}\hlnum{0.6}\hlstd{,}
-                           \hlkwc{resp}\hlstd{=}\hlkwd{seq}\hlstd{(}\hlnum{1}\hlstd{,}\hlnum{1000}\hlstd{),} \hlkwc{stds}\hlstd{=}\hlkwa{NULL}\hlstd{,}
-                           \hlkwc{lenPred}\hlstd{=}\hlnum{800}\hlstd{,}\hlkwc{tmar} \hlstd{=} \hlnum{0.2}\hlstd{,}
+                           \hlkwc{resp}\hlstd{=bioactivity,} \hlkwc{stds}\hlstd{=}\hlkwa{NULL}\hlstd{,}
+                           \hlkwc{lenPred}\hlstd{=}\hlkwd{length}\hlstd{(bioactivity)}\hlopt{*}\hlnum{0.3}\hlstd{,}\hlkwc{tmar} \hlstd{=} \hlnum{0.2}\hlstd{,}
                            \hlkwc{bmar} \hlstd{=} \hlnum{0.2}\hlstd{,} \hlkwc{rmar} \hlstd{=} \hlnum{0.2}\hlstd{,}
                            \hlkwc{lmar} \hlstd{=} \hlnum{0.2}\hlstd{)}
 

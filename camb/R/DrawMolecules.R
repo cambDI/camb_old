@@ -1,5 +1,7 @@
 
 
+#' TBD: fill in description and the rest
+#' @export
 DrawMoleculeInSDF <- function(structures.file, structure.number, file.name, useNameAsTitle) {
   if (file.info(structures.file)$size  == 0) {stop("Input file is empty")}
   print(structure.number)
@@ -10,6 +12,8 @@ DrawMoleculeInSDF <- function(structures.file, structure.number, file.name, useN
 #.C("R_drawMoleculeInSDF", system.file("test_structures", "structures_10.sdf", package = "camb"), 1, "output.png", FALSE)
 
 
+#' TBD: fill in description and the rest
+#' @export
 PlotMolecules <- function(sdf.file, IDs,pdf.file=NULL,PDFMain=NULL,useNameAsTitle=TRUE) {
 isnot.vector <- function(x) ! is.vector(x) 
 isnot.null <- function(x) ! is.null(x)

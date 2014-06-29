@@ -409,8 +409,8 @@ we can calculate the minimum achievable performance.
 
 <<highlight=TRUE,tidy=FALSE,fig.align='center',fig.cap="Maximum achievable model performance",fig.width='10cm',fig.height='25cm',eval=TRUE>>=
 max_performance <- MaxPerf(meanNoise=0,sdNoise=0.6,
-                           resp=bioactivities, stds=NULL,
-                           lenPred=len(resp)*0.3,tmar = 0.2, 
+                           resp=bioactivity, stds=NULL,
+                           lenPred=length(bioactivity)*0.3,tmar = 0.2, 
                            bmar = 0.2, rmar = 0.2, 
                            lmar = 0.2)
 
