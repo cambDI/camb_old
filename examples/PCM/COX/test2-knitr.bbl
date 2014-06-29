@@ -332,7 +332,40 @@
   \strng{namehash}{CIWGJPvLEB+1}
   \strng{fullhash}{CIWGJPvLEBMDSBAMT1}
   \field{title}{{Proteochemometrics Modeling in a Bayesian Framework}}
-  \field{journaltitle}{J. Cheminf. In revision}
+  \field{journaltitle}{J. Cheminf. Accepted}
+\endentry
+
+\entry{Kalliokoski2013}{article}{}
+  \name{author}{4}{}{%
+    {{}%
+     {Kalliokoski}{K.}%
+     {Tuomo}{T.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Kramer}{K.}%
+     {Christian}{C.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Vulpetti}{V.}%
+     {Anna}{A.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Gedeck}{G.}%
+     {Peter}{P.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{KTKCVA+1}
+  \strng{fullhash}{KTKCVAGP1}
+  \field{number}{4}
+  \field{pages}{e61007}
+  \field{title}{{Comparability of mixed IC50 data - a statistical analysis.}}
+  \field{volume}{8}
+  \field{journaltitle}{PLoS One}
+  \field{year}{2013}
 \endentry
 
 \entry{svmreview}{article}{}

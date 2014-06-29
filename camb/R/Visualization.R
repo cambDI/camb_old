@@ -77,8 +77,8 @@ PCA <- function (Data, RowNames = NULL,cor=TRUE, scale = TRUE, center = TRUE,...
 
 ##############
 # Plot the towo first PC of the sequence descriptors
-PCAPlot <- function (Data,main="",ylab="PC2",xlab="PC1",Seqs=NULL,PointSize=4,
-                         LegendPosition="right",LegendName="Sequences",ColLegend=1,RowLegend=NULL,
+PCAPlot <- function (Data,main="",ylab="PC2",xlab="PC1",labels=NULL,PointSize=4,
+                         LegendPosition="right",LegendName="",ColLegend=1,RowLegend=NULL,
                          TitleSize=15,TextSize=15,XAxisSize=15,YAxisSize=15,AngleLab=30,
                          TitleAxesSize=15,LegendTitleSize=15,LegendTextSize=15,tmar=1,bmar=1,rmar=1,lmar=1) 
 {
@@ -88,7 +88,7 @@ PCAPlot <- function (Data,main="",ylab="PC2",xlab="PC1",Seqs=NULL,PointSize=4,
     stop("Two PCs required. The Data.frame provided has less than two columns (PCs) or more than 3")
   } else if (names(Data)[1] != "PC1" || names(Data)[2] != "PC2"){
     stop("Column names have to be {PC1, PC2}")
-  } else if (length(names(Data)) == 2 && is.null(Seqs)){
+  } else if (length(names(Data)) == 2 && is.null(labels)){
     print("No names provided")
     p <- ggplot(Data, aes(x=PC1, y=PC2)) +
       geom_point(size=PointSize) + theme_bw() + ggtitle(main) + ylab(ylab) + xlab(xlab) +
@@ -100,14 +100,14 @@ PCAPlot <- function (Data,main="",ylab="PC2",xlab="PC1",Seqs=NULL,PointSize=4,
             plot.margin=unit(c(tmar,rmar,bmar,lmar),"cm")) +
       guides(colour = guide_legend(LegendName,ncol=ColLegend,nrow=RowLegend),
              shape = guide_legend(LegendName,ncol=ColLegend,nrow=RowLegend))
-  } else if (length(names(Data)) == 2 && isnot.null(Seqs)){
-    if (length(Seqs) != nrow(Data) || isnot.vector(Seqs)) {
+  } else if (length(names(Data)) == 2 && isnot.null(labels)){
+    if (length(labels) != nrow(Data) || isnot.vector(labels)) {
       stop("Either the names are not in a vector, or its length is not equal to the number of datapoints (rows of the input data)")
     } else {
       print("Names provided")
-      Data <- data.frame(Data,Seqs=Seqs)
-      a <- length(unique(Seqs))
-      p <- ggplot(Data, aes(x=PC1, y=PC2, color=Seqs,shape=Seqs)) +
+      Data <- data.frame(Data,labels=labels)
+      a <- length(unique(labels))
+      p <- ggplot(Data, aes(x=PC1, y=PC2, color=labels,shape=labels)) +
         geom_point(size=PointSize)  + scale_shape_manual(values=1:a) + theme_bw() + ggtitle(main) + ylab(ylab) + xlab(xlab) +
         theme(text = element_text(size=TextSize),axis.text.x = element_text(size=XAxisSize,angle = AngleLab, hjust = 1),
               axis.title.x=element_text(size=TitleAxesSize),axis.title.y=element_text(size=TitleAxesSize),
@@ -119,8 +119,8 @@ PCAPlot <- function (Data,main="",ylab="PC2",xlab="PC1",Seqs=NULL,PointSize=4,
     } 
   } else {
     print("Names provided in the third column of the data.frame")
-    Seqs <- unlist(Data[names(Data)[3]])
-    a <- length(unique(Seqs))
+    labels <- unlist(Data[names(Data)[3]])
+    a <- length(unique(labels))
     namee <- names(Data)[3]
     p <- ggplot(Data, aes_string(x="PC1", y="PC2",colour=namee,shape=namee)) +
       geom_point(size=PointSize) +scale_shape_manual(values=1:a) + theme_bw() + ggtitle(main) + ylab(ylab) + xlab(xlab) +
@@ -173,96 +173,96 @@ PairwiseDistPlot <- function(Data,xlab="",ylab="",main="",TextSize=15,TitleSize=
 ##############
 ##############
 ## Maximum Model Performance
-
-MaxPerf <- function(meanNoise=0,sdNoise,meanResp,sdResp,lenPred,iters=1000,
-                    filename=NULL,pdfW=10,pdfH=10,TextSize=15,TitleSize=15,
-                    XAxisSize=15,YAxisSize=15,TitleAxesSize=15,tmar=1,bmar=1,
-                    rmar=1,lmar=1,AngleLab=30,LegendPosition="right"){
-  vplayout <- function(x, y) viewport(layout.pos.row = x, layout.pos.col = y)
-  R2 <- c()
-  R02 <- c()
-  Q2 <- c()
-  rmsep <- c()
-  for (i in 1:iters){
-    x <- rnorm(lenPred,mean=meanResp,sd=sdResp)
-    noise <- rnorm(length(x),mean=meanNoise,sd=sdNoise)
-    y <- x+noise
-    R2[i] <- Rsquared(y,x)
-    Q2[i] <- Qsquared2(y,x)
-    R02[i] <- Rsquared0(y,x)
-    rmsep[i] <- RMSE(y,x)
-  }
-  
-  pp <- data.frame(R2=R2)
-  title <- expression(paste("R"^{2}))
-  p1 <- ggplot(pp, aes(x=R2)) + 
-    theme_bw() + 
-    geom_density(alpha=.2, fill="#FF6666") + ggtitle(title)+ aes(y = ..count..)+ 
-    theme(text = element_text(size=TextSize),axis.text.x = element_text(size=XAxisSize,angle = AngleLab, hjust = 1),
-          axis.title.x=element_text(size=TitleAxesSize),axis.title.y=element_text(size=TitleAxesSize),
-          axis.text.y=element_text(size=YAxisSize),legend.position=LegendPosition,plot.title=element_text(size=TitleSize),
-          legend.key=element_blank(), plot.margin=unit(c(tmar,rmar,bmar,lmar),"cm")) +
-    geom_vline(aes(xintercept=mean(R2, na.rm=T)), color="blue", linetype="dashed", size=1)
-  
-  pp <- data.frame(rmsep=rmsep)
-  p2 <- ggplot(pp, aes(x=rmsep)) + 
-    theme_bw() + 
-    geom_density(alpha=.2, fill="#FF6666") + ggtitle('RMSEP') +  aes(y = ..count..)+ 
-    theme(text = element_text(size=TextSize),axis.text.x = element_text(size=XAxisSize,angle = AngleLab, hjust = 1),
-          axis.title.x=element_text(size=TitleAxesSize),axis.title.y=element_text(size=TitleAxesSize),
-          axis.text.y=element_text(size=YAxisSize),legend.position=LegendPosition,plot.title=element_text(size=TitleSize),
-          legend.key=element_blank(), plot.margin=unit(c(tmar,rmar,bmar,lmar),"cm")) +
-    geom_vline(aes(xintercept=mean(rmsep, na.rm=T)), color="blue", linetype="dashed", size=1)
-  
-  pp <- data.frame(R02=R02)
-  title <- expression(paste("R"[0]^{2}))
-  
-  p3 <- ggplot(pp, aes(x=R02)) + 
-    theme_bw() + 
-    geom_density(alpha=.2, fill="#FF6666") + ggtitle(title) + aes(y = ..count..)+ 
-    theme(text = element_text(size=TextSize),axis.text.x = element_text(size=XAxisSize,angle = AngleLab, hjust = 1),
-          axis.title.x=element_text(size=TitleAxesSize),axis.title.y=element_text(size=TitleAxesSize),
-          axis.text.y=element_text(size=YAxisSize),legend.position=LegendPosition,plot.title=element_text(size=TitleSize),
-          legend.key=element_blank(), plot.margin=unit(c(tmar,rmar,bmar,lmar),"cm")) +
-    geom_vline(aes(xintercept=mean(R02, na.rm=T)), color="blue", linetype="dashed", size=1)
-  
-  title <- expression(paste("Q"^{2}))
-  pp <- data.frame(Q2=Q2)
-  p4 <- ggplot(pp, aes(x=Q2)) + 
-    theme_bw() + 
-    geom_density(alpha=.2, fill="#FF6666") + ggtitle(title) + aes(y = ..count..)+ 
-    theme(text = element_text(size=TextSize),axis.text.x = element_text(size=XAxisSize,angle = AngleLab, hjust = 1),
-          axis.title.x=element_text(size=TitleAxesSize),axis.title.y=element_text(size=TitleAxesSize),
-          axis.text.y=element_text(size=YAxisSize),legend.position=LegendPosition,plot.title=element_text(size=TitleSize),
-          legend.key=element_blank(), plot.margin=unit(c(tmar,rmar,bmar,lmar),"cm")) +
-    geom_vline(aes(xintercept=mean(Q2, na.rm=T)), color="blue", linetype="dashed", size=1)
-  
-  if (isnot.null(filename)){
-    pdfname=paste(filename,".pdf",sep="")
-    pdf(pdfname,width=pdfW,height=pdfH)
-    grid.newpage()
-    pushViewport(viewport(layout = grid.layout(2, 2)))
-    print(p1, vp = vplayout(1,1))
-    print(p2, vp = vplayout(1,2))
-    print(p3, vp = vplayout(2,1))
-    print(p4, vp = vplayout(2,2))
-    dev.off()
-  } #else {
-    #grid.newpage()
-    #pushViewport(viewport(layout = grid.layout(2, 2)))
-    #print(p1, vp = vplayout(1,1))
-    #print(p2, vp = vplayout(1,2))
-    #print(p3, vp = vplayout(2,1))
-    #print(p4, vp = vplayout(2,2))
-  #}
-  p <- list()
-  p$p1 <- p1
-  p$p2 <- p2
-  p$p3 <- p3
-  p$p4 <- p4
-  return(p)
-}
-
+#
+#MaxPerf <- function(meanNoise=0,sdNoise,meanResp,sdResp,lenPred,iters=1000,
+#                    filename=NULL,pdfW=10,pdfH=10,TextSize=15,TitleSize=15,
+#                    XAxisSize=15,YAxisSize=15,TitleAxesSize=15,tmar=1,bmar=1,
+#                    rmar=1,lmar=1,AngleLab=30,LegendPosition="right"){
+#  vplayout <- function(x, y) viewport(layout.pos.row = x, layout.pos.col = y)
+#  R2 <- c()
+#  R02 <- c()
+#  Q2 <- c()
+#  rmsep <- c()
+#  for (i in 1:iters){
+#    x <- rnorm(lenPred,mean=meanResp,sd=sdResp)
+#    noise <- rnorm(length(x),mean=meanNoise,sd=sdNoise)
+#    y <- x+noise
+#    R2[i] <- Rsquared(y,x)
+#    Q2[i] <- Qsquared2(y,x)
+#    R02[i] <- Rsquared0(y,x)
+#    rmsep[i] <- RMSE(y,x)
+#  }
+#  
+#  pp <- data.frame(R2=R2)
+#  title <- expression(paste("R"^{2}))
+#  p1 <- ggplot(pp, aes(x=R2)) + 
+#    theme_bw() + 
+#    geom_density(alpha=.2, fill="#FF6666") + ggtitle(title)+ aes(y = ..count..)+ 
+#    theme(text = element_text(size=TextSize),axis.text.x = element_text(size=XAxisSize,angle = AngleLab, hjust = 1),
+#          axis.title.x=element_text(size=TitleAxesSize),axis.title.y=element_text(size=TitleAxesSize),
+#          axis.text.y=element_text(size=YAxisSize),legend.position=LegendPosition,plot.title=element_text(size=TitleSize),
+#          legend.key=element_blank(), plot.margin=unit(c(tmar,rmar,bmar,lmar),"cm")) +
+#    geom_vline(aes(xintercept=mean(R2, na.rm=T)), color="blue", linetype="dashed", size=1)
+#  
+#  pp <- data.frame(rmsep=rmsep)
+#  p2 <- ggplot(pp, aes(x=rmsep)) + 
+#    theme_bw() + 
+#    geom_density(alpha=.2, fill="#FF6666") + ggtitle('RMSEP') +  aes(y = ..count..)+ 
+#    theme(text = element_text(size=TextSize),axis.text.x = element_text(size=XAxisSize,angle = AngleLab, hjust = 1),
+#          axis.title.x=element_text(size=TitleAxesSize),axis.title.y=element_text(size=TitleAxesSize),
+#          axis.text.y=element_text(size=YAxisSize),legend.position=LegendPosition,plot.title=element_text(size=TitleSize),
+#          legend.key=element_blank(), plot.margin=unit(c(tmar,rmar,bmar,lmar),"cm")) +
+#    geom_vline(aes(xintercept=mean(rmsep, na.rm=T)), color="blue", linetype="dashed", size=1)
+#  
+#  pp <- data.frame(R02=R02)
+#  title <- expression(paste("R"[0]^{2}))
+#  
+#  p3 <- ggplot(pp, aes(x=R02)) + 
+#    theme_bw() + 
+#    geom_density(alpha=.2, fill="#FF6666") + ggtitle(title) + aes(y = ..count..)+ 
+#    theme(text = element_text(size=TextSize),axis.text.x = element_text(size=XAxisSize,angle = AngleLab, hjust = 1),
+#          axis.title.x=element_text(size=TitleAxesSize),axis.title.y=element_text(size=TitleAxesSize),
+#          axis.text.y=element_text(size=YAxisSize),legend.position=LegendPosition,plot.title=element_text(size=TitleSize),
+#          legend.key=element_blank(), plot.margin=unit(c(tmar,rmar,bmar,lmar),"cm")) +
+#    geom_vline(aes(xintercept=mean(R02, na.rm=T)), color="blue", linetype="dashed", size=1)
+#  
+#  title <- expression(paste("Q"^{2}))
+#  pp <- data.frame(Q2=Q2)
+#  p4 <- ggplot(pp, aes(x=Q2)) + 
+#    theme_bw() + 
+#    geom_density(alpha=.2, fill="#FF6666") + ggtitle(title) + aes(y = ..count..)+ 
+#    theme(text = element_text(size=TextSize),axis.text.x = element_text(size=XAxisSize,angle = AngleLab, hjust = 1),
+#          axis.title.x=element_text(size=TitleAxesSize),axis.title.y=element_text(size=TitleAxesSize),
+#          axis.text.y=element_text(size=YAxisSize),legend.position=LegendPosition,plot.title=element_text(size=TitleSize),
+#          legend.key=element_blank(), plot.margin=unit(c(tmar,rmar,bmar,lmar),"cm")) +
+#    geom_vline(aes(xintercept=mean(Q2, na.rm=T)), color="blue", linetype="dashed", size=1)
+#  
+#  if (isnot.null(filename)){
+#    pdfname=paste(filename,".pdf",sep="")
+#    pdf(pdfname,width=pdfW,height=pdfH)
+#    grid.newpage()
+#    pushViewport(viewport(layout = grid.layout(2, 2)))
+#    print(p1, vp = vplayout(1,1))
+#    print(p2, vp = vplayout(1,2))
+#    print(p3, vp = vplayout(2,1))
+#    print(p4, vp = vplayout(2,2))
+#    dev.off()
+#  } #else {
+#    #grid.newpage()
+#    #pushViewport(viewport(layout = grid.layout(2, 2)))
+#    #print(p1, vp = vplayout(1,1))
+#    #print(p2, vp = vplayout(1,2))
+#    #print(p3, vp = vplayout(2,1))
+#    #print(p4, vp = vplayout(2,2))
+#  #}
+#  p <- list()
+#  p$p1 <- p1
+#  p$p2 <- p2
+#  p$p3 <- p3
+#  p$p4 <- p4
+#  return(p)
+#}
+#
 ##########
 # Get Legend
 GetLegend <- function(a.gplot){
