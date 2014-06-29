@@ -39,7 +39,7 @@ suppressWarnings(library(doMC,quietly=TRUE,warn.conflicts=FALSE))
 
 \maketitle
 
-In the following sections, we demonstrate the utility of the \texttt{camb} package by presenting a pipeline which generates various aqueous solubility models using 2D molecular descriptors calculated by the PaDEL-Descriptor package as input features. These models are then ensembled to create a single model with a greater predictive accuracy.
+In the following sections, we demonstrate the utility of the \texttt{camb} \cite{camb} package by presenting a pipeline which generates various aqueous solubility models using 2D molecular descriptors calculated by the PaDEL-Descriptor package as input features. These models are then ensembled to create a single model with a greater predictive accuracy. The trained ensemble is then put to use in making predictions for new molecules.
 
 Firstly, the package needs to be loaded and the working directory set:
 <<echo=FALSE,results='hide',warning=FALSE,message=FALSE>>=
@@ -59,10 +59,10 @@ Molecules are represented with implicit hydrogens, dearomatized, and passed thro
 
 The \texttt{StandardiseMolecules} function enables the representation of molecular structures in a similarly processed form.
 The different arguments of this function allow control over the maximum number of (i) fluorines, (ii) chlorines,
-(iii) bromines, and (iv) iodines the molecule contains in order to be retained for training.
+(iii) bromines, and (iv) iodines the molecules contain in order to be retained for training.
 Inorgnaic molecules (those containing atoms not in \{H, C, N, O, P, S, F, Cl, Br, I\}) are removed if the argument \texttt{remove.inorganic} is set to \texttt{TRUE}. This is the function's default behaviour.
 The upper and lower limits for the molecular mass can be set with the arguments \texttt{min.mass.limit} and \texttt{max.mass.limit}.
-The name of the file containing the chemical structures is input to the argument \texttt{structures.file}.
+The name of the file containing the chemical structures is provided by the argument \texttt{structures.file}.
 <<echo=TRUE,results='hide',warning=FALSE,message=FALSE,eval=FALSE>>=
 StandardiseMolecules(structures.file="solubility_2007_ref2.sdf", 
                      standardised.file="standardised.sdf", 
@@ -76,12 +76,11 @@ StandardiseMolecules(structures.file="solubility_2007_ref2.sdf",
                      min.mass.limit=20, 
                      max.mass.limit=900)
 @
-Molecules that Indigo manages to parse and that pass the filters are written to the file indicated in the argument "standardised.file". Molecules that are discarded for training purposes are written to the file indicated in the "removed.file" argument.
+Molecules that Indigo manages to parse and that pass the filters are written to the file indicated by the \texttt{standardised.file} argument. Molecules that were discarded before training are written to the file indicated by the \texttt{removed.file} argument.
 
 \section{Target Visualisation}
-The properties specified in the structure file of all molecules and an index, in the column "kept", indicating which molecules were deleted (0) and kept (1),
-are written to the file indicated in the argument "properties.file" which is in CSV format.
-In this case the file is \verb|"properties.csv"|.
+The molecular properties specified in the structure file as well as an index are written to the file indicated in the argument \texttt{properties.file} which is in CSV format. A column \texttt{kept} is added which indicates which molecules were deleted (0) or kept (1). \texttt{camb} provides a function to visualise the density of the target variable.
+
 <<echo=TRUE, fig.align='center',fig.cap="LogS Target Distribution",out.width='8cm',results='hide',warning=FALSE,message=FALSE,eval=TRUE>>=
 properties <- read.table("properties.csv", header=TRUE, sep="\t")
 properties <- properties[properties$Kept==1, ]
@@ -92,7 +91,7 @@ p
 @
 
 \subsection{PaDEL Descriptors}
-One and two-dimensional PaDEL\cite{padel} descriptors and fingerprints can be calculated with the function "GeneratePadelDescriptors":
+One and two-dimensional descriptors can be calculated with the function \texttt{GeneratePadelDescriptors} provided by the PaDEL-Descriptor\cite{padel} Java library built into the \texttt{camb} package:
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
 descriptors <- GeneratePadelDescriptors(standardised.file = "standardised.sdf", types=c("2D"), threads = 1)
 descriptors <- RemoveStandardisedPrefix(descriptors)
@@ -103,7 +102,7 @@ descriptors <- readRDS("descriptors.rds")
 @
 
 \section{Statistical Pre-processing}
-Merge the calculated descriptors and the target values by name into a single data.frame. Check that the number of rows of the merged and original data.frames are the same. Split the data.frame into \textit{ids}, \textit{x} and \textit{y} where \textit{ids} are the molecule names, \textit{x} are the descriptor values and \textit{y} is the target values.  
+The descriptors and the target values are then merged by name into a single \textit{data.frame}. We check that the number of rows of the merged and original \textit{data.frames} are the same. We then split the \textit{data.frame} into \textit{ids}, \textit{x} and \textit{y} where \textit{ids} are the molecule names, \textit{x} are the descriptor values and \textit{y} is the target values.  
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=TRUE>>=
 all <- merge(x=targets, y=descriptors, by="Name")
 ids <- all$Name
@@ -111,50 +110,50 @@ x <- all[3:ncol(all)]
 y <- all$target
 @
 
-Sometimes, some descriptors are not calculated for all molecules, thus giving a "NA" or "Inf" as descriptor value.
+Sometimes, some descriptors are not calculated for all molecules, giving a "NA" or "Inf" as the descriptor value. 
 Instead of removing that descriptor for all molecules, the missing descriptor values can be imputed from the corresponding descriptor values of the rest of molecules.
-Descriptor values equal to "Inf" are converted to "NA".
-For the imputation of missing descriptor values, the R package {\it impute} is required.
-Depending on the R version, it can be accessed from either {\it CRAN} or {\it Bioconductor}.
+"Inf" descriptor values are first converted to "NA".
+For the imputation of missing descriptor values, the R package  \texttt{impute} is required.
+Depending on the R version, it can be accessed from either \texttt{CRAN} or \texttt{Bioconductor}.
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=TRUE>>=
 x.finite <- ReplaceInfinitesWithNA(x)
 x.imputed <- ImputeFeatures(x.finite)
 @
 
-Split the dataset into a training (80\%) and a holdout (20\%) set that will be used to assess the predictive ability of the models. Remove the following descriptors: (i) those with a variance close to zero (near-zero variance), and (ii) those highly correlated:
+The dataset is split into a training (80\%) set used for training and a holdout (20\%) set used to assess the predictive ability of the models on molecules drawn from the same distribution as the training set. Unhelpful descriptos are removed: (i) those with a variance close to zero (near-zero variance), and (ii) those highly correlated with one another:
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=TRUE>>=
 dataset <- SplitSet(ids, x.imputed, y, percentage=20)
 dataset <- RemoveNearZeroVarianceFeatures(dataset, frequencyCutoff=30)
 dataset <- RemoveHighlyCorrelatedFeatures(dataset, correlationCutoff=0.95)
 @
 
-Convert the descriptors to z-scores by centering them to have a mean of zero and scaling them to have unit variance:
+The descriptors are converted to z-scores by centering them to have a mean of zero and scaling them to have unit variance:
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=TRUE>>=
 dataset <- PreProcess(dataset)
 @
 
-Given that cross-validation (CV) will be used to optimize the hyperparameters of the models, we divide the training set in 5 folds:
+Five fold cross-validation (CV) is be used to optimize the hyperparameters of the models:
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=TRUE>>=
-dataset <- GetCVTrainControl(dataset)
+dataset <- GetCVTrainControl(dataset, folds=5)
 saveRDS(dataset, file="dataset_logS_preprocessed.rds")
 @
 
-All models are trained with the same CV options, {\it i.e.} the arguments of the function 'GetCVTrainControl' to allow ensemble modeling (see below).
-It is important to mention that the functions presented in the previous code blocks depend on functions from the {\it caret} package, namely: 
+All models are trained with the same CV options, {\it i.e.} the arguments of the function \texttt{GetCVTrainControl}, to allow ensemble modeling as ensemble modelling requires the same data fold split over all methods used (see below).
+It is important to mention that the functions presented in the previous code blocks depend on functions from the \texttt{caret} package, namely: 
 \begin{itemize}
 \item RemoveNearZeroVarianceFeatures : nearZeroVar
 \item RemoveHighlyCorrelatedFeatures : findCorrelation
 \item PreProcess : preProcess
 \item GetCVTrainControl : trainControl
 \end{itemize}
-Experienced users might want to control more arguments of the underlying {\it caret} functions.
-This is certainly possible as the arguments given to the {\it camb} functions will be subsequently given to the {\it caret} counterparts.
-The default values of these function however permit the less experienced user to fo throught the statistical preprocessing
-steps with ease, though guaranteeing that the choice of the argument values is reasonable.
+Experienced users might want to control more arguments of the underlying \texttt{caret} functions.
+This is certainly possible as the arguments given to the \texttt{camb} functions will be subsequently given to the \texttt{caret} counterparts.
+The default values of these function permit the less experienced user to quickly handle the statistical preprocessing
+steps with ease, making a reasonable default choice for the argument values.
 
 \section{Model Training}
 
-In the following section we will present the different steps required to train a QSPR model with {\it camb}. It should be noted that the above steps can be run locally on a low powered computer such as a laptop and the preprocessed dataset saved to disk. This can then be copied to a high powered machine with multiple cores for model training and the resulting models saved back to the local machine. Pro tip: Dropbox can be used to sync this proceedure so that manual transfer is not required.
+In the following section we present the different steps required to train a QSPR model with \texttt{camb}. It should be noted that the above steps can be run locally on a low powered computer such as a laptop and the preprocessed dataset saved to disk. This dataset can then be copied to a high powered machine or a farm with multiple cores for model training and the resulting models saved back to the local machine. Pro tip: Dropbox can be used to sync this proceedure so that manual transfer is not required.
 
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE>>=
 dataset <- readRDS("dataset_logS_preprocessed.rds")
@@ -163,8 +162,8 @@ registerDoMC(cores=10)
 @
 
 \subsection{Support Vector Machines (SVM)}
-Firstly, a SVM will be trained\cite{svmreview}.
-We define an exponential grid (base 2) to optimize the hyperparameters. The \texttt{train} function from the \texttt{caret} package is used directly for model training.
+Firstly, a SVM using a radial basis function is trained\cite{svmreview}.
+We then define an exponential grid (base 2) to optimize over the hyperparameters. The \texttt{train} function from the \texttt{caret} package is used directly for model training.
 
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
 method <- "svmRadial"
@@ -193,7 +192,7 @@ model <- train(dataset$x.train, dataset$y.train, method, tuneGrid=tune.grid, trC
 saveRDS(model, file=paste(method,".rds",sep=""))
 @
 
-Determine if your hyper-parameter search needs to be altered. In the following we focus on the RF model, though the same steps can be applied to the GBM and SVM models. If your hyper-parameters lead you to what looks like a global minimum then you can stop scanning the space of hyper-parameters, otherwise you need to adjust the grid and retrain your model.
+For each model we determine if our hyper-parameter search needs to be altered. In the following we focus on the RF model, though the same steps can be applied to the GBM and SVM models. If your hyper-parameters lead you to what looks like a global minimum then you can stop scanning the space of hyper-parameters, otherwise you need to adjust the grid and retrain your model.
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,fig.align='center',fig.cap="CV RMSE over the hyperparameters",out.width='8cm'>>=
 model <- readRDS("rf.rds")
 plot(model, metric = "RMSE")
@@ -201,15 +200,77 @@ plot(model, metric = "RMSE")
 
 \section{Model Evaluation}
 
-Once the models are trained, the cross validated metrics can be calculated:
-We assume that the metric used for the choice of the best combination of hyperparameters is 'RMSE',
-which is normally considered as the aim of bioactivity modeling, {\it i.e.} how far (on average) are our 
-predictions from the real the bioactivity values?.
+Once the models are trained, the cross validated metrics for the optimised hyper-parameters become visible:
 
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE>>=
 print(RMSE_CV(model, digits=3))
 print(Rsquared_CV(model,digits=3))
 @
+
+On the basis of the soundness of the obtained models, assessed through the value of the cross-validated metrics, 
+we proceed to predict the values for the external (hold-out) set:
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,warning=FALSE,message=FALSE,eval=FALSE>>=
+holdout.predictions <- as.vector(predict(model$finalModel, newdata = dataset$x.holdout))
+@
+
+To visualize the correlation between predicted and observed values, we use the \texttt{CorrelationPlot} function:
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,fig.align='center',fig.cap="Observed vs Predicted">>=
+CorrelationPlot(pred=holdout.predictions,obs=dataset$y.holdout,PointSize=3,ColMargin='blue',TitleSize=26,XAxisSize=20,YAxisSize=20,TitleAxesSize=24,margin=2,PointColor="black",PointShape=16,MarginWidth=1,AngleLab=0,xlab="Observed",ylab="Predicted")
+@
+
+
+\section{Ensemble Modeling}
+In the following section, two ensemble modeling techniques will be applied, namely greedy optimization and model stacking.
+Further information can be found in ref \cite{caretEnsemble} and \cite{caruana}.
+
+We insert all the trained models into a list. Output the cross-validation RMSE of the trained models. 
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE>>=
+all.models <- list()
+all.models[[length(all.models)+1]] <- readRDS("gbm.rds")
+all.models[[length(all.models)+1]] <- readRDS("svmRadial.rds")
+all.models[[length(all.models)+1]] <- readRDS("rf.rds")
+
+# sort the models from lowest to highest RMSE
+names(all.models) <- sapply(all.models, function(x) x$method)
+sort(sapply(all.models, function(x) min(as.vector(na.omit(x$results$RMSE)))))
+@
+    
+A greedy ensemble is then trained using 1000 iterations. The Greedy ensemble picks a liner combination of model output that minimises the RMSE.
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE>>=
+greedy <- caretEnsemble(all.models, iter=1000L)
+sort(greedy$weights, decreasing=TRUE)
+saveRDS(greedy, file="greedy.rds")
+greedy$error
+@
+ 
+We create a linear stack ensemble that uses the trained model inputs as input into the stack.
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE>>=
+linear <- caretStack(all.models, method='glm', trControl=trainControl(method='cv'))
+saveRDS(linear, file="linear.rds")
+linear$error
+@
+
+We also create a non-linear stack ensemble that uses the trained model inputs as input into the stack. In this case we use a Random Forest as the stacking model.
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE>>=
+tune.grid <- expand.grid(.mtry = seq(1,length(all.models),1))
+nonlinear <- caretStack(all.models, method='rf', trControl=trainControl(method='cv'), tune.grid=tune.grid)
+saveRDS(nonlinear, file="nonlinear.rds")
+nonlinear$error
+@
+
+The greedy and the linear stack have a cross validated RMSE that is lower than any of the individual models.
+
+We then test to see if these ensemble models outperform the individual models on the holdout set
+
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE>>=
+preds <- data.frame(sapply(all.models, predict, newdata=dataset$x.holdout))
+preds$ENS_greedy <- predict(greedy, newdata=dataset$x.holdout)
+preds$ENS_linear <- predict(linear, newdata=dataset$x.holdout)
+preds$ENS_nonlinear <- predict(nonlinear, newdata=dataset$x.holdout)
+sort(sqrt(colMeans((preds - dataset$y.holdout) ^ 2)))
+@
+
+TBD - predictions on new molecules.
 
 \section{Bibliography}
 \printbibliography

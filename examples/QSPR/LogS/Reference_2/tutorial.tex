@@ -83,7 +83,7 @@
 
 \maketitle
 
-In the following sections, we demonstrate the utility of the \texttt{camb} package by presenting a pipeline which generates various aqueous solubility models using 2D molecular descriptors calculated by the PaDEL-Descriptor package as input features. These models are then ensembled to create a single model with a greater predictive accuracy.
+In the following sections, we demonstrate the utility of the \texttt{camb} \cite{camb} package by presenting a pipeline which generates various aqueous solubility models using 2D molecular descriptors calculated by the PaDEL-Descriptor package as input features. These models are then ensembled to create a single model with a greater predictive accuracy. The trained ensemble is then put to use in making predictions for new molecules.
 
 Firstly, the package needs to be loaded and the working directory set:
 
@@ -104,10 +104,10 @@ Molecules are represented with implicit hydrogens, dearomatized, and passed thro
 
 The \texttt{StandardiseMolecules} function enables the representation of molecular structures in a similarly processed form.
 The different arguments of this function allow control over the maximum number of (i) fluorines, (ii) chlorines,
-(iii) bromines, and (iv) iodines the molecule contains in order to be retained for training.
+(iii) bromines, and (iv) iodines the molecules contain in order to be retained for training.
 Inorgnaic molecules (those containing atoms not in \{H, C, N, O, P, S, F, Cl, Br, I\}) are removed if the argument \texttt{remove.inorganic} is set to \texttt{TRUE}. This is the function's default behaviour.
 The upper and lower limits for the molecular mass can be set with the arguments \texttt{min.mass.limit} and \texttt{max.mass.limit}.
-The name of the file containing the chemical structures is input to the argument \texttt{structures.file}.
+The name of the file containing the chemical structures is provided by the argument \texttt{structures.file}.
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -125,12 +125,11 @@ The name of the file containing the chemical structures is input to the argument
 \end{alltt}
 \end{kframe}
 \end{knitrout}
-Molecules that Indigo manages to parse and that pass the filters are written to the file indicated in the argument "standardised.file". Molecules that are discarded for training purposes are written to the file indicated in the "removed.file" argument.
+Molecules that Indigo manages to parse and that pass the filters are written to the file indicated by the \texttt{standardised.file} argument. Molecules that were discarded before training are written to the file indicated by the \texttt{removed.file} argument.
 
 \section{Target Visualisation}
-The properties specified in the structure file of all molecules and an index, in the column "kept", indicating which molecules were deleted (0) and kept (1),
-are written to the file indicated in the argument "properties.file" which is in CSV format.
-In this case the file is \verb|"properties.csv"|.
+The molecular properties specified in the structure file as well as an index are written to the file indicated in the argument \texttt{properties.file} which is in CSV format. A column \texttt{kept} is added which indicates which molecules were deleted (0) or kept (1). \texttt{camb} provides a function to visualise the density of the target variable.
+
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -155,7 +154,7 @@ In this case the file is \verb|"properties.csv"|.
 \end{knitrout}
 
 \subsection{PaDEL Descriptors}
-One and two-dimensional PaDEL\cite{padel} descriptors and fingerprints can be calculated with the function "GeneratePadelDescriptors":
+One and two-dimensional descriptors can be calculated with the function \texttt{GeneratePadelDescriptors} provided by the PaDEL-Descriptor\cite{padel} Java library built into the \texttt{camb} package:
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -169,7 +168,7 @@ One and two-dimensional PaDEL\cite{padel} descriptors and fingerprints can be ca
 
 
 \section{Statistical Pre-processing}
-Merge the calculated descriptors and the target values by name into a single data.frame. Check that the number of rows of the merged and original data.frames are the same. Split the data.frame into \textit{ids}, \textit{x} and \textit{y} where \textit{ids} are the molecule names, \textit{x} are the descriptor values and \textit{y} is the target values.  
+The descriptors and the target values are then merged by name into a single \textit{data.frame}. We check that the number of rows of the merged and original \textit{data.frames} are the same. We then split the \textit{data.frame} into \textit{ids}, \textit{x} and \textit{y} where \textit{ids} are the molecule names, \textit{x} are the descriptor values and \textit{y} is the target values.  
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -181,11 +180,11 @@ Merge the calculated descriptors and the target values by name into a single dat
 \end{kframe}
 \end{knitrout}
 
-Sometimes, some descriptors are not calculated for all molecules, thus giving a "NA" or "Inf" as descriptor value.
+Sometimes, some descriptors are not calculated for all molecules, giving a "NA" or "Inf" as the descriptor value. 
 Instead of removing that descriptor for all molecules, the missing descriptor values can be imputed from the corresponding descriptor values of the rest of molecules.
-Descriptor values equal to "Inf" are converted to "NA".
-For the imputation of missing descriptor values, the R package {\it impute} is required.
-Depending on the R version, it can be accessed from either {\it CRAN} or {\it Bioconductor}.
+"Inf" descriptor values are first converted to "NA".
+For the imputation of missing descriptor values, the R package  \texttt{impute} is required.
+Depending on the R version, it can be accessed from either \texttt{CRAN} or \texttt{Bioconductor}.
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -202,7 +201,7 @@ Depending on the R version, it can be accessed from either {\it CRAN} or {\it Bi
 \end{kframe}
 \end{knitrout}
 
-Split the dataset into a training (80\%) and a holdout (20\%) set that will be used to assess the predictive ability of the models. Remove the following descriptors: (i) those with a variance close to zero (near-zero variance), and (ii) those highly correlated:
+The dataset is split into a training (80\%) set used for training and a holdout (20\%) set used to assess the predictive ability of the models on molecules drawn from the same distribution as the training set. Unhelpful descriptos are removed: (i) those with a variance close to zero (near-zero variance), and (ii) those highly correlated with one another:
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -221,7 +220,7 @@ Split the dataset into a training (80\%) and a holdout (20\%) set that will be u
 {\ttfamily\noindent\itshape\color{messagecolor}{\#\# 121 features removed with correlation above cutoff}}\end{kframe}
 \end{knitrout}
 
-Convert the descriptors to z-scores by centering them to have a mean of zero and scaling them to have unit variance:
+The descriptors are converted to z-scores by centering them to have a mean of zero and scaling them to have unit variance:
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -230,32 +229,32 @@ Convert the descriptors to z-scores by centering them to have a mean of zero and
 \end{kframe}
 \end{knitrout}
 
-Given that cross-validation (CV) will be used to optimize the hyperparameters of the models, we divide the training set in 5 folds:
+Five fold cross-validation (CV) is be used to optimize the hyperparameters of the models:
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{dataset} \hlkwb{<-} \hlkwd{GetCVTrainControl}\hlstd{(dataset)}
+\hlstd{dataset} \hlkwb{<-} \hlkwd{GetCVTrainControl}\hlstd{(dataset,} \hlkwc{folds} \hlstd{=} \hlnum{5}\hlstd{)}
 \hlkwd{saveRDS}\hlstd{(dataset,} \hlkwc{file} \hlstd{=} \hlstr{"dataset_logS_preprocessed.rds"}\hlstd{)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
 
-All models are trained with the same CV options, {\it i.e.} the arguments of the function 'GetCVTrainControl' to allow ensemble modeling (see below).
-It is important to mention that the functions presented in the previous code blocks depend on functions from the {\it caret} package, namely: 
+All models are trained with the same CV options, {\it i.e.} the arguments of the function \texttt{GetCVTrainControl}, to allow ensemble modeling as ensemble modelling requires the same data fold split over all methods used (see below).
+It is important to mention that the functions presented in the previous code blocks depend on functions from the \texttt{caret} package, namely: 
 \begin{itemize}
 \item RemoveNearZeroVarianceFeatures : nearZeroVar
 \item RemoveHighlyCorrelatedFeatures : findCorrelation
 \item PreProcess : preProcess
 \item GetCVTrainControl : trainControl
 \end{itemize}
-Experienced users might want to control more arguments of the underlying {\it caret} functions.
-This is certainly possible as the arguments given to the {\it camb} functions will be subsequently given to the {\it caret} counterparts.
-The default values of these function however permit the less experienced user to fo throught the statistical preprocessing
-steps with ease, though guaranteeing that the choice of the argument values is reasonable.
+Experienced users might want to control more arguments of the underlying \texttt{caret} functions.
+This is certainly possible as the arguments given to the \texttt{camb} functions will be subsequently given to the \texttt{caret} counterparts.
+The default values of these function permit the less experienced user to quickly handle the statistical preprocessing
+steps with ease, making a reasonable default choice for the argument values.
 
 \section{Model Training}
 
-In the following section we will present the different steps required to train a QSPR model with {\it camb}. It should be noted that the above steps can be run locally on a low powered computer such as a laptop and the preprocessed dataset saved to disk. This can then be copied to a high powered machine with multiple cores for model training and the resulting models saved back to the local machine. Pro tip: Dropbox can be used to sync this proceedure so that manual transfer is not required.
+In the following section we present the different steps required to train a QSPR model with \texttt{camb}. It should be noted that the above steps can be run locally on a low powered computer such as a laptop and the preprocessed dataset saved to disk. This dataset can then be copied to a high powered machine or a farm with multiple cores for model training and the resulting models saved back to the local machine. Pro tip: Dropbox can be used to sync this proceedure so that manual transfer is not required.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -268,8 +267,8 @@ In the following section we will present the different steps required to train a
 \end{knitrout}
 
 \subsection{Support Vector Machines (SVM)}
-Firstly, a SVM will be trained\cite{svmreview}.
-We define an exponential grid (base 2) to optimize the hyperparameters. The \texttt{train} function from the \texttt{caret} package is used directly for model training.
+Firstly, a SVM using a radial basis function is trained\cite{svmreview}.
+We then define an exponential grid (base 2) to optimize over the hyperparameters. The \texttt{train} function from the \texttt{caret} package is used directly for model training.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -315,7 +314,7 @@ We proceed similarly in the case of a gradient boosting machine (GBM) model\cite
 \end{kframe}
 \end{knitrout}
 
-Determine if your hyper-parameter search needs to be altered. In the following we focus on the RF model, though the same steps can be applied to the GBM and SVM models. If your hyper-parameters lead you to what looks like a global minimum then you can stop scanning the space of hyper-parameters, otherwise you need to adjust the grid and retrain your model.
+For each model we determine if our hyper-parameter search needs to be altered. In the following we focus on the RF model, though the same steps can be applied to the GBM and SVM models. If your hyper-parameters lead you to what looks like a global minimum then you can stop scanning the space of hyper-parameters, otherwise you need to adjust the grid and retrain your model.
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -337,25 +336,167 @@ Determine if your hyper-parameter search needs to be altered. In the following w
 
 \section{Model Evaluation}
 
-Once the models are trained, the cross validated metrics can be calculated:
-We assume that the metric used for the choice of the best combination of hyperparameters is 'RMSE',
-which is normally considered as the aim of bioactivity modeling, {\it i.e.} how far (on average) are our 
-predictions from the real the bioactivity values?.
+Once the models are trained, the cross validated metrics for the optimised hyper-parameters become visible:
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlkwd{print}\hlstd{(}\hlkwd{RMSE_CV}\hlstd{(model,} \hlkwc{digits} \hlstd{=} \hlnum{3}\hlstd{))}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: could not find function "{}RMSE\_CV"{}}}\begin{alltt}
+\begin{verbatim}
+## [1] 0.624
+\end{verbatim}
+\begin{alltt}
 \hlkwd{print}\hlstd{(}\hlkwd{Rsquared_CV}\hlstd{(model,} \hlkwc{digits} \hlstd{=} \hlnum{3}\hlstd{))}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.8895
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+On the basis of the soundness of the obtained models, assessed through the value of the cross-validated metrics, 
+we proceed to predict the values for the external (hold-out) set:
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{holdout.predictions} \hlkwb{<-} \hlkwd{as.vector}\hlstd{(}\hlkwd{predict}\hlstd{(model}\hlopt{$}\hlstd{finalModel,}
+    \hlkwc{newdata} \hlstd{= dataset}\hlopt{$}\hlstd{x.holdout))}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+To visualize the correlation between predicted and observed values, we use the \texttt{CorrelationPlot} function:
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{CorrelationPlot}\hlstd{(}\hlkwc{pred} \hlstd{= holdout.predictions,} \hlkwc{obs} \hlstd{= dataset}\hlopt{$}\hlstd{y.holdout,}
+    \hlkwc{PointSize} \hlstd{=} \hlnum{3}\hlstd{,} \hlkwc{ColMargin} \hlstd{=} \hlstr{"blue"}\hlstd{,} \hlkwc{TitleSize} \hlstd{=} \hlnum{26}\hlstd{,}
+    \hlkwc{XAxisSize} \hlstd{=} \hlnum{20}\hlstd{,} \hlkwc{YAxisSize} \hlstd{=} \hlnum{20}\hlstd{,} \hlkwc{TitleAxesSize} \hlstd{=} \hlnum{24}\hlstd{,}
+    \hlkwc{margin} \hlstd{=} \hlnum{2}\hlstd{,} \hlkwc{PointColor} \hlstd{=} \hlstr{"black"}\hlstd{,} \hlkwc{PointShape} \hlstd{=} \hlnum{16}\hlstd{,}
+    \hlkwc{MarginWidth} \hlstd{=} \hlnum{1}\hlstd{,} \hlkwc{AngleLab} \hlstd{=} \hlnum{0}\hlstd{,} \hlkwc{xlab} \hlstd{=} \hlstr{"Observed"}\hlstd{,}
+    \hlkwc{ylab} \hlstd{=} \hlstr{"Predicted"}\hlstd{)}
 \end{alltt}
 
 
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: could not find function "{}Rsquared\_CV"{}}}\end{kframe}
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'holdout.predictions' not found}}\end{kframe}
 \end{knitrout}
+
+
+\section{Ensemble Modeling}
+In the following section, two ensemble modeling techniques will be applied, namely greedy optimization and model stacking.
+Further information can be found in ref \cite{caretEnsemble} and \cite{caruana}.
+
+We insert all the trained models into a list. Output the cross-validation RMSE of the trained models. 
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{all.models} \hlkwb{<-} \hlkwd{list}\hlstd{()}
+\hlstd{all.models[[}\hlkwd{length}\hlstd{(all.models)} \hlopt{+} \hlnum{1}\hlstd{]]} \hlkwb{<-} \hlkwd{readRDS}\hlstd{(}\hlstr{"gbm.rds"}\hlstd{)}
+\hlstd{all.models[[}\hlkwd{length}\hlstd{(all.models)} \hlopt{+} \hlnum{1}\hlstd{]]} \hlkwb{<-} \hlkwd{readRDS}\hlstd{(}\hlstr{"svmRadial.rds"}\hlstd{)}
+\hlstd{all.models[[}\hlkwd{length}\hlstd{(all.models)} \hlopt{+} \hlnum{1}\hlstd{]]} \hlkwb{<-} \hlkwd{readRDS}\hlstd{(}\hlstr{"rf.rds"}\hlstd{)}
+
+\hlcom{# sort the models from lowest to highest RMSE}
+\hlkwd{names}\hlstd{(all.models)} \hlkwb{<-} \hlkwd{sapply}\hlstd{(all.models,} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{) x}\hlopt{$}\hlstd{method)}
+\hlkwd{sort}\hlstd{(}\hlkwd{sapply}\hlstd{(all.models,} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)} \hlkwd{min}\hlstd{(}\hlkwd{as.vector}\hlstd{(}\hlkwd{na.omit}\hlstd{(x}\hlopt{$}\hlstd{results}\hlopt{$}\hlstd{RMSE)))))}
+\end{alltt}
+\begin{verbatim}
+##       gbm        rf svmRadial 
+##    0.5903    0.6239    0.6320
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+    
+A greedy ensemble is then trained using 1000 iterations. The Greedy ensemble picks a liner combination of model output that minimises the RMSE.
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{greedy} \hlkwb{<-} \hlkwd{caretEnsemble}\hlstd{(all.models,} \hlkwc{iter} \hlstd{=} \hlnum{1000L}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Loading required package: pbapply}}\begin{alltt}
+\hlkwd{sort}\hlstd{(greedy}\hlopt{$}\hlstd{weights,} \hlkwc{decreasing} \hlstd{=} \hlnum{TRUE}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+##       gbm svmRadial        rf 
+##     0.580     0.336     0.084
+\end{verbatim}
+\begin{alltt}
+\hlkwd{saveRDS}\hlstd{(greedy,} \hlkwc{file} \hlstd{=} \hlstr{"greedy.rds"}\hlstd{)}
+\hlstd{greedy}\hlopt{$}\hlstd{error}
+\end{alltt}
+\begin{verbatim}
+##   RMSE 
+## 0.5742
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+ 
+We create a linear stack ensemble that uses the trained model inputs as input into the stack.
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{linear} \hlkwb{<-} \hlkwd{caretStack}\hlstd{(all.models,} \hlkwc{method} \hlstd{=} \hlstr{"glm"}\hlstd{,} \hlkwc{trControl} \hlstd{=} \hlkwd{trainControl}\hlstd{(}\hlkwc{method} \hlstd{=} \hlstr{"cv"}\hlstd{))}
+\hlkwd{saveRDS}\hlstd{(linear,} \hlkwc{file} \hlstd{=} \hlstr{"linear.rds"}\hlstd{)}
+\hlstd{linear}\hlopt{$}\hlstd{error}
+\end{alltt}
+\begin{verbatim}
+##   parameter  RMSE Rsquared  RMSESD RsquaredSD
+## 1      none 0.574   0.9035 0.04047    0.01881
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+We also create a non-linear stack ensemble that uses the trained model inputs as input into the stack. In this case we use a Random Forest as the stacking model.
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{tune.grid} \hlkwb{<-} \hlkwd{expand.grid}\hlstd{(}\hlkwc{.mtry} \hlstd{=} \hlkwd{seq}\hlstd{(}\hlnum{1}\hlstd{,} \hlkwd{length}\hlstd{(all.models),}
+    \hlnum{1}\hlstd{))}
+\hlstd{nonlinear} \hlkwb{<-} \hlkwd{caretStack}\hlstd{(all.models,} \hlkwc{method} \hlstd{=} \hlstr{"rf"}\hlstd{,}
+    \hlkwc{trControl} \hlstd{=} \hlkwd{trainControl}\hlstd{(}\hlkwc{method} \hlstd{=} \hlstr{"cv"}\hlstd{),} \hlkwc{tune.grid} \hlstd{= tune.grid)}
+\end{alltt}
+
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Loading required package: randomForest\\\#\# randomForest 4.6-7\\\#\# Type rfNews() to see new features/changes/bug fixes.}}\begin{verbatim}
+## note: only 2 unique complexity parameters in default grid. Truncating the grid to 2 .
+\end{verbatim}
+\begin{alltt}
+\hlkwd{saveRDS}\hlstd{(nonlinear,} \hlkwc{file} \hlstd{=} \hlstr{"nonlinear.rds"}\hlstd{)}
+\hlstd{nonlinear}\hlopt{$}\hlstd{error}
+\end{alltt}
+\begin{verbatim}
+##   mtry   RMSE Rsquared  RMSESD RsquaredSD
+## 1    2 0.6118   0.8919 0.07471    0.02498
+## 2    3 0.6184   0.8896 0.07587    0.02516
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+The greedy and the linear stack have a cross validated RMSE that is lower than any of the individual models.
+
+We then test to see if these ensemble models outperform the individual models on the holdout set
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{preds} \hlkwb{<-} \hlkwd{data.frame}\hlstd{(}\hlkwd{sapply}\hlstd{(all.models, predict,} \hlkwc{newdata} \hlstd{= dataset}\hlopt{$}\hlstd{x.holdout))}
+\hlstd{preds}\hlopt{$}\hlstd{ENS_greedy} \hlkwb{<-} \hlkwd{predict}\hlstd{(greedy,} \hlkwc{newdata} \hlstd{= dataset}\hlopt{$}\hlstd{x.holdout)}
+\hlstd{preds}\hlopt{$}\hlstd{ENS_linear} \hlkwb{<-} \hlkwd{predict}\hlstd{(linear,} \hlkwc{newdata} \hlstd{= dataset}\hlopt{$}\hlstd{x.holdout)}
+\hlstd{preds}\hlopt{$}\hlstd{ENS_nonlinear} \hlkwb{<-} \hlkwd{predict}\hlstd{(nonlinear,} \hlkwc{newdata} \hlstd{= dataset}\hlopt{$}\hlstd{x.holdout)}
+\hlkwd{sort}\hlstd{(}\hlkwd{sqrt}\hlstd{(}\hlkwd{colMeans}\hlstd{((preds} \hlopt{-} \hlstd{dataset}\hlopt{$}\hlstd{y.holdout)}\hlopt{^}\hlnum{2}\hlstd{)))}
+\end{alltt}
+\begin{verbatim}
+##    ENS_linear    ENS_greedy           gbm ENS_nonlinear 
+##        0.5109        0.5126        0.5156        0.5532 
+##            rf     svmRadial 
+##        0.5938        0.5984
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+TBD - predictions on new molecules.
 
 \section{Bibliography}
 \printbibliography

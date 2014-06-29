@@ -16,6 +16,42 @@
   {}
 \endgroup
 
+\entry{camb}{article}{}
+  \name{author}{5}{}{%
+    {{}%
+     {Murrell}{M.}%
+     {Daniel~S}{D.~S.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Cortes-Ciriano}{C.-C.}%
+     {Isidro}{I.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Westen}{W.}%
+     {Gerard~JP}{G.~J.}%
+     {van}{v.}%
+     {}{}}%
+    {{}%
+     {Malliavin}{M.}%
+     {Th\'er\`ese}{T.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Bender}{B.}%
+     {Andreas}{A.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{MDSCCIWGJvMTBA1}
+  \strng{fullhash}{MDSCCIWGJvMTBA1}
+  \field{title}{{C}hemistry {A}ware {M}odel {B}uilder (camb): an {R} Package
+  for Predictive Bioactivity Modeling}
+  \field{journaltitle}{http://github.com/cambDI/camb}
+  \field{year}{2014}
+\endentry
+
 \entry{Indigo}{article}{}
   \name{author}{1}{}{%
     {{}%
@@ -37,6 +73,151 @@
     {Cambridge MA, USA}%
   }
   \field{year}{2013}
+\endentry
+
+\entry{padel}{article}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Yap}{Y.}%
+     {Chun~Wei}{C.~W.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{YCW1}
+  \strng{fullhash}{YCW1}
+  \field{pages}{1466\bibrangedash 1474}
+  \field{title}{{PaDEL-descriptor: an open source software to calculate
+  molecular descriptors and fingerprints.}}
+  \verb{url}
+  \verb http://www.ncbi.nlm.nih.gov/pubmed/21425294
+  \endverb
+  \field{volume}{32}
+  \field{journaltitle}{J. Comput. Chem.}
+  \field{year}{2011}
+\endentry
+
+\entry{svmreview}{article}{}
+  \name{author}{5}{}{%
+    {{}%
+     {Ben-Hur}{B.-H.}%
+     {Asa}{A.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Ong}{O.}%
+     {Cheng~Soon}{C.~S.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Sonnenburg}{S.}%
+     {Sören}{S.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Schölkopf}{S.}%
+     {Bernhard}{B.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Rätsch}{R.}%
+     {Gunnar}{G.}%
+     {}{}%
+     {}{}}%
+  }
+  \name{editor}{1}{}{%
+    {{}%
+     {Lewitter}{L.}%
+     {Fran}{F.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{BHAOCSSSSBRG1}
+  \strng{fullhash}{BHAOCSSSSBRG1}
+  \field{number}{10}
+  \field{pages}{e1000173}
+  \field{title}{{Support Vector Machines and Kernels for Computational
+  Biology}}
+  \field{volume}{4}
+  \field{journaltitle}{{PLoS} Computational Biology}
+  \field{month}{10}
+  \field{year}{2008}
+\endentry
+
+\entry{rf}{article}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Breiman}{B.}%
+     {Leo}{L.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{BL1}
+  \strng{fullhash}{BL1}
+  \field{number}{1}
+  \field{pages}{5\bibrangedash 32}
+  \field{title}{Random Forests}
+  \field{volume}{45}
+  \field{journaltitle}{Machine Learning}
+  \field{month}{10}
+  \field{year}{2001}
+\endentry
+
+\entry{gbm}{article}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Friedman}{F.}%
+     {Jerome~H.}{J.~H.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{FJH1}
+  \strng{fullhash}{FJH1}
+  \field{note}{Mathematical Reviews number ({MathSciNet)} {MR1873328},
+  Zentralblatt {MATH} identifier01829052}
+  \field{number}{5}
+  \field{pages}{1189\bibrangedash 1232}
+  \field{title}{Greedy function approximation: A gradient boosting machine.}
+  \field{volume}{29}
+  \field{journaltitle}{The Annals of Statistics}
+\endentry
+
+\entry{caruana}{inproceedings}{}
+  \name{author}{4}{}{%
+    {{}%
+     {Caruana}{C.}%
+     {Rich}{R.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Niculescu-Mizil}{N.-M.}%
+     {Alexandru}{A.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Crew}{C.}%
+     {Geoff}{G.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Ksikes}{K.}%
+     {Alex}{A.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{publisher}{1}{%
+    {ACM}%
+  }
+  \strng{namehash}{CRNMACGKA1}
+  \strng{fullhash}{CRNMACGKA1}
+  \field{booktitle}{Proceedings of the Twenty-first International Conference on
+  Machine Learning}
+  \field{pages}{18}
+  \field{series}{ICML '04}
+  \field{title}{Ensemble Selection from Libraries of Models}
+  \list{location}{1}{%
+    {New York, NY, USA}%
+  }
+  \field{year}{2004}
 \endentry
 
 \lossort
