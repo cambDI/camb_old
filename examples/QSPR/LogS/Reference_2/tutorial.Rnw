@@ -23,6 +23,25 @@
 \affil[2]{Unite de Bioinformatique Structurale, Institut Pasteur and CNRS UMR 3825, Structural Biology and Chemistry Department, 25-28, rue Dr. Roux, 75 724 Paris, France.}
 \affil[3]{Equal contributors}
 \setlength{\parindent}{0pt}
+
+
+\author[1,5]{\rm Daniel S. Murrell\thanks{dsmurrell@gmail.com}}
+\author[2,5]{\rm Isidro Cortes-Ciriano\thanks{isidrolauscher@gmail.com}} 
+\author[3]{\rm Gerard J. P. van Westen}
+\author[4]{\rm Ian P. Stott}
+\author[1]{\rm Andreas Bender}
+\author[2]{\rm Therese E. Malliavin}
+\author[1]{\rm Robert C. Glen}
+\affil[1]{Unilever Centre for Molecular Science Informatics, Department of Chemistry, University of Cambridge, Cambridge, United Kingdom.}
+\affil[2]{Unite de Bioinformatique Structurale, Institut Pasteur and CNRS UMR 3825, Structural Biology and Chemistry Department, 25-28, rue Dr. Roux, 75 724 Paris, France.}
+\affil[3]{ChEMBL Group, European Molecular Biology Laboratory European Bioinformatics Institute, Wellcome Trust Genome Campus, CB10 1SD, Hinxton, Cambridge, UK.}
+\affil[4]{Unilever Research, Bebington, UK.}
+\affil[5]{Equal contributors}
+\setlength{\parindent}{0pt}
+
+
+
+
 \setlength{\parskip}{\baselineskip}%
 \begin{document}
 
@@ -48,7 +67,7 @@ setwd('~/Dropbox/projects/camb/examples/QSPR/LogS/Reference_2')
 @
 <<echo=TRUE,results='hide',warning=FALSE,message=FALSE,eval=FALSE>>=
 library(camb)
-setwd('path_to_working_directory')
+# setwd('path_to_working_directory')
 @
 
 \section{Compounds}
@@ -64,17 +83,17 @@ Inorgnaic molecules (those containing atoms not in \{H, C, N, O, P, S, F, Cl, Br
 The upper and lower limits for the molecular mass can be set with the arguments \texttt{min.mass.limit} and \texttt{max.mass.limit}.
 The name of the file containing the chemical structures is provided by the argument \texttt{structures.file}.
 <<echo=TRUE,results='hide',warning=FALSE,message=FALSE,eval=FALSE>>=
-StandardiseMolecules(structures.file="solubility_2007_ref2.sdf", 
-                     standardised.file="standardised.sdf", 
-                     removed.file="removed.sdf",
-                     properties.file = "properties.csv",
-                     remove.inorganic=TRUE, 
-                     fluorine.limit=3, 
-                     chlorine.limit=3, 
-                     bromine.limit=3, 
-                     iodine.limit=3, 
-                     min.mass.limit=20, 
-                     max.mass.limit=900)
+standardisation.options <- StandardiseMolecules(structures.file="solubility_2007_ref2.sdf", 
+                                                standardised.file="standardised.sdf", 
+                                                removed.file="removed.sdf",
+                                                properties.file = "properties.csv",
+                                                remove.inorganic=TRUE, 
+                                                fluorine.limit=3, 
+                                                chlorine.limit=3, 
+                                                bromine.limit=3, 
+                                                iodine.limit=3, 
+                                                min.mass.limit=20, 
+                                                max.mass.limit=900)
 @
 Molecules that Indigo manages to parse and that pass the filters are written to the file indicated by the \texttt{standardised.file} argument. Molecules that were discarded before training are written to the file indicated by the \texttt{removed.file} argument.
 
@@ -93,7 +112,8 @@ p
 \subsection{PaDEL Descriptors}
 One and two-dimensional descriptors can be calculated with the function \texttt{GeneratePadelDescriptors} provided by the PaDEL-Descriptor\cite{padel} Java library built into the \texttt{camb} package:
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
-descriptors <- GeneratePadelDescriptors(standardised.file = "standardised.sdf", types=c("2D"), threads = 1)
+descriptor.types <- c("2D") 
+descriptors <- GeneratePadelDescriptors(standardised.file = "standardised.sdf", types=descriptor.types, threads = 1)
 descriptors <- RemoveStandardisedPrefix(descriptors)
 saveRDS(descriptors, file="descriptors.rds")
 @
@@ -115,7 +135,7 @@ Instead of removing that descriptor for all molecules, the missing descriptor va
 "Inf" descriptor values are first converted to "NA".
 For the imputation of missing descriptor values, the R package  \texttt{impute} is required.
 Depending on the R version, it can be accessed from either \texttt{CRAN} or \texttt{Bioconductor}.
-<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=TRUE>>=
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,echo=FALSE,eval=TRUE>>=
 x.finite <- ReplaceInfinitesWithNA(x)
 x.imputed <- ImputeFeatures(x.finite)
 @
@@ -166,6 +186,7 @@ Firstly, a SVM using a radial basis function is trained\cite{svmreview}.
 We then define an exponential grid (base 2) to optimize over the hyperparameters. The \texttt{train} function from the \texttt{caret} package is used directly for model training.
 
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
+library(kernlab)
 method <- "svmRadial"
 tune.grid <- expand.grid(.sigma = expGrid(-8, 4, 2, 2), .C = c(0.0001, 0.001, 0.01, 0.1, 1, 10, 100))
 model <- train(dataset$x.train, dataset$y.train, method, tuneGrid=tune.grid, trControl=dataset$trControl)
@@ -176,6 +197,7 @@ saveRDS(model, file=paste(method,".rds",sep=""))
 We proceed similarly in the case of a random forest (RF) model\cite{rf}.
 
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
+library(randomForest)
 method <- "rf"
 tune.grid <- expand.grid(.mtry = seq(5,100,5))
 model <- train(dataset$x.train, dataset$y.train, method, tuneGrid=tune.grid, trControl=dataset$trControl)
@@ -186,6 +208,7 @@ saveRDS(model, file=paste(method,".rds",sep=""))
 We proceed similarly in the case of a gradient boosting machine (GBM) model\cite{gbm}.
 
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
+library(gbm)
 method <- "gbm"
 tune.grid <- expand.grid(.n.trees=c(500,1000), .interaction.depth=c(25), .shrinkage = c(0.01, 0.02, 0.04, 0.08))
 model <- train(dataset$x.train, dataset$y.train, method, tuneGrid=tune.grid, trControl=dataset$trControl)
@@ -220,10 +243,10 @@ CorrelationPlot(pred=holdout.predictions,obs=dataset$y.holdout,PointSize=3,ColMa
 
 
 \section{Ensemble Modeling}
-In the following section, two ensemble modeling techniques will be applied, namely greedy optimization and model stacking.
+In the following section, two ensemble modeling techniques are applied, namely greedy optimization and model stacking.
 Further information can be found in ref \cite{caretEnsemble} and \cite{caruana}.
 
-We insert all the trained models into a list. Output the cross-validation RMSE of the trained models. 
+We insert all the trained models into a list. The \texttt{sort} function shows the cross-validation RMSEs of the trained models in accending order. 
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE>>=
 all.models <- list()
 all.models[[length(all.models)+1]] <- readRDS("gbm.rds")
@@ -235,23 +258,23 @@ names(all.models) <- sapply(all.models, function(x) x$method)
 sort(sapply(all.models, function(x) min(as.vector(na.omit(x$results$RMSE)))))
 @
     
-A greedy ensemble is then trained using 1000 iterations. The Greedy ensemble picks a liner combination of model output that minimises the RMSE.
+A greedy ensemble is then trained using 1000 iterations. The Greedy ensemble picks a liner combination of model outputs that is a local minimum in the RMSE landscape. The weights for each model can be seen in the \texttt{greedy$weights} variable. The RMSE of the greedy model can be found in the \texttt{greedy$error} variable.
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE>>=
-greedy <- caretEnsemble(all.models, iter=1000L)
+greedy <- caretEnsemble(all.models, iter=1000)
 sort(greedy$weights, decreasing=TRUE)
 saveRDS(greedy, file="greedy.rds")
 greedy$error
 @
  
-We create a linear stack ensemble that uses the trained model inputs as input into the stack.
-<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE>>=
+Similarly, we create a linear stack ensemble that uses the trained model inputs as input into the stack.
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,warning=FALSE>>=
 linear <- caretStack(all.models, method='glm', trControl=trainControl(method='cv'))
 saveRDS(linear, file="linear.rds")
 linear$error
 @
 
 We also create a non-linear stack ensemble that uses the trained model inputs as input into the stack. In this case we use a Random Forest as the stacking model.
-<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE>>=
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,warning=FALSE>>=
 tune.grid <- expand.grid(.mtry = seq(1,length(all.models),1))
 nonlinear <- caretStack(all.models, method='rf', trControl=trainControl(method='cv'), tune.grid=tune.grid)
 saveRDS(nonlinear, file="nonlinear.rds")
@@ -262,7 +285,7 @@ The greedy and the linear stack have a cross validated RMSE that is lower than a
 
 We then test to see if these ensemble models outperform the individual models on the holdout set
 
-<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE>>=
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,warning=FALSE>>=
 preds <- data.frame(sapply(all.models, predict, newdata=dataset$x.holdout))
 preds$ENS_greedy <- predict(greedy, newdata=dataset$x.holdout)
 preds$ENS_linear <- predict(linear, newdata=dataset$x.holdout)
@@ -270,7 +293,50 @@ preds$ENS_nonlinear <- predict(nonlinear, newdata=dataset$x.holdout)
 sort(sqrt(colMeans((preds - dataset$y.holdout) ^ 2)))
 @
 
-TBD - predictions on new molecules.
+One of the main attractions of this package is that it makes standardising and making predictions on new molecules a simple task.
+
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,warning=FALSE>>=
+
+test_structures_file <- system.file("test_structures", "structures_10.sdf", package = "camb")
+
+PredictExternal <- function(structures.file, standardisation.options, descriptor.types, dataset, model) {
+  model = model # this is done to make sure model gets evaluated successfully first
+  
+  standardised.file <- tempfile("standardised", fileext=".sdf")
+  removed.file <- tempfile("removed", fileext=".sdf")
+  properties.file <- tempfile("properties", fileext=".csv")
+  
+  StandardiseMolecules(structures.file = structures.file, 
+                     standardised.file = standardised.file, 
+                     removed.file = removed.file,
+                     properties.file = properties.file,
+                     standardisation.options)
+
+  descriptors <- GeneratePadelDescriptors(standardised.file = standardised.file, types=c("2D"), threads = 1)
+  descriptors <- RemoveStandardisedPrefix(descriptors)
+
+  ids <- descriptors[,1]
+  x <- descriptors[,2:ncol(descriptors)]
+
+  x <- x[, names(dataset$x.train)]
+  x.finite <- ReplaceInfinitesWithNA(x)
+  x.imputed <- ImputeFeatures(x.finite)
+
+  x.preprocessed <- predict(dataset$transformation, x.imputed)
+  predictions <- predict(model, newdata=x.preprocessed)
+  return(data.frame(id=ids, prediction=predictions))
+}
+
+library(camb)
+library(randomForest)
+hmm <- PredictExternal(test_structures_file, standardisation.options, descriptor.types, dataset, readRDS("rf.rds"))
+hmm2 <- PredictExternal(test_structures_file, standardisation.options, NULL, dataset, greedy)
+hmm3 <- PredictExternal(test_structures_file, standardisation.options, NULL, dataset, readRDS("svmRadial.rds"))
+
+structures.file <- test_structures_file
+descriptor.types <- NULL
+model <- readRDS("rf.rds")
+@
 
 \section{Bibliography}
 \printbibliography

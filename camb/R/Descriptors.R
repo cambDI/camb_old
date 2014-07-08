@@ -26,7 +26,7 @@
 #' @param number.processed If specified, only the first \code{number.processed} molecules will be processed by this function. 
 #' This is used mainly for testing purposed on files that contain a lot of molecules.
 #' @export
-#' @return Does not return anything.
+#' @return The options used in standardisation
 #' @references \url{http://www.ggasoftware.com/opensource/indigo}
 #' @references \url{http://www.iupac.org/home/publications/e-resources/inchi.html}
 #' @examples
@@ -95,6 +95,8 @@ StandardiseMolecules <- function(structures.file,
   else {
     print("Unrecognised file type")
   }
+  
+  return(c(remove.inorganic, fluorine.limit, chlorine.limit, bromine.limit, iodine.limit, min.mass.limit, max.mass.limit))
 }
 
 #' @export
