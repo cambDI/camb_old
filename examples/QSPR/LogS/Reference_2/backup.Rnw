@@ -1,0 +1,34 @@
+\documentclass{article}
+
+\begin{document}
+
+We also create a non-linear stack ensemble that uses the trained model inputs as input into the stack. In this case we use a Random Forest as the stacking model.
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,warning=FALSE>>=
+tune.grid <- expand.grid(.mtry = seq(1,length(all.models),1))
+nonlinear <- caretStack(all.models, method='rf', trControl=trainControl(method='cv'), tune.grid=tune.grid)
+saveRDS(nonlinear, file="nonlinear.rds")
+nonlinear$error
+@
+
+The greedy and the linear stack have a cross validated RMSE that is lower than any of the individual models.
+
+We then test to see if these ensemble models outperform the individual models on the holdout set
+
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,warning=FALSE>>=
+preds <- data.frame(sapply(all.models, predict, newdata=dataset$x.holdout))
+preds$ENS_greedy <- predict(greedy, newdata=dataset$x.holdout)
+preds$ENS_linear <- predict(linear, newdata=dataset$x.holdout)
+preds$ENS_nonlinear <- predict(nonlinear, newdata=dataset$x.holdout)
+sort(sqrt(colMeans((preds - dataset$y.holdout) ^ 2)))
+@
+
+One of the main attractions of this package is that it makes standardising and making predictions on new molecules a simple task. It is essential to ensure that the same standardisation option and descriptor types are used.
+
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,warning=FALSE>>=
+test_structures_file <- system.file("test_structures", "structures_10.sdf", package = "camb")
+predictions <- PredictExternal(test_structures_file, standardisation.options, descriptor.types, dataset, readRDS("rf.rds"))
+print(predictions)
+@
+
+
+\end{document}

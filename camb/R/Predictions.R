@@ -16,7 +16,8 @@
 #' @return A data.frame containing the original ids of the molecules as well as their predicted values.
 #' @examples
 #' test_structures_file <- system.file("test_structures", "structures_10.sdf", package = "camb")
-#' predictions <- PredictExternal(test_structures_file, standardisation.options, descriptor.types, dataset, readRDS("rf.rds"))
+#' # the following requires a trained model
+#' # predictions <- PredictExternal(test_structures_file, standardisation.options, descriptor.types, dataset, readRDS("rf.rds"))
 #' @author Daniel Murrell <dsmurrell@@gmail.com> and Isidro Cortes <isidrolauscher@@gmail.com>
 PredictExternal <- function(structures.file, standardisation.options, descriptor.types, dataset, model) {
   model = model # this is done to make sure model gets evaluated successfully first

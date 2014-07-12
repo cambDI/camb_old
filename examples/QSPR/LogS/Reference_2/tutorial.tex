@@ -66,12 +66,20 @@
 {\bf C}hemically {\bf A}ware {\bf M}odel {\bf B}uilder\\
 }
 
-\author[1,3]{\rm Daniel Murrell\thanks{dsmurrell@gmail.com}}
-\author[2,3]{\rm Isidro Cortes-Ciriano\thanks{isidrolauscher@gmail.com}} 
+\author[1,5]{\rm Daniel S. Murrell\thanks{dsmurrell@gmail.com}}
+\author[2,5]{\rm Isidro Cortes-Ciriano\thanks{isidrolauscher@gmail.com}} 
+\author[3]{\rm Gerard J. P. van Westen}
+\author[4]{\rm Ian P. Stott}
+\author[1]{\rm Andreas Bender}
+\author[2]{\rm Therese E. Malliavin}
+\author[1]{\rm Robert C. Glen}
 \affil[1]{Unilever Centre for Molecular Science Informatics, Department of Chemistry, University of Cambridge, Cambridge, United Kingdom.}
 \affil[2]{Unite de Bioinformatique Structurale, Institut Pasteur and CNRS UMR 3825, Structural Biology and Chemistry Department, 25-28, rue Dr. Roux, 75 724 Paris, France.}
-\affil[3]{Equal contributors}
+\affil[3]{ChEMBL Group, European Molecular Biology Laboratory European Bioinformatics Institute, Wellcome Trust Genome Campus, CB10 1SD, Hinxton, Cambridge, UK.}
+\affil[4]{Unilever Research, Bebington, UK.}
+\affil[5]{Equal contributors}
 \setlength{\parindent}{0pt}
+
 \setlength{\parskip}{\baselineskip}%
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
@@ -85,13 +93,13 @@
 
 In the following sections, we demonstrate the utility of the \texttt{camb} \cite{camb} package by presenting a pipeline which generates various aqueous solubility models using 2D molecular descriptors calculated by the PaDEL-Descriptor package as input features. These models are then ensembled to create a single model with a greater predictive accuracy. The trained ensemble is then put to use in making predictions for new molecules.
 
-Firstly, the package needs to be loaded and the working directory set:
+Firstly, the package is loaded and the working directory set:
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlkwd{library}\hlstd{(camb)}
-\hlkwd{setwd}\hlstd{(}\hlstr{'path_to_working_directory'}\hlstd{)}
+\hlcom{# setwd('path_to_working_directory')}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
@@ -99,36 +107,37 @@ Firstly, the package needs to be loaded and the working directory set:
 \section{Compounds}
 
 \subsection{Reading and Preprocessing}
-The compounds are read in and standardised. Internally, the Indigo C API \cite{Indigo}, which is incorporated into the \texttt{camb} package, is use to perform this task.
+The compounds are read in and standardised. Internally, Indigo's C API \cite{Indigo}, incorporated into the \texttt{camb} package, is use to perform this task.
 Molecules are represented with implicit hydrogens, dearomatized, and passed through the InChI format to ensure that tautomers are represented by the same SMILES.
 
-The \texttt{StandardiseMolecules} function enables the representation of molecular structures in a similarly processed form.
-The different arguments of this function allow control over the maximum number of (i) fluorines, (ii) chlorines,
-(iii) bromines, and (iv) iodines the molecules contain in order to be retained for training.
+The \texttt{StandardiseMolecules} function allows representation of the molecular structures in a similarly processed form.
+The arguments of this function allow control over the maximum number of (i) fluorines, (ii) chlorines,
+(iii) bromines, and (iv) iodines the molecules can contain in order to be retained for training.
 Inorgnaic molecules (those containing atoms not in \{H, C, N, O, P, S, F, Cl, Br, I\}) are removed if the argument \texttt{remove.inorganic} is set to \texttt{TRUE}. This is the function's default behaviour.
-The upper and lower limits for the molecular mass can be set with the arguments \texttt{min.mass.limit} and \texttt{max.mass.limit}.
+The upper and lower limits for molecular mass can be set with the arguments \texttt{min.mass.limit} and \texttt{max.mass.limit}.
 The name of the file containing the chemical structures is provided by the argument \texttt{structures.file}.
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{StandardiseMolecules}\hlstd{(}\hlkwc{structures.file}\hlstd{=}\hlstr{"solubility_2007_ref2.sdf"}\hlstd{,}
-                     \hlkwc{standardised.file}\hlstd{=}\hlstr{"standardised.sdf"}\hlstd{,}
-                     \hlkwc{removed.file}\hlstd{=}\hlstr{"removed.sdf"}\hlstd{,}
-                     \hlkwc{properties.file} \hlstd{=} \hlstr{"properties.csv"}\hlstd{,}
-                     \hlkwc{remove.inorganic}\hlstd{=}\hlnum{TRUE}\hlstd{,}
-                     \hlkwc{fluorine.limit}\hlstd{=}\hlnum{3}\hlstd{,}
-                     \hlkwc{chlorine.limit}\hlstd{=}\hlnum{3}\hlstd{,}
-                     \hlkwc{bromine.limit}\hlstd{=}\hlnum{3}\hlstd{,}
-                     \hlkwc{iodine.limit}\hlstd{=}\hlnum{3}\hlstd{,}
-                     \hlkwc{min.mass.limit}\hlstd{=}\hlnum{20}\hlstd{,}
-                     \hlkwc{max.mass.limit}\hlstd{=}\hlnum{900}\hlstd{)}
+\hlstd{std.options} \hlkwb{<-} \hlkwd{StandardiseMolecules}\hlstd{(}\hlkwc{structures.file}\hlstd{=}\hlstr{"solubility_2007_ref2.sdf"}\hlstd{,}
+                                                \hlkwc{standardised.file}\hlstd{=}\hlstr{"standardised.sdf"}\hlstd{,}
+                                                \hlkwc{removed.file}\hlstd{=}\hlstr{"removed.sdf"}\hlstd{,}
+                                                \hlkwc{properties.file} \hlstd{=} \hlstr{"properties.csv"}\hlstd{,}
+                                                \hlkwc{remove.inorganic}\hlstd{=}\hlnum{TRUE}\hlstd{,}
+                                                \hlkwc{fluorine.limit}\hlstd{=}\hlnum{3}\hlstd{,}
+                                                \hlkwc{chlorine.limit}\hlstd{=}\hlnum{3}\hlstd{,}
+                                                \hlkwc{bromine.limit}\hlstd{=}\hlnum{3}\hlstd{,}
+                                                \hlkwc{iodine.limit}\hlstd{=}\hlnum{3}\hlstd{,}
+                                                \hlkwc{min.mass.limit}\hlstd{=}\hlnum{20}\hlstd{,}
+                                                \hlkwc{max.mass.limit}\hlstd{=}\hlnum{900}\hlstd{)}
+\hlkwd{saveRDS}\hlstd{(std.options,} \hlstr{"standardisation_options.rds"}\hlstd{)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
-Molecules that Indigo manages to parse and that pass the filters are written to the file indicated by the \texttt{standardised.file} argument. Molecules that were discarded before training are written to the file indicated by the \texttt{removed.file} argument.
+Molecules that Indigo manages to parse and that pass the filters are written to the file indicated by the \texttt{standardised.file} argument once they have been through the standardisation procedure. Molecules that were discarded are written to the file indicated by the \texttt{removed.file} argument. The molecule name and molecular properties specified in the structure file are written to the file indicated in the argument \texttt{properties.file} which is in CSV format. A column \texttt{kept} is added which indicates which molecules were deleted (0) or kept (1).
 
 \section{Target Visualisation}
-The molecular properties specified in the structure file as well as an index are written to the file indicated in the argument \texttt{properties.file} which is in CSV format. A column \texttt{kept} is added which indicates which molecules were deleted (0) or kept (1). \texttt{camb} provides a function to visualise the density of the target variable.
+\texttt{camb} provides a function to visualise the density of the target variable. Visualising the distribution of the target variable gives can give a measure of how accurate a trained model is. The narrower the distribution the lower the RMSE should for the model to exhibit predictive power.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -154,12 +163,13 @@ The molecular properties specified in the structure file as well as an index are
 \end{knitrout}
 
 \subsection{PaDEL Descriptors}
-One and two-dimensional descriptors can be calculated with the function \texttt{GeneratePadelDescriptors} provided by the PaDEL-Descriptor\cite{padel} Java library built into the \texttt{camb} package:
+One and two-dimensional descriptors can be calculated with the function \texttt{GeneratePadelDescriptors} provided by the PaDEL-Descriptor \cite{padel} Java library built into the \texttt{camb} package:
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
+\hlstd{descriptor.types} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlstr{"2D"}\hlstd{)}
 \hlstd{descriptors} \hlkwb{<-} \hlkwd{GeneratePadelDescriptors}\hlstd{(}\hlkwc{standardised.file} \hlstd{=} \hlstr{"standardised.sdf"}\hlstd{,}
-    \hlkwc{types} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{"2D"}\hlstd{),} \hlkwc{threads} \hlstd{=} \hlnum{1}\hlstd{)}
+    \hlkwc{types} \hlstd{= descriptor.types,} \hlkwc{threads} \hlstd{=} \hlnum{1}\hlstd{)}
 \hlstd{descriptors} \hlkwb{<-} \hlkwd{RemoveStandardisedPrefix}\hlstd{(descriptors)}
 \hlkwd{saveRDS}\hlstd{(descriptors,} \hlkwc{file} \hlstd{=} \hlstr{"descriptors.rds"}\hlstd{)}
 \end{alltt}
@@ -168,7 +178,7 @@ One and two-dimensional descriptors can be calculated with the function \texttt{
 
 
 \section{Statistical Pre-processing}
-The descriptors and the target values are then merged by name into a single \textit{data.frame}. We check that the number of rows of the merged and original \textit{data.frames} are the same. We then split the \textit{data.frame} into \textit{ids}, \textit{x} and \textit{y} where \textit{ids} are the molecule names, \textit{x} are the descriptor values and \textit{y} is the target values.  
+The descriptors and the target values are then merged by name into a single \textit{data.frame}. We check that the number of rows of the merged and original \textit{data.frames} are the same. We then split the \textit{data.frame} into \textit{ids}, \textit{x} and \textit{y} where \textit{ids} are the molecule names, \textit{x} is the block of descriptor values and \textit{y} is the target values.  
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -181,16 +191,12 @@ The descriptors and the target values are then merged by name into a single \tex
 \end{knitrout}
 
 Sometimes, some descriptors are not calculated for all molecules, giving a "NA" or "Inf" as the descriptor value. 
-Instead of removing that descriptor for all molecules, the missing descriptor values can be imputed from the corresponding descriptor values of the rest of molecules.
+Instead of removing that descriptor for all molecules, the missing descriptor values can be imputed from the corresponding descriptor values in the molecules that are closest to the molecule with the missing information.
 "Inf" descriptor values are first converted to "NA".
 For the imputation of missing descriptor values, the R package  \texttt{impute} is required.
 Depending on the R version, it can be accessed from either \texttt{CRAN} or \texttt{Bioconductor}.
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hlstd{x.finite} \hlkwb{<-} \hlkwd{ReplaceInfinitesWithNA}\hlstd{(x)}
-\hlstd{x.imputed} \hlkwb{<-} \hlkwd{ImputeFeatures}\hlstd{(x.finite)}
-\end{alltt}
 
 
 {\ttfamily\noindent\itshape\color{messagecolor}{\#\# Loading required package: impute}}\begin{verbatim}
@@ -201,7 +207,7 @@ Depending on the R version, it can be accessed from either \texttt{CRAN} or \tex
 \end{kframe}
 \end{knitrout}
 
-The dataset is split into a training (80\%) set used for training and a holdout (20\%) set used to assess the predictive ability of the models on molecules drawn from the same distribution as the training set. Unhelpful descriptos are removed: (i) those with a variance close to zero (near-zero variance), and (ii) those highly correlated with one another:
+The dataset is randomly split into a training set (80\%) used for training and a holdout set (20\%) which used to assess the predictive ability of the models on molecules drawn from the same distribution as the training set. Unhelpful descriptos are removed: (i) those with a variance close to zero (near-zero variance), and (ii) those highly correlated with one another:
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -239,7 +245,7 @@ Five fold cross-validation (CV) is be used to optimize the hyperparameters of th
 \end{kframe}
 \end{knitrout}
 
-All models are trained with the same CV options, {\it i.e.} the arguments of the function \texttt{GetCVTrainControl}, to allow ensemble modeling as ensemble modelling requires the same data fold split over all methods used (see below).
+All models are trained with the same CV options, {\it i.e.} the arguments of the function \texttt{GetCVTrainControl}, to allow ensemble modeling as ensemble modelling requires the same data fold split over all methods used.
 It is important to mention that the functions presented in the previous code blocks depend on functions from the \texttt{caret} package, namely: 
 \begin{itemize}
 \item RemoveNearZeroVarianceFeatures : nearZeroVar
@@ -247,8 +253,9 @@ It is important to mention that the functions presented in the previous code blo
 \item PreProcess : preProcess
 \item GetCVTrainControl : trainControl
 \end{itemize}
-Experienced users might want to control more arguments of the underlying \texttt{caret} functions.
-This is certainly possible as the arguments given to the \texttt{camb} functions will be subsequently given to the \texttt{caret} counterparts.
+Experienced users might want to have more control over the underlying \texttt{caret} functions.
+This is certainly possible as the arguments given to the \texttt{camb} functions will be subsequently given to the \texttt{caret} counterparts in the typical \texttt{...} R fashion.
+In fact, experienced users may want to learn from the internals of the functions \texttt{camb} provides and create their own specialised pipeline that fits their own modelling needs. \texttt{camb} is intended to speed up the modelling process and should not limit use of the extremely valuble caret package which \texttt{camb} utilises.
 The default values of these function permit the less experienced user to quickly handle the statistical preprocessing
 steps with ease, making a reasonable default choice for the argument values.
 
@@ -267,12 +274,13 @@ In the following section we present the different steps required to train a QSPR
 \end{knitrout}
 
 \subsection{Support Vector Machines (SVM)}
-Firstly, a SVM using a radial basis function is trained\cite{svmreview}.
-We then define an exponential grid (base 2) to optimize over the hyperparameters. The \texttt{train} function from the \texttt{caret} package is used directly for model training.
+Firstly, a SVM using a radial basis function kernel is trained \cite{svmreview}.
+An base 2 exponential grid is used to optimize over the hyperparameters. The \texttt{train} function from the \texttt{caret} package is used directly for model training.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
+\hlkwd{library}\hlstd{(kernlab)}
 \hlstd{method} \hlkwb{<-} \hlstr{"svmRadial"}
 \hlstd{tune.grid} \hlkwb{<-} \hlkwd{expand.grid}\hlstd{(}\hlkwc{.sigma} \hlstd{=} \hlkwd{expGrid}\hlstd{(}\hlopt{-}\hlnum{8}\hlstd{,} \hlnum{4}\hlstd{,} \hlnum{2}\hlstd{,}
     \hlnum{2}\hlstd{),} \hlkwc{.C} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{1e-04}\hlstd{,} \hlnum{0.001}\hlstd{,} \hlnum{0.01}\hlstd{,} \hlnum{0.1}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{10}\hlstd{,} \hlnum{100}\hlstd{))}
@@ -284,11 +292,12 @@ We then define an exponential grid (base 2) to optimize over the hyperparameters
 \end{knitrout}
 
 \subsection{Random Forest}
-We proceed similarly in the case of a random forest (RF) model\cite{rf}.
+We proceed similarly in the case of a random forest (RF) model \cite{rf}. Here, only the mtry parameter needs optimisation.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
+\hlkwd{library}\hlstd{(randomForest)}
 \hlstd{method} \hlkwb{<-} \hlstr{"rf"}
 \hlstd{tune.grid} \hlkwb{<-} \hlkwd{expand.grid}\hlstd{(}\hlkwc{.mtry} \hlstd{=} \hlkwd{seq}\hlstd{(}\hlnum{5}\hlstd{,} \hlnum{100}\hlstd{,} \hlnum{5}\hlstd{))}
 \hlstd{model} \hlkwb{<-} \hlkwd{train}\hlstd{(dataset}\hlopt{$}\hlstd{x.train, dataset}\hlopt{$}\hlstd{y.train, method,}
@@ -299,11 +308,12 @@ We proceed similarly in the case of a random forest (RF) model\cite{rf}.
 \end{knitrout}
 
 \subsection{Gradient Boosting Machine}
-We proceed similarly in the case of a gradient boosting machine (GBM) model\cite{gbm}.
+A gradient boosting machine (GBM) model \cite{gbm} is trained optimising over the number of trees and the interaction depth.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
+\hlkwd{library}\hlstd{(gbm)}
 \hlstd{method} \hlkwb{<-} \hlstr{"gbm"}
 \hlstd{tune.grid} \hlkwb{<-} \hlkwd{expand.grid}\hlstd{(}\hlkwc{.n.trees} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{500}\hlstd{,} \hlnum{1000}\hlstd{),} \hlkwc{.interaction.depth} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{25}\hlstd{),}
     \hlkwc{.shrinkage} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{0.01}\hlstd{,} \hlnum{0.02}\hlstd{,} \hlnum{0.04}\hlstd{,} \hlnum{0.08}\hlstd{))}
@@ -314,7 +324,7 @@ We proceed similarly in the case of a gradient boosting machine (GBM) model\cite
 \end{kframe}
 \end{knitrout}
 
-For each model we determine if our hyper-parameter search needs to be altered. In the following we focus on the RF model, though the same steps can be applied to the GBM and SVM models. If your hyper-parameters lead you to what looks like a global minimum then you can stop scanning the space of hyper-parameters, otherwise you need to adjust the grid and retrain your model.
+For each model we determine if our hyper-parameter search needs to be altered. In the following we focus on the RF model, though the same steps are also applied to the GBM and SVM models. If the hyper-parameters scanned lead you to what looks like a global minimum then you can stop scanning the space of hyper-parameters, otherwise you need to adjust the grid and retrain your model.
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -328,7 +338,7 @@ For each model we determine if our hyper-parameter search needs to be altered. I
 
 }
 
-\caption[CV RMSE over the hyperparameters]{CV RMSE over the hyperparameters\label{fig:unnamed-chunk-17}}
+\caption[CV RMSE over the mtry hyperparameter for the RF]{CV RMSE over the mtry hyperparameter for the RF\label{fig:unnamed-chunk-17}}
 \end{figure}
 
 
@@ -360,6 +370,7 @@ we proceed to predict the values for the external (hold-out) set:
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
+\hlkwd{library}\hlstd{(randomForest)}
 \hlstd{holdout.predictions} \hlkwb{<-} \hlkwd{as.vector}\hlstd{(}\hlkwd{predict}\hlstd{(model}\hlopt{$}\hlstd{finalModel,}
     \hlkwc{newdata} \hlstd{= dataset}\hlopt{$}\hlstd{x.holdout))}
 \end{alltt}
@@ -382,12 +393,11 @@ To visualize the correlation between predicted and observed values, we use the \
 {\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'holdout.predictions' not found}}\end{kframe}
 \end{knitrout}
 
-
 \section{Ensemble Modeling}
-In the following section, two ensemble modeling techniques will be applied, namely greedy optimization and model stacking.
+In the following section, two ensemble modeling techniques are applied, namely greedy optimization and model stacking.
 Further information can be found in ref \cite{caretEnsemble} and \cite{caruana}.
 
-We insert all the trained models into a list. Output the cross-validation RMSE of the trained models. 
+We insert all the trained models into a list. The \texttt{sort} function shows the cross-validation RMSEs of the trained models in accending order. 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -407,11 +417,11 @@ We insert all the trained models into a list. Output the cross-validation RMSE o
 \end{kframe}
 \end{knitrout}
     
-A greedy ensemble is then trained using 1000 iterations. The Greedy ensemble picks a liner combination of model output that minimises the RMSE.
+A greedy ensemble is then trained using 1000 iterations. The Greedy ensemble picks a liner combination of model outputs that is a local minimum in the RMSE landscape. The weights for each model can be seen in the \texttt{greedy\$weights} variable. The RMSE of the greedy model can be found in the \texttt{greedy\$error} variable.
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{greedy} \hlkwb{<-} \hlkwd{caretEnsemble}\hlstd{(all.models,} \hlkwc{iter} \hlstd{=} \hlnum{1000L}\hlstd{)}
+\hlstd{greedy} \hlkwb{<-} \hlkwd{caretEnsemble}\hlstd{(all.models,} \hlkwc{iter} \hlstd{=} \hlnum{1000}\hlstd{)}
 \end{alltt}
 
 
@@ -433,7 +443,7 @@ A greedy ensemble is then trained using 1000 iterations. The Greedy ensemble pic
 \end{kframe}
 \end{knitrout}
  
-We create a linear stack ensemble that uses the trained model inputs as input into the stack.
+Similarly, we create a linear stack ensemble that uses the trained model inputs as input into the stack.
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -456,21 +466,9 @@ We also create a non-linear stack ensemble that uses the trained model inputs as
     \hlnum{1}\hlstd{))}
 \hlstd{nonlinear} \hlkwb{<-} \hlkwd{caretStack}\hlstd{(all.models,} \hlkwc{method} \hlstd{=} \hlstr{"rf"}\hlstd{,}
     \hlkwc{trControl} \hlstd{=} \hlkwd{trainControl}\hlstd{(}\hlkwc{method} \hlstd{=} \hlstr{"cv"}\hlstd{),} \hlkwc{tune.grid} \hlstd{= tune.grid)}
-\end{alltt}
-
-
-{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Loading required package: randomForest\\\#\# randomForest 4.6-7\\\#\# Type rfNews() to see new features/changes/bug fixes.}}\begin{verbatim}
-## note: only 2 unique complexity parameters in default grid. Truncating the grid to 2 .
-\end{verbatim}
-\begin{alltt}
 \hlkwd{saveRDS}\hlstd{(nonlinear,} \hlkwc{file} \hlstd{=} \hlstr{"nonlinear.rds"}\hlstd{)}
 \hlstd{nonlinear}\hlopt{$}\hlstd{error}
 \end{alltt}
-\begin{verbatim}
-##   mtry   RMSE Rsquared  RMSESD RsquaredSD
-## 1    2 0.6118   0.8919 0.07471    0.02498
-## 2    3 0.6184   0.8896 0.07587    0.02516
-\end{verbatim}
 \end{kframe}
 \end{knitrout}
 
@@ -482,23 +480,57 @@ We then test to see if these ensemble models outperform the individual models on
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{preds} \hlkwb{<-} \hlkwd{data.frame}\hlstd{(}\hlkwd{sapply}\hlstd{(all.models, predict,} \hlkwc{newdata} \hlstd{= dataset}\hlopt{$}\hlstd{x.holdout))}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: no applicable method for 'predict' applied to an object of class "{}randomForest"{}}}\begin{alltt}
 \hlstd{preds}\hlopt{$}\hlstd{ENS_greedy} \hlkwb{<-} \hlkwd{predict}\hlstd{(greedy,} \hlkwc{newdata} \hlstd{= dataset}\hlopt{$}\hlstd{x.holdout)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: no applicable method for 'predict' applied to an object of class "{}randomForest"{}}}\begin{alltt}
 \hlstd{preds}\hlopt{$}\hlstd{ENS_linear} \hlkwb{<-} \hlkwd{predict}\hlstd{(linear,} \hlkwc{newdata} \hlstd{= dataset}\hlopt{$}\hlstd{x.holdout)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: no applicable method for 'predict' applied to an object of class "{}randomForest"{}}}\begin{alltt}
 \hlstd{preds}\hlopt{$}\hlstd{ENS_nonlinear} \hlkwb{<-} \hlkwd{predict}\hlstd{(nonlinear,} \hlkwc{newdata} \hlstd{= dataset}\hlopt{$}\hlstd{x.holdout)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: error in evaluating the argument 'object' in selecting a method for function 'predict': Error: object 'nonlinear' not found}}\begin{alltt}
 \hlkwd{sort}\hlstd{(}\hlkwd{sqrt}\hlstd{(}\hlkwd{colMeans}\hlstd{((preds} \hlopt{-} \hlstd{dataset}\hlopt{$}\hlstd{y.holdout)}\hlopt{^}\hlnum{2}\hlstd{)))}
 \end{alltt}
-\begin{verbatim}
-##    ENS_linear    ENS_greedy           gbm ENS_nonlinear 
-##        0.5109        0.5126        0.5156        0.5532 
-##            rf     svmRadial 
-##        0.5938        0.5984
-\end{verbatim}
-\end{kframe}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: error in evaluating the argument 'x' in selecting a method for function 'sort': Error in is.data.frame(x) : object 'preds' not found\\\#\# Calls: colMeans -> is.data.frame}}\end{kframe}
 \end{knitrout}
 
-TBD - predictions on new molecules.
+One of the main attractions of this package is that it makes standardising and making predictions on new molecules a simple task. It is essential to ensure that the same standardisation option and descriptor types are used.
 
-\section{Bibliography}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{test_structures_file} \hlkwb{<-} \hlkwd{system.file}\hlstd{(}\hlstr{"test_structures"}\hlstd{,}
+    \hlstr{"structures_10.sdf"}\hlstd{,} \hlkwc{package} \hlstd{=} \hlstr{"camb"}\hlstd{)}
+\hlstd{std.options} \hlkwb{<-} \hlkwd{readRDS}\hlstd{(}\hlstr{"standardisation_options.rds"}\hlstd{)}
+\hlstd{predictions} \hlkwb{<-} \hlkwd{PredictExternal}\hlstd{(test_structures_file,}
+    \hlstd{std.options, descriptor.types, dataset,} \hlkwd{readRDS}\hlstd{(}\hlstr{"rf.rds"}\hlstd{))}
+\end{alltt}
+\begin{verbatim}
+## [1] "Standardising Structures: Reading SDF (R)"
+## [1] "Generating Descriptors"
+\end{verbatim}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: no applicable method for 'predict' applied to an object of class "{}randomForest"{}}}\begin{alltt}
+\hlkwd{print}\hlstd{(predictions)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'predictions' not found}}\end{kframe}
+\end{knitrout}
+
 \printbibliography
 
 \end{document}

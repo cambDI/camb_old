@@ -181,6 +181,21 @@
   \field{journaltitle}{The Annals of Statistics}
 \endentry
 
+\entry{caretEnsemble}{article}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Mayer}{M.}%
+     {Zach}{Z.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{MZ1}
+  \strng{fullhash}{MZ1}
+  \field{title}{caret{E}nsemble: Framework for combining caret models into
+  ensembles. [R package version 1.0]}
+  \field{year}{2013}
+\endentry
+
 \entry{caruana}{inproceedings}{}
   \name{author}{4}{}{%
     {{}%

@@ -37,7 +37,7 @@ If left out, this file is not created.}
 This is used mainly for testing purposed on files that contain a lot of molecules.}
 }
 \value{
-Does not return anything.
+The options used in standardisation
 }
 \description{
 Molecules are converted to a standard representation using Indigo's C API. Molecules can be read in either SMILES or SDF format. Hydrogens are made implicit.
