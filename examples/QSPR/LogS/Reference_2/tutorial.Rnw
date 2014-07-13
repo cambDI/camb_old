@@ -68,7 +68,7 @@ The arguments of this function allow control over the maximum number of (i) fluo
 Inorgnaic molecules (those containing atoms not in \{H, C, N, O, P, S, F, Cl, Br, I\}) are removed if the argument \texttt{remove.inorganic} is set to \texttt{TRUE}. This is the function's default behaviour.
 The upper and lower limits for molecular mass can be set with the arguments \texttt{min.mass.limit} and \texttt{max.mass.limit}.
 The name of the file containing the chemical structures is provided by the argument \texttt{structures.file}.
-<<echo=TRUE,results='hide',warning=FALSE,message=FALSE,eval=FALSE>>=
+<<echo=TRUE,results='hide',warning=FALSE,message=FALSE>>=
 std.options <- StandardiseMolecules(structures.file="solubility_2007_ref2.sdf", 
                                                 standardised.file="standardised.sdf", 
                                                 removed.file="removed.sdf",
@@ -220,21 +220,23 @@ print(Rsquared_CV(model,digits=3))
 
 On the basis of the soundness of the obtained models, assessed through the value of the cross-validated metrics, 
 we proceed to predict the values for the external (hold-out) set:
-<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,warning=FALSE,message=FALSE,eval=FALSE>>=
+<<echo=FALSE,results='hide',warning=FALSE,message=FALSE>>=
 library(randomForest)
+@
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,warning=FALSE,message=FALSE>>=
 holdout.predictions <- as.vector(predict(model$finalModel, newdata = dataset$x.holdout))
 @
 
 To visualize the correlation between predicted and observed values, we use the \texttt{CorrelationPlot} function:
-<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,fig.align='center',fig.cap="Observed vs Predicted">>=
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,fig.align='center',fig.cap="Observed vs Predicted",out.width='8cm'>>=
 CorrelationPlot(pred=holdout.predictions,obs=dataset$y.holdout,PointSize=3,ColMargin='blue',TitleSize=26,XAxisSize=20,YAxisSize=20,TitleAxesSize=24,margin=2,PointColor="black",PointShape=16,MarginWidth=1,AngleLab=0,xlab="Observed",ylab="Predicted")
 @
 
 \section{Ensemble Modeling}
 In the following section, two ensemble modeling techniques are applied, namely greedy optimization and model stacking.
-Further information can be found in ref \cite{caretEnsemble} and \cite{caruana}.
+Further information about these methods can be found in ref \cite{caretEnsemble} and \cite{caruana}.
 
-We insert all the trained models into a list. The \texttt{sort} function shows the cross-validation RMSEs of the trained models in accending order. 
+We append all the trained models to a list. The \texttt{sort} function shows the cross-validation RMSEs of the trained models in accending order. 
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE>>=
 all.models <- list()
 all.models[[length(all.models)+1]] <- readRDS("gbm.rds")
@@ -246,7 +248,7 @@ names(all.models) <- sapply(all.models, function(x) x$method)
 sort(sapply(all.models, function(x) min(as.vector(na.omit(x$results$RMSE)))))
 @
     
-A greedy ensemble is then trained using 1000 iterations. The Greedy ensemble picks a liner combination of model outputs that is a local minimum in the RMSE landscape. The weights for each model can be seen in the \texttt{greedy\$weights} variable. The RMSE of the greedy model can be found in the \texttt{greedy\$error} variable.
+A greedy ensemble is then trained using 1000 iterations. The Greedy ensemble picks a linear combination of model outputs that is a local minimum in the RMSE landscape. The weights for each model can be seen in the \texttt{greedy\$weights} variable. The RMSE of the greedy model can be found in the \texttt{greedy\$error} variable.
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE>>=
 greedy <- caretEnsemble(all.models, iter=1000)
 sort(greedy$weights, decreasing=TRUE)
@@ -262,16 +264,17 @@ linear$error
 @
 
 We also create a non-linear stack ensemble that uses the trained model inputs as input into the stack. In this case we use a Random Forest as the stacking model.
-<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,warning=FALSE,eval=FALSE>>=
+<<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,warning=FALSE>>=
+registerDoMC(cores=1)
 tune.grid <- expand.grid(.mtry = seq(1,length(all.models),1))
 nonlinear <- caretStack(all.models, method='rf', trControl=trainControl(method='cv'), tune.grid=tune.grid)
 saveRDS(nonlinear, file="nonlinear.rds")
 nonlinear$error
 @
 
-The greedy and the linear stack have a cross validated RMSE that is lower than any of the individual models.
+The greedy and the linear stack ensembles have a cross validated RMSEs that are lower than any of the individual models.
 
-We then test to see if these ensemble models outperform the individual models on the holdout set
+We then test to see if these ensemble models outperform the individual models on the holdout set.
 
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,warning=FALSE>>=
 preds <- data.frame(sapply(all.models, predict, newdata=dataset$x.holdout))
@@ -281,12 +284,15 @@ preds$ENS_nonlinear <- predict(nonlinear, newdata=dataset$x.holdout)
 sort(sqrt(colMeans((preds - dataset$y.holdout) ^ 2)))
 @
 
-One of the main attractions of this package is that it makes standardising and making predictions on new molecules a simple task. It is essential to ensure that the same standardisation option and descriptor types are used.
+The linear ensemble slightly outperforms other models on the holdout set as well. This leads us to choose this as the most predictive model for future predictions. In the case that the ensemble models underperform the single models on the holdout set, it is advisable to pick the best single model for future predictions as a simpler model is a better model performance being equal. 
+
+\section{External Predictions}
+
+One of the main attractions of this package is that it makes standardising and making predictions on new molecules a simple task. It is essential to ensure that the same standardisation options and descriptor types are used when the model is applied to make predictions for new molecules.
 
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,warning=FALSE>>=
 test_structures_file <- system.file("test_structures", "structures_10.sdf", package = "camb")
-std.options <- readRDS("standardisation_options.rds")
-predictions <- PredictExternal(test_structures_file, std.options, descriptor.types, dataset, readRDS("rf.rds"))
+predictions <- PredictExternal(test_structures_file, std.options, descriptor.types, dataset, linear)
 print(predictions)
 @
 

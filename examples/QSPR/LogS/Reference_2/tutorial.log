@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  12 JUL 2014 16:37
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  13 JUL 2014 19:49
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -769,7 +769,7 @@ LaTeX Font Warning: Font shape `OMS/fi4/m/n' undefined
 LaTeX Warning: No positions in optional float specifier.
                Default added (so using `tbp') on input line 152.
 
-<figure/unnamed-chunk-5.pdf, id=69, 505.89pt x 505.89pt>
+<figure/unnamed-chunk-5.pdf, id=73, 505.89pt x 505.89pt>
 File: figure/unnamed-chunk-5.pdf Graphic file (type pdf)
 
 <use figure/unnamed-chunk-5.pdf>
@@ -808,7 +808,7 @@ Package color Info: Redefining color shadecolor on input line 329.
 LaTeX Warning: No positions in optional float specifier.
                Default added (so using `tbp') on input line 334.
 
-<figure/unnamed-chunk-17.pdf, id=108, 505.89pt x 505.89pt>
+<figure/unnamed-chunk-17.pdf, id=112, 505.89pt x 505.89pt>
 File: figure/unnamed-chunk-17.pdf Graphic file (type pdf)
 
 <use figure/unnamed-chunk-17.pdf>
@@ -816,7 +816,7 @@ Package pdftex.def Info: figure/unnamed-chunk-17.pdf used on input line 337.
 (pdftex.def)             Requested size: 227.62204pt x 227.62523pt.
 Package color Info: Redefining color shadecolor on input line 352.
  [8]
-Package color Info: Redefining color shadecolor on input line 371.
+Package color Info: Redefining color shadecolor on input line 372.
 Package color Info: Redefining color shadecolor on input line 382.
 
 Overfull \hbox (12.75618pt too wide) in paragraph at lines 380--382
@@ -825,71 +825,51 @@ Overfull \hbox (12.75618pt too wide) in paragraph at lines 380--382
  []
 
 [9 <./figure/unnamed-chunk-17.pdf>]
-Package color Info: Redefining color shadecolor on input line 402.
-Package color Info: Redefining color shadecolor on input line 422.
- [10]
-Package color Info: Redefining color shadecolor on input line 448.
 
-Overfull \hbox (64.24498pt too wide) in paragraph at lines 450--450
+LaTeX Warning: No positions in optional float specifier.
+               Default added (so using `tbp') on input line 391.
+
+<figure/unnamed-chunk-21.pdf, id=128, 505.89pt x 505.89pt>
+File: figure/unnamed-chunk-21.pdf Graphic file (type pdf)
+
+<use figure/unnamed-chunk-21.pdf>
+Package pdftex.def Info: figure/unnamed-chunk-21.pdf used on input line 394.
+(pdftex.def)             Requested size: 227.62204pt x 227.62523pt.
+Package color Info: Redefining color shadecolor on input line 410.
+ [10 <./figure/unnamed-chunk-21.pdf>]
+Package color Info: Redefining color shadecolor on input line 430.
+Package color Info: Redefining color shadecolor on input line 456.
+ [11]
+Overfull \hbox (64.24498pt too wide) in paragraph at lines 458--458
 [][]\OT1/fi4/m/it/12 linear[] []<-[] []caretStack[][](all.models,[] []method[] 
 []=[] []"glm"[][],[] []trControl[] []=[] []trainControl[][]([][]method[] []=[] 
 []"cv"[][]))[][] 
  []
 
-Package color Info: Redefining color shadecolor on input line 463.
-[11]
-Package color Info: Redefining color shadecolor on input line 480.
+Package color Info: Redefining color shadecolor on input line 471.
 
-Overfull \hbox (70.24498pt too wide) in paragraph at lines 486--486
-[]\OT1/fi4/m/it/12 ## Error: no applicable method for 'predict' applied to an o
-bject of class "randomForest"[] 
+Overfull \hbox (58.24498pt too wide) in paragraph at lines 481--481
+[]\OT1/fi4/m/it/12 ## note: only 2 unique complexity parameters in default grid
+. Truncating the grid to 2 .[] 
  []
 
-
-Overfull \hbox (70.24498pt too wide) in paragraph at lines 491--491
-[]\OT1/fi4/m/it/12 ## Error: no applicable method for 'predict' applied to an o
-bject of class "randomForest"[] 
- []
-
-
-Overfull \hbox (70.24498pt too wide) in paragraph at lines 496--496
-[]\OT1/fi4/m/it/12 ## Error: no applicable method for 'predict' applied to an o
-bject of class "randomForest"[] 
- []
-
-
-Overfull \hbox (52.24498pt too wide) in paragraph at lines 501--501
-[]\OT1/fi4/m/it/12 ## Error: error in evaluating the argument 'object' in selec
-ting a method for function
- []
-
-
-Overfull \hbox (22.24498pt too wide) in paragraph at lines 506--506
-[]\OT1/fi4/m/it/12 ## Error: error in evaluating the argument 'x' in selecting 
-a method for function
- []
-
+Package color Info: Redefining color shadecolor on input line 499.
 [12]
-Package color Info: Redefining color shadecolor on input line 512.
-
-Overfull \hbox (70.24498pt too wide) in paragraph at lines 526--526
-[]\OT1/fi4/m/it/12 ## Error: no applicable method for 'predict' applied to an o
-bject of class "randomForest"[] 
- []
-
-[13]
+Package color Info: Redefining color shadecolor on input line 523.
+ [13]
 Missing character: There is no Ã in font cmr12!
 Missing character: There is no ¶ in font cmr12!
 Missing character: There is no Ã in font cmr12!
 Missing character: There is no ¤ in font cmr12!
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 536.
  [14]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 536.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 555.
+ [15]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 555.
  (./tutorial.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 536.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 536.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 555.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 555.
 Package rerunfilecheck Info: File `tutorial.out' has not changed.
-(rerunfilecheck)             Checksum: 566C4EBC712F4A5CA430D2A4BD9C3DC0;670.
+(rerunfilecheck)             Checksum: 08E2BC0665F3FF967BA77A5C32CB6C49;726.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
@@ -897,16 +877,16 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 Package logreq Info: Writing requests to 'tutorial.run.xml'.
 \openout1 = `tutorial.run.xml'.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 536.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 555.
  ) 
 Here is how much of TeX's memory you used:
- 11401 strings out of 493633
- 178954 string characters out of 3143378
+ 11411 strings out of 493633
+ 179158 string characters out of 3143378
  366963 words of memory out of 3000000
- 14500 multiletter control sequences out of 15000+200000
+ 14506 multiletter control sequences out of 15000+200000
  12030 words of font info for 43 fonts, out of 3000000 for 9000
  831 hyphenation exceptions out of 8191
- 35i,8n,49p,934b,1160s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 35i,8n,49p,934b,1158s stack positions out of 5000i,500n,10000p,200000b,50000s
 {/usr/local/texlive/2011/texmf-dist/fonts/enc/dvips/inconsolata/fi4-ts1.enc}{
 /usr/local/texlive/2011/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}{/
 usr/local/texlive/2011/texmf-dist/fonts/enc/dvips/inconsolata/fi4-ot1tt.enc}</u
@@ -919,10 +899,10 @@ local/texlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/l
 ocal/texlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/loc
 al/texlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/loca
 l/texlive/2011/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb>
-Output written on tutorial.pdf (14 pages, 152746 bytes).
+Output written on tutorial.pdf (15 pages, 176755 bytes).
 PDF statistics:
- 201 PDF objects out of 1000 (max. 8388607)
- 170 compressed objects within 2 object streams
- 37 named destinations out of 1000 (max. 500000)
- 99 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 216 PDF objects out of 1000 (max. 8388607)
+ 182 compressed objects within 2 object streams
+ 40 named destinations out of 1000 (max. 500000)
+ 112 words of extra memory for PDF output out of 10000 (max. 10000000)
 
