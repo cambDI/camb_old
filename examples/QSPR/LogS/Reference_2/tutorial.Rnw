@@ -171,7 +171,7 @@ registerDoMC(cores=10)
 
 \subsection{Support Vector Machines (SVM)}
 Firstly, a SVM using a radial basis function kernel is trained \cite{svmreview}.
-An base 2 exponential grid is used to optimize over the hyperparameters. The \texttt{train} function from the \texttt{caret} package is used directly for model training.
+A base 2 exponential grid is used to optimize over the hyperparameters. The \texttt{train} function from the \texttt{caret} package is used directly for model training.
 
 <<highlight=TRUE,tidy.opts=list(width.cutoff=50),tidy=TRUE,eval=FALSE>>=
 library(kernlab)

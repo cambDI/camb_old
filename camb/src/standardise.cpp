@@ -114,8 +114,6 @@ extern "C" {
             structureIter = indigoIterateSmilesFile(*structures_file);
         }
         
-        
-        
         int readCount = 0;
         int writeCount = 0;
         int inorganicCount = 0;
