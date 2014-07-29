@@ -8,8 +8,10 @@
 #' A saved model is used to make predictions on new molecules.
 #' 
 #' @param structures.file The name of the file containing the chemical structures. SMILES and SDF are currently supported formats.
-#' @param standardisation.options The options saved during the standardisation procedure. These options are returned from the StandardiseMolecules function.
-#' @param descriptor.types A named list of the types of descriptors used in model training.
+#' @param standardisation.options The options saved during the standardisation procedure.
+#' These options are returned from the \code{\link{StandardiseMolecules}} function.
+#' @param descriptor.types A named list of the types of descriptors used in model training. 
+#' These types are the ones fed into the \code{\link{GeneratePadelDescriptors}} function.
 #' @param dataset The dataset used in model training. This is used for the preprocessing applied to the training data as well as the descriptors used in training.
 #' @param model The trained model.
 #' @export

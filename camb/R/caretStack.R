@@ -17,9 +17,6 @@
 #' @return S3 caretStack object
 #' @references \url{http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.60.2859&rep=rep1&type=pdf}
 caretStack <- function(all.models, ...){
-
-  #TODO: Add progressbar argument and move optFUN to an all.models control argument
-  
   #Libraries
   require('caret')
   
@@ -42,8 +39,6 @@ caretStack <- function(all.models, ...){
 #' @param ... arguments (including newdata) to pass to predict.train.
 #' @export
 predict.caretStack <- function(ensemble, newdata=NULL, ...){
-  #TODO: grab type argument
-  #TODO: rename my "type" variable
   type <- checkModels_extractTypes(ensemble$models)
   preds <- multiPredict(ensemble$models, newdata=newdata, type)
   out <- predict(ensemble$ens_model, newdata=preds, ...)

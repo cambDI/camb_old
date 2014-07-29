@@ -55,7 +55,7 @@ DensityResponse(Data, xlab = "", ylab = "", main = "", alpha = 0.2,
 Returns a ggplot object.
 }
 \description{
-This function creates plots the distribution of the response variable.
+Plots the distribution of the response variable using a histogram.
 }
 \details{
 Additional ggplot2 layers can be added with "+".

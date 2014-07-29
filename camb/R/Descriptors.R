@@ -26,7 +26,7 @@
 #' @param number.processed If specified, only the first \code{number.processed} molecules will be processed by this function. 
 #' This is used mainly for testing purposed on files that contain a lot of molecules.
 #' @export
-#' @return The options used in standardisation
+#' @return The options used in standardisation so that they may be applied to make predictions on new molecules using the function \code{\link{PredictExternal}}.
 #' @references \url{http://www.ggasoftware.com/opensource/indigo}
 #' @references \url{http://www.iupac.org/home/publications/e-resources/inchi.html}
 #' @examples
@@ -139,13 +139,19 @@ prop <- read.table(output)
 names(prop) <- property
 return(prop)
 }
+
+
 ##############
 ## Compound Descriptors
 
-#' RemoveStandardisedPrefix
+#' Remove the prefix that was added to the molecule names before standardisation.
 #' 
-#' TBD: fill in description and the rest
+#' This function is needed to remove the prefix that is added to the molecule names to make sure that they don't start with a number.
+#' PaDEL-Descriptor doesn't handle molecule names starting with certain characters so a prefix is added before its use and then removed with this function.
+#' This function will be removed at some point when the PaDEL-Descriptor issue is resolved.
+#' @param descriptors A \code{data.frame} containing the descriptors. 
 #' @export
+#' @return A \code{data.frame} containing the descriptors with the prefix removed.
 RemoveStandardisedPrefix <- function(descriptors) {
   descriptors$Name <- sapply(descriptors$Name, function(x) {strsplit(as.character(x), "Standardised_")[[1]][2]})
   descriptors
@@ -153,8 +159,17 @@ RemoveStandardisedPrefix <- function(descriptors) {
 
 #' GeneratePadelDescriptors
 #' 
-#' TBD: fill in description and the rest
+#' Utilises the PaDEL-Descriptor Java library to generate molecular descriptors.
+#' 
+#' @param standardised.file The name of the file to which the standardised molecules were written to with the \code{\link{StandardiseMolecules}} function.
+#' If standardisation is not used then this can be any file in the SDF format.
+#' @param types The types of descriptors to calculate. Options include: "2D", "Fingerprinter", "ExtendedFingerprinter", "EStateFingerprinter", "GraphOnlyFingerprinter",
+#' "MACCSFingerprinter", "PubchemFingerprinter", "SubstructureFingerprinter", "SubstructureFingerprintCount", 
+#' "KlekotaRothFingerprinter", "KlekotaRothFingerprintCount". "2D" specifies all 1D and 2D topological descirptors available within the PaDEL-Descriptor software.
+#' @param threads The number of processors to use when calculating the descriptors
+#' @param limit The number of molecules to calculate descriptors for
 #' @export
+#' @return A \code{data.frame} containing the descriptors with the prefix removed.
 GeneratePadelDescriptors <- function(standardised.file, types = c("2D"), threads = -1, limit = -1) {
   if (file.info(standardised.file)$size  == 0) {stop("Input file is empty")}
   descriptors.file <- tempfile("descriptors", fileext=".csv")
@@ -233,7 +248,6 @@ GeneratePadelDescriptors.internal <- function(structures.file, descriptors.file,
 
 ##############
 # Check if an AA is natural
-#' TBD: fill in description and the rest
 #' @export
 checkAA <- function(x) {
   AADict = c("A", "R", "N", "D", "C", "E", "Q", "G", "H", "I", 
@@ -246,7 +260,6 @@ checkAA <- function(x) {
 
 ##############
 ## Three letter to one letter AA code
-#' TBD: fill in description and the rest
 #' @export
 convert31 <- function(AA) {  
   threeL <- c("ALA", "ARG", "ASN", "ASP", "CYS", "GLU", "GLN",
@@ -357,10 +370,6 @@ AADescs <- function(Data, type="Z5",..){
     }
   }
 }
-
-
-
-
 
 
 #' Whole Protein Sequence Descriptor Calculation

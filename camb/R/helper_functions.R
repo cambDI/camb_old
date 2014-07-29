@@ -2,17 +2,10 @@
 #TODO: Move predictions functions to their own document
  
 #' Check that a list of models are all train objects and are ready to be ensembled together
-#' 
-#' TBD description
-#' 
-#' @param tbd tbd
 #' @export
-#' @return something
 #' @author Daniel Murrell <dsmurrell@@gmail.com> and Isidro Cortes <isidrolauscher@@gmail.com>
 checkModels_extractTypes <- function(list_of_models){
   require('caret') || stop("Pacakge 'caret' is required")
-  
-  #TODO: Add helpful error messages
   
   #Check that we have a list of train models
   stopifnot(class(list_of_models)=='list')
@@ -55,8 +48,6 @@ checkModels_extractTypes <- function(list_of_models){
 #' @export
 extractBestPreds <- function(list_of_models){
   
-  #TODO: add an optional progress bar?
-  
   #Extract resampled predictions from each model
   modelLibrary <- lapply(list_of_models, function(x) {x$pred})
   
@@ -82,7 +73,6 @@ extractBestPreds <- function(list_of_models){
 #' 
 #' @param list_of_models a list of caret models to check
 #' @export
-#' 
 checkPreds <- function(list_of_models){
   stop('NOT IMPLEMENTED')
 }
@@ -128,9 +118,6 @@ makePredObsMatrix <- function(list_of_models){
 #' if possible, and regression models will return "raw".
 #' @export
 multiPredict <- function(list_of_models, type, newdata=NULL, ...){
-  
-  #TODO: Add progressbar argument
-  
   require('caret')|| stop("Pacakge 'caret' is required")
   require('pbapply')|| stop("Pacakge 'pbapply' is required")
   

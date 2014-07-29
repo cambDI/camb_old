@@ -1,6 +1,5 @@
 # Function to calculate the minimum model performance
 
-#' TBD: fill in description and the rest
 #' @export
 MinPerf <- function (meanNoise = 0, sdNoise, resp, lenPred, stds=NULL,
                              iters = 1000, filename = NULL, pdfW = 10, pdfH = 10, TextSize = 15, 

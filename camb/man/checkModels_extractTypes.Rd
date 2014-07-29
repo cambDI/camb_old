@@ -5,14 +5,8 @@
 \usage{
 checkModels_extractTypes(list_of_models)
 }
-\arguments{
-\item{tbd}{tbd}
-}
-\value{
-something
-}
 \description{
-TBD description
+Check that a list of models are all train objects and are ready to be ensembled together
 }
 \author{
 Daniel Murrell <dsmurrell@gmail.com> and Isidro Cortes <isidrolauscher@gmail.com>

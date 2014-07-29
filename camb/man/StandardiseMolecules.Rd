@@ -37,7 +37,7 @@ If left out, this file is not created.}
 This is used mainly for testing purposed on files that contain a lot of molecules.}
 }
 \value{
-The options used in standardisation
+The options used in standardisation so that they may be applied to make predictions on new molecules using the function \code{\link{PredictExternal}}.
 }
 \description{
 Molecules are converted to a standard representation using Indigo's C API. Molecules can be read in either SMILES or SDF format. Hydrogens are made implicit.

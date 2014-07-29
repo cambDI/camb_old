@@ -6,7 +6,16 @@
 GeneratePadelDescriptors(standardised.file, types = c("2D"), threads = -1,
   limit = -1)
 }
+\arguments{
+\item{standardised.file}{The name of the file to which the standardised molecules were written to with the \code{\link{StandardiseMolecules}} function.
+If standardisation is not used then this can be any file in the SDF format.}
+
+\item{types}{The types of descriptors calculated. Options include: "2D", "Fingerprinter", "ExtendedFingerprinter", "EStateFingerprinter", "GraphOnlyFingerprinter",}
+}
+\value{
+A \code{data.frame} containing the descriptors with the prefix removed.
+}
 \description{
-TBD: fill in description and the rest
+Utilises the PaDEL-Descriptor Java library to generate molecular descriptors.
 }
 

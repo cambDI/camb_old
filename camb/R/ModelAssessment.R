@@ -2,13 +2,8 @@
 ## Model Assessment and Results Visualization
 #################################################################################
 
-#' TBD
-#' 
-#' TBD description
-#' 
-#' @param tbd tbd
+#' Scatter plot with error bars
 #' @export
-#' @return something
 #' @author Daniel Murrell <dsmurrell@@gmail.com> and Isidro Cortes <isidrolauscher@@gmail.com>
 ErrorBarplot <- function(X, Y, err, fill = X,
           main = "", ylab = "", xlab = "",
@@ -111,14 +106,8 @@ ErrorBarplot <- function(X, Y, err, fill = X,
 #  }
 #}
 
-## Observed vs predicted
-#' TBD
-#' 
-#' TBD description
-#' 
-#' @param tbd tbd
+## Scatter plot showing the predictions against the observed values
 #' @export
-#' @return something
 #' @author Daniel Murrell <dsmurrell@@gmail.com> and Isidro Cortes <isidrolauscher@@gmail.com>
 CorrelationPlot <- function (pred,obs,margin=NULL,main="",ylab="Predicted",xlab="Observed",
                    PointSize=4,ColMargin="blue",TextSize=15,TitleSize=15,
@@ -161,15 +150,9 @@ CorrelationPlot <- function (pred,obs,margin=NULL,main="",ylab="Predicted",xlab=
 # Functions to evaluate models performance
 # Tropsha, A.; Golbraikh, A. Predictive Quantitative Structure–Activity Relationships Modeling: 
 #Development and Validation of QSAR Models. In: Handbook of Chemoinformatics Algorithms 
-#(Faulon, J.-L.; Bender, A., Eds.), Chapter 7, pp. 213-233, Chapman & Hall / CRC, London, UK, 2010.
+# (Faulon, J.-L.; Bender, A., Eds.), Chapter 7, pp. 213-233, Chapman & Hall / CRC, London, UK, 2010.
 # calculates the RMSE between two vectors
-#' TBD
-#' 
-#' TBD description
-#' 
-#' @param tbd tbd
 #' @export
-#' @return something
 #' @author Daniel Murrell <dsmurrell@@gmail.com> and Isidro Cortes <isidrolauscher@@gmail.com>
 RMSE <- function(v1, v2) {
   i1 <- which(!is.na(v1))
@@ -181,26 +164,15 @@ RMSE <- function(v1, v2) {
   return(as.numeric(sqrt( (residuals%*%residuals)/length(v1) )))
 }
 
-#' TBD
-#' 
-#' TBD description
-#' 
-#' @param tbd tbd
+#' Extract the cross validated RMSE from a caret model
 #' @export
-#' @return something
 #' @author Daniel Murrell <dsmurrell@@gmail.com> and Isidro Cortes <isidrolauscher@@gmail.com>
 RMSE_CV <- function(model, digits = 3) {
   signif(min(as.vector(na.omit(model$results$RMSE))), digits=3)
 }  
 
 # calculates the MAE between two vectors
-#' TBD
-#' 
-#' TBD description
-#' 
-#' @param tbd tbd
 #' @export
-#' @return something
 #' @author Daniel Murrell <dsmurrell@@gmail.com> and Isidro Cortes <isidrolauscher@@gmail.com>
 MAE <- function (v1, v2) {
   i1 <- which(!is.na(v1))
@@ -213,26 +185,14 @@ MAE <- function (v1, v2) {
 }
 
 # Calculates the slope between two vector (k')
-#' TBD
-#' 
-#' TBD description
-#' 
-#' @param tbd tbd
 #' @export
-#' @return something
 #' @author Daniel Murrell <dsmurrell@@gmail.com> and Isidro Cortes <isidrolauscher@@gmail.com>
 slope <- function(v1,v2){ # v1=z.test v2=y.test
   return(sum(v2*v1)/sum(v1*v1))
 }
 
 # Calculates the regression coefficient through the origin
-#' TBD
-#' 
-#' TBD description
-#' 
-#' @param tbd tbd
 #' @export
-#' @return something
 #' @author Daniel Murrell <dsmurrell@@gmail.com> and Isidro Cortes <isidrolauscher@@gmail.com>
 Rsquared0 <- function(v1,v2) { #v1=z.test (y), v2=y.test (x)
   if (is.vector(v1) && is.vector(v2) && length(v1)==length(v2)){
@@ -247,13 +207,7 @@ Rsquared0 <- function(v1,v2) { #v1=z.test (y), v2=y.test (x)
 
 
 # Calculates the regression coefficient
-#' TBD
-#' 
-#' TBD description
-#' 
-#' @param tbd tbd
 #' @export
-#' @return something
 #' @author Daniel Murrell <dsmurrell@@gmail.com> and Isidro Cortes <isidrolauscher@@gmail.com>
 Rsquared <- function(v1,v2) { # v1=z.test (y), v2=y.test (x)
   if (is.vector(v1) && is.vector(v2) && length(v1)==length(v2)){
@@ -267,27 +221,15 @@ Rsquared <- function(v1,v2) { # v1=z.test (y), v2=y.test (x)
   else {print("Wrong input: input arguments are not vector or have unequal length")}
 }
 
-#' TBD
-#' 
-#' TBD description
-#' 
-#' @param tbd tbd
+#' Calculate the cross validated RSquared
 #' @export
-#' @return something
 #' @author Daniel Murrell <dsmurrell@@gmail.com> and Isidro Cortes <isidrolauscher@@gmail.com>
 Rsquared_CV <- function(model, digits = 3) {
   model$results$Rsquared[which(model$results$RMSE %in% min(model$results$RMSE, na.rm=TRUE))]
 } 
 
-# Calculates the Q squared 
-#Qsquared (z.test,y.test) (predicted vs observed)
-#' TBD
-#' 
-#' TBD description
-#' 
-#' @param tbd tbd
+#' Calculates the Q squared 
 #' @export
-#' @return something
 #' @author Daniel Murrell <dsmurrell@@gmail.com> and Isidro Cortes <isidrolauscher@@gmail.com>
 Qsquared1 <- function(v1, v2, resp_tr) {
   if (is.vector(v1) && is.vector(v2) && length(v1)==length(v2)){
@@ -299,13 +241,8 @@ Qsquared1 <- function(v1, v2, resp_tr) {
   else {print("Wrong input: input arguments are not vector or have unequal length")}
 }
 
-#' TBD
-#' 
-#' TBD description
-#' 
-#' @param tbd tbd
+#' Calculates the Q Squared
 #' @export
-#' @return something
 #' @author Daniel Murrell <dsmurrell@@gmail.com> and Isidro Cortes <isidrolauscher@@gmail.com>
 Qsquared2 <- function(v1, v2) {
   if (is.vector(v1) && is.vector(v2) && length(v1)==length(v2)){
@@ -317,13 +254,8 @@ Qsquared2 <- function(v1, v2) {
   else {print("Wrong input: input arguments are not vector or have unequal length")}
 }
 
-#' TBD
-#' 
-#' TBD description
-#' 
-#' @param tbd tbd
+#' Calculates the Q Squared
 #' @export
-#' @return something
 #' @author Daniel Murrell <dsmurrell@@gmail.com> and Isidro Cortes <isidrolauscher@@gmail.com>
 Qsquared3 <- function(v1, v2,resp_tr) {
   if (is.vector(v1) && is.vector(v2) && length(v1)==length(v2)){
@@ -340,13 +272,8 @@ Qsquared3 <- function(v1, v2,resp_tr) {
 
 ##############
 ## Validation of models
-#' TBD
-#' 
-#' TBD description
-#' 
-#' @param tbd tbd
+#' Validation of models
 #' @export
-#' @return something
 #' @author Daniel Murrell <dsmurrell@@gmail.com> and Isidro Cortes <isidrolauscher@@gmail.com>
 Validation <- function(pred, obs, resp_tr){
   if (is.vector(pred) && is.vector(obs) && length(pred)==length(obs)){

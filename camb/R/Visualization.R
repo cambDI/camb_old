@@ -4,9 +4,9 @@
 
 #' Plot Distribution of the Response Variable
 #' 
-#' This function creates plots the distribution of the response variable.
+#' Plots the distribution of the response variable using a histogram.
 #' 
-#' @param Data A numeric vector. TBD: explain more
+#' @param Data A numeric vector of the variable to visualise.
 #' @param xlab Title of the x axis.
 #' @param ylab Title of the y axis.
 #' @param main Title of the plot.

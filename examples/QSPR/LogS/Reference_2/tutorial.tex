@@ -275,7 +275,7 @@ In the following section we present the different steps required to train a QSPR
 
 \subsection{Support Vector Machines (SVM)}
 Firstly, a SVM using a radial basis function kernel is trained \cite{svmreview}.
-An base 2 exponential grid is used to optimize over the hyperparameters. The \texttt{train} function from the \texttt{caret} package is used directly for model training.
+A base 2 exponential grid is used to optimize over the hyperparameters. The \texttt{train} function from the \texttt{caret} package is used directly for model training.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -499,6 +499,10 @@ We then test to see if these ensemble models outperform the individual models on
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{preds} \hlkwb{<-} \hlkwd{data.frame}\hlstd{(}\hlkwd{sapply}\hlstd{(all.models, predict,} \hlkwc{newdata} \hlstd{= dataset}\hlopt{$}\hlstd{x.holdout))}
+\end{alltt}
+
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Loading required package: plyr}}\begin{alltt}
 \hlstd{preds}\hlopt{$}\hlstd{ENS_greedy} \hlkwb{<-} \hlkwd{predict}\hlstd{(greedy,} \hlkwc{newdata} \hlstd{= dataset}\hlopt{$}\hlstd{x.holdout)}
 \hlstd{preds}\hlopt{$}\hlstd{ENS_linear} \hlkwb{<-} \hlkwd{predict}\hlstd{(linear,} \hlkwc{newdata} \hlstd{= dataset}\hlopt{$}\hlstd{x.holdout)}
 \hlstd{preds}\hlopt{$}\hlstd{ENS_nonlinear} \hlkwb{<-} \hlkwd{predict}\hlstd{(nonlinear,} \hlkwc{newdata} \hlstd{= dataset}\hlopt{$}\hlstd{x.holdout)}
