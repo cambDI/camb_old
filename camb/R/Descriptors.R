@@ -145,7 +145,8 @@ GeneratePadelDescriptors.internal <- function(structures.file, descriptors.file,
   .jinit()
   .jcall("java/lang/System","S","setProperty","java.awt.headless","true")
   # add all JARs
-  .jaddClassPath(Sys.glob("lib/*.jar"))
+  #.jaddClassPath(Sys.glob("lib/*.jar")) this was the old code but it stopped working for some reason
+  .jaddClassPath(Sys.glob(paste(system.file(package = "camb"), "java", "*.jar", sep="/")))
   # call the main() method on the main class
   
   # replace the options in the padel_config.txt file

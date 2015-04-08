@@ -14,7 +14,7 @@ library(doMC)
 StandardiseMolecules(structures.file="solubility_2007_ref2.sdf", 
                      standardised.file="standardised.sdf", 
                      removed.file="removed.sdf",
-                     output = "properties.csv",
+                     properties.file = "properties.csv",
                      remove.inorganic=TRUE, 
                      fluorine.limit=3, 
                      chlorine.limit=3, 
@@ -26,7 +26,6 @@ StandardiseMolecules(structures.file="solubility_2007_ref2.sdf",
 #########################################
 # Calculate descriptors for the molecules
 #########################################
-
 descriptors <- GeneratePadelDescriptors(standardised.file = "standardised.sdf", types=c("2D"), threads = 1)
 descriptors <- RemoveStandardisedPrefix(descriptors)
 saveRDS(descriptors, file="descriptors.rds")
